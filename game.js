@@ -127,12 +127,15 @@ var game = {
         return this.players[this.turn].pieces;
     },
     move: function(piece, board_location) {
+        if (piece.type == 'king' &&
+            this.board[board_location.v][board_location.h].level == 3) {
+            console.debug('Winner. Game Over.');
+        }
         piece.location = {
             v: board_location.v,
             h: board_location.h,
             l: this.board[board_location.v][board_location.h].level
         };
-        // check for win condition
         return piece.location;
     },
     build: function(location) {
