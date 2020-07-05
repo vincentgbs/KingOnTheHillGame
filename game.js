@@ -13,6 +13,8 @@ var game = {
         this.settings[key] = value;
     },
     create_locations: function() {
+        // document.getElementById("board").style.height = (this.vertical * 100);
+        // document.getElementById("board").style.width = (this.horizontal * 100);
         for(var i = 0; i < this.vertical; i++) {
             row = [];
             for(var j = 0; j < this.horizontal; j++) {
@@ -89,36 +91,38 @@ var game = {
         return false;
     },
     filter_move: function(options, piece) {
+        filtered = [];
         for (i in options) {
             location = options[i];
             if (this.board[location.v][location.h].level >= 4) {
-                options.splice(i, 1);
+                // skip, do not add to filtered
             } else if (this.board[location.v][location.h].level >= piece.level + 1) {
-                options.splice(i, 1);
+                // skip, do not add to filtered
             } else if (this.check_for_piece(location)) {
                 if (piece.type == 'king' && piece.player == this.turn) {
-                    // still valid due to king-pawn swap
+                    filtered.push(location);
                 } else {
-                    options.splice(i, 1);
+                    // skip, do not add to filtered
                 }
+            } else {
+                filtered.push(location);
             }
         }
-        return options;
+        return filtered;
     },
     filter_build: function(options, piece) {
+        filtered = [];
         for (i in options) {
             location = options[i];
             if (this.board[location.v][location.h].level >= 4) {
-                options.splice(i, 1);
+                // skip, do not add to filtered
             } else if (this.check_for_piece(location)) {
-                if (piece.type == 'king' && piece.player == this.turn) {
-                    // still valid due to king-pawn swap
-                } else {
-                    options.splice(i, 1);
-                }
+                // skip, do not add to filtered
+            } else {
+                filtered.push(location);
             }
         }
-        return options;
+        return filtered;
     },
     choose_piece: function(player) {
         //
@@ -132,5 +136,6 @@ var game = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    //
+    var c = document.getElementById("board");
+    var ctx = c.getContext("3D");
 });
