@@ -50,22 +50,34 @@ var unittests = {
     },
     test5: function() {
         // create labels
-        let p1 = game.players[0];
-        let p2 = game.players[1];
+        let p0 = game.players[0];
+        let p1 = game.players[1];
+        let k0 = p0.pieces[0];
+        let p0p1 = p0.pieces[1];
+        let p0p2 = p0.pieces[2];
         let k1 = p1.pieces[0];
         let p1p1 = p1.pieces[1];
         let p1p2 = p1.pieces[2];
-        let k2 = p2.pieces[0];
-        let p2p1 = p2.pieces[1];
-        let p2p2 = p2.pieces[2];
         // place pieces on board
-        game.move(k1, {v:1,h:2});
-        game.move(p1p1, {v:1,h:1});
-        game.move(p1p2, {v:1,h:3});
-        game.move(k2, {v:3,h:2});
-        game.move(p2p1, {v:3,h:1});
-        game.move(p2p2, {v:3,h:3});
-        console.debug('Passed Unit Test 5');
+        game.move(k0, {v:1,h:2});
+        game.move(p0p1, {v:1,h:1});
+        game.move(p0p2, {v:1,h:3});
+        game.move(k1, {v:3,h:2});
+        game.move(p1p1, {v:3,h:1});
+        game.move(p1p2, {v:3,h:3});
+        if (this.objectmatch(k0.location, p0.pieces[0].location) &&
+            this.objectmatch(k0.location, game.players[0].pieces[0].location)) {
+            return true;
+        } else {
+            console.debug('Expected locations to match: ');
+            console.debug(k0.location);
+            console.debug(p0.pieces[0].location);
+            console.debug(game.players[0].pieces[0].location);
+            return false;
+        }
+    },
+    test6: function() {
+        console.debug('Running Unit Test 6');
     }
 }
 
@@ -75,5 +87,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     unittests.test2();
     unittests.test3();
     unittests.test4();
-    unittests.test5();
+    let p = new Promise((resolve, reject) => {
+        let a = unittests.test5();
+        if (a) {
+            resolve('Passed Unit Test 5');
+        } else {
+            reject('Failed Unit Test 5');
+        }
+    });
+    p.then((message) => {
+        console.debug(message);
+        unittests.test6();
+    }).catch((message) => {
+        console.debug(message);
+    });
 });
