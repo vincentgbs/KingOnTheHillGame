@@ -106,7 +106,7 @@ var unittests = {
         return p.then((message) => {
             let p0p1 = game.players[0].pieces[1];
             let o = game.filter_move(game.get_adjacent(p0p1.location), p0p1);
-            let q = new Promise((resolve, reject) => {
+            let p = new Promise((resolve, reject) => {
                 let a = game.move(p0p1, o[0]);
                 if (p0p1.location.v == 2 && p0p1.location.h == 1) {
                     resolve('Moved to: {v:2, h:1}');
@@ -115,7 +115,7 @@ var unittests = {
                     reject('Did not move correctly');
                 }
             });
-            return q.then((message) => {
+            return p.then((message) => {
                 return true;
             }).catch((message) => {
                 console.debug(message);
@@ -124,7 +124,47 @@ var unittests = {
         }).catch((message) => {
             console.debug(message);
         });
-    }
+    },
+    test8: function() {
+        let p0p1 = game.players[0].pieces[1];
+        let o = game.get_adjacent(p0p1.location);
+        let p = game.filter_build(o, p0p1);
+        if (this.objectmatch(o, p)) {
+            console.debug('Should not be able to build where another piece is');
+            return false;
+        } else {
+            if (this.objectmatch(p, [{h:1,v:1},{h:2,v:2},
+                {h:0,v:2},{h:0,v:3},{h:0,v:1}])) {
+                return true;
+            } else {
+                console.debug(o, p);
+                return false;
+            }
+        }
+    },
+    test9: function() {
+        let p0p1 = game.players[0].pieces[1];
+        let o = game.filter_build(game.get_adjacent(p0p1.location), p0p1);
+        if (game.board[o[0].v][o[0].h].level !== 0) {
+            return false;
+        } else {
+            let p = new Promise((resolve, reject) => {
+                let a = game.build(o[0]);
+                if (game.board[o[0].v][o[0].h].level === 1) {
+                    resolve('Build successful (Test 9)');
+                } else {
+                    reject('Build failed (Test 9)');
+                }
+            });
+            return p.then((message) => {
+                console.debug(message);
+                return true;
+            }).catch((message) => {
+                console.debug(message);
+                return false;
+            });
+        }
+    },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -163,6 +203,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
             p.then((message) => {
                 console.debug(message);
+                let p = new Promise((resolve, reject) => {
+                    let a = unittests.test8();
+                    if (a) {
+                        resolve('Passed Unit Test 8');
+                    } else {
+                        reject('Failed Unit Test 8');
+                    }
+                });
+                p.then((message) => {
+                    console.debug(message);
+                    let p = new Promise((resolve, reject) => {
+                        let a = unittests.test9();
+                        if (a) {
+                            resolve('Passed Unit Test 9');
+                        } else {
+                            reject('Failed Unit Test 9');
+                        }
+                    });
+                    p.then((message) => {
+                        // console.debug(message);
+                    }).catch((message) => {
+                        // console.debug(message);
+                    });
+                }).catch((message) => {
+                    console.debug(message);
+                });
             }).catch((message) => {
                 console.debug(message);
             });

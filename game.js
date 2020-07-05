@@ -123,8 +123,8 @@ var game = {
         }
         return filtered;
     },
-    select_piece: function() {
-        // may not be needed
+    get_pieces: function() {
+        return this.players[this.turn].pieces;
     },
     move: function(piece, board_location) {
         piece.location = {
@@ -136,7 +136,7 @@ var game = {
         return piece.location;
     },
     build: function(location) {
-        this.board[location.v][location.h].level++;
+        return this.board[location.v][location.h].level++;
     }
 }
 
