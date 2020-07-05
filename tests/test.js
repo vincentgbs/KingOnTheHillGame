@@ -165,6 +165,15 @@ var unittests = {
             });
         }
     },
+    test10: function() {
+        canvas.resize(game.settings.vertical * 100, game.settings.horizontal * 100);
+        canvas.draw_board();
+        canvas.draw_base({h:1, v:1});
+        canvas.draw_mid({h:1, v:1});
+        canvas.draw_top({h:1, v:1});
+        canvas.draw_cap({h:1, v:1});
+        canvas.draw_piece({h:2, v:2}, 'king');
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -182,6 +191,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     });
     p.then((message) => {
+        canvas.render(game);
         console.debug(message);
         let p = new Promise((resolve, reject) => {
             let a = unittests.test6();
@@ -238,4 +248,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }).catch((message) => {
         console.debug(message);
     });
+
+    // unittests.test10();
 });

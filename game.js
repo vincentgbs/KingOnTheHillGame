@@ -78,9 +78,9 @@ var game = {
     },
     check_for_piece: function(location) {
         for(i in this.players) {
-            player = this.players[i];
+            let player = this.players[i];
             for(j in player.pieces) {
-                piece = player.pieces[j];
+                let piece = player.pieces[j];
                 if (location.v == piece.location.v &&
                     location.h == piece.location.h) {
                     return true;
