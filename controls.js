@@ -1,5 +1,6 @@
 var controls = {
     active_piece: false,
+    active_move: false,
     getCursorPosition: function (canvas, event) {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -14,18 +15,34 @@ var controls = {
             piece.active = false;
             canvas.render(game);
         } else if (!this.active_piece && piece.player == game.turn) {
-            this.active_piece = true;
+            this.active_piece = piece; // loose definition
             piece.active = true;
             canvas.render(game);
         } else {
             console.debug(coord);
         }
     },
-    select_move: function() {
-        //
+    select_move: function(c, e) {
+        let coord = this.getCursorPosition(c, e);
+        let options = game.filter_move(game.get_adjacent(this.active_piece.location));
+        for (i in options) {
+            if (coord.h == options[i].h && coord.v == options[i].v) {
+                console.debug('VALID MOVE');
+            }
+        } // else
+        console.debug('WRONG PLACE');
     },
-    select_build: function() {
-        //
+    select_build: function(c, e) {
+        let coord = this.getCursorPosition(c, e);
+    },
+    on_click: function(c, e) {
+        if (this.active_piece == false && this.active_move == false) {
+            this.select_piece(c, e);
+        } else if (this.active_piece == true && this.active_move == false) {
+            this.select_move(c, e);
+        } else if (this.active_piece == true && this.active_move == true) {
+            //
+        }
     }
 }
 
@@ -33,6 +50,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('layout.js loaded');
     const c = document.querySelector("#board");
     c.addEventListener('mousedown', function(e) {
-        controls.select_piece(c, e);
+        controls.on_click(c, e);
     });
 });

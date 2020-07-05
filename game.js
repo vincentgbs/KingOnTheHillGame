@@ -86,7 +86,7 @@ var game = {
                 let piece = player.pieces[j];
                 if (location.v == piece.location.v &&
                     location.h == piece.location.h) {
-                    return piece;
+                    return piece; // loose definition
                 }
             }
         }
@@ -151,9 +151,8 @@ var game = {
         return this;
     },
     take_turn: function() {
-        // player chooses piece from game.get_pieces()
         // player chooses move from game.filter_move(game.get_adjacent(piece.location))
-        // player chooses build from game.filter_build(game.get_adjacent.piece.location)
+        // player chooses build from game.filter_build(game.get_adjacent(piece.location))
         game.turn = (game.turn+1) % game.settings.no_of_players;
     }
 }
