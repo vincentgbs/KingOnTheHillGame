@@ -151,8 +151,3 @@ var game = {
         game.turn = (game.turn+1) % game.settings.no_of_players;
     }
 }
-
-document.addEventListener("DOMContentLoaded", function(event) {
-    var c = document.getElementById("board");
-    var ctx = c.getContext("3D");
-});
