@@ -43,6 +43,7 @@ var game = {
     create_board: function() {
         this.create_locations();
         this.create_players();
+        canvas.render(this);
         return this;
     },
     get_adjacent: function(location) {
@@ -154,3 +155,11 @@ var game = {
         game.turn = (game.turn+1) % game.settings.no_of_players;
     }
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    console.debug('game.js loaded');
+    document.querySelector("#start_game").onclick=function(){
+        this.style.display = 'none';
+        game.create_board();
+    }
+});

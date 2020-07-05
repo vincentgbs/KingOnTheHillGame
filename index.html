@@ -7,11 +7,12 @@
         <!-- <title>Vertical Chess</title> -->
         <script src="layout.js" type="text/javascript"></script>
         <script src="game.js" type="text/javascript"></script>
-        <script src="tests/test.js" type="text/javascript"></script>
+        <!-- <script src="tests/test.js" type="text/javascript"></script> -->
         <link rel="stylesheet" type="text/css" href="game.css">
     </head>
     <body>
         <canvas id="board"></canvas>
+        <div id="turn"><button id="start_game">Start</button></div>
         <div class="instructions"><div id="instructions">King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece. <br>There are four levels: base, middle, top, cap. You want your king placed on top of the third level (top).
         <br>You may move your piece to any adjacent square (including diagonals). You may build on any adjacent square (including diagonals).
         <br>When moving, you cannot move to a space where another piece resides. You cannot move onto a cap. You cannot move up more than one level at a time. You may move down multiple levels.

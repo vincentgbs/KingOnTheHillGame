@@ -111,5 +111,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const c = document.querySelector("#board");
     const ctx = c.getContext("2d");
     canvas.set(c, ctx);
-    // Default Starting Point
 });
