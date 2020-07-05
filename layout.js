@@ -48,6 +48,8 @@ var canvas = {
         this.ctx.beginPath();
         if (active) {
             this.ctx.strokeStyle = 'grey';
+        } else {
+            this.ctx.strokeStyle = 'black';
         }
         this.ctx.arc(location.h*100 + 50, location.v*100 + 50, 25, 0, 2 * Math.PI);
         this.ctx.stroke();
