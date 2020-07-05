@@ -77,7 +77,54 @@ var unittests = {
         }
     },
     test6: function() {
-        console.debug('Running Unit Test 6');
+        let p0p1 = game.players[0].pieces[1];
+        let o = game.get_adjacent(p0p1.location);
+        let p = game.filter_move(o, p0p1);
+        if (this.objectmatch(o, p)) {
+            console.debug('Should not be able to move where another piece is');
+            return false;
+        } else {
+            if (this.objectmatch(p, [{h:1,v:2},{h:1,v:0},{h:2,v:2},
+                {h:2,v:0},{h:0,v:1},{h:0,v:2},{h:0,v:0}])) {
+                return true;
+            } else {
+                console.debug(o, p);
+                return false;
+            }
+        }
+    },
+    test7: function() {
+        let p0p1 = game.players[0].pieces[1];
+        let p = new Promise((resolve, reject) => {
+            if (p0p1.location.v == 1 && p0p1.location.h == 1) {
+                resolve('Starting at: {v:1, h:1}');
+            } else {
+                console.debug(p0p1.location);
+                reject('Incorrect Starting Location');
+            }
+        });
+        p.then((message) => {
+            console.debug(message);
+            let p0p1 = game.players[0].pieces[1];
+            let o = game.filter_move(game.get_adjacent(p0p1.location), p0p1);
+            let q = new Promise((resolve, reject) => {
+                let a = game.move(p0p1, o[0]);
+                if (p0p1.location.v == 2 && p0p1.location.h == 1) {
+                    console.debug('Moved to: {v:2, h:1}');
+                    resolve('Passed Unit Test 7');
+                } else {
+                    console.debug(p0p1.location)
+                    reject('Did not move correctly');
+                }
+            });
+            q.then((message) => {
+                console.debug(message);
+            }).catch((message) => {
+                console.debug(message);
+            });
+        }).catch((message) => {
+            console.debug(message);
+        });
     }
 }
 
@@ -97,7 +144,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
     p.then((message) => {
         console.debug(message);
-        unittests.test6();
+        let p = new Promise((resolve, reject) => {
+            let a = unittests.test6();
+            if (a) {
+                resolve('Passed Unit Test 6');
+            } else {
+                reject('Failed Unit Test 6');
+            }
+        });
+        p.then((message) => {
+            console.debug(message);
+            unittests.test7();
+        }).catch((message) => {
+            console.debug(message);
+        });
     }).catch((message) => {
         console.debug(message);
     });

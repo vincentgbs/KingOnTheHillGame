@@ -92,19 +92,19 @@ var game = {
     filter_move: function(options, piece) {
         filtered = [];
         for (i in options) {
-            location = options[i];
-            if (this.board[location.v][location.h].level >= 4) {
+            board_loc = options[i];
+            if (this.board[board_loc.v][board_loc.h].level >= 4) {
                 // skip, do not add to filtered
-            } else if (this.board[location.v][location.h].level >= piece.location.l + 1) {
+            } else if (this.board[board_loc.v][board_loc.h].level >= piece.location.l + 1) {
                 // skip, do not add to filtered
-            } else if (this.check_for_piece(location)) {
+            } else if (this.check_for_piece(board_loc)) {
                 if (piece.type == 'king' && piece.player == this.turn) {
-                    filtered.push(location);
+                    filtered.push(board_loc);
                 } else {
                     // skip, do not add to filtered
                 }
             } else {
-                filtered.push(location);
+                filtered.push(board_loc);
             }
         }
         return filtered;
@@ -112,13 +112,13 @@ var game = {
     filter_build: function(options, piece) {
         filtered = [];
         for (i in options) {
-            location = options[i];
-            if (this.board[location.v][location.h].level >= 4) {
+            board_loc = options[i];
+            if (this.board[board_loc.v][board_loc.h].level >= 4) {
                 // skip, do not add to filtered
-            } else if (this.check_for_piece(location)) {
+            } else if (this.check_for_piece(board_loc)) {
                 // skip, do not add to filtered
             } else {
-                filtered.push(location);
+                filtered.push(board_loc);
             }
         }
         return filtered;
