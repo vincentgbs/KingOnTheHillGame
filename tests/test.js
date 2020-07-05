@@ -167,13 +167,24 @@ var unittests = {
         }
     },
     test10: function() {
-        canvas.resize(game.settings.vertical * 100, game.settings.horizontal * 100);
-        canvas.draw_board();
-        canvas.draw_base({h:1, v:1});
-        canvas.draw_mid({h:1, v:1});
-        canvas.draw_top({h:1, v:1});
-        canvas.draw_cap({h:1, v:1});
-        canvas.draw_piece({h:2, v:2}, 'king');
+        // reset game
+        game.board[1][1].level = 0;
+        // create labels
+        let p0 = game.players[0];
+        let p1 = game.players[1];
+        let k0 = p0.pieces[0];
+        let p0p1 = p0.pieces[1];
+        let p0p2 = p0.pieces[2];
+        let k1 = p1.pieces[0];
+        let p1p1 = p1.pieces[1];
+        let p1p2 = p1.pieces[2];
+        // place pieces on board
+        game.move(k0, {v:1,h:2});
+        game.move(p0p1, {v:1,h:1});
+        game.move(p0p2, {v:1,h:3});
+        game.move(k1, {v:3,h:2});
+        game.move(p1p1, {v:3,h:1});
+        game.move(p1p2, {v:3,h:3});
     }
 }
 
@@ -253,5 +264,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         console.debug(message);
     });
 
-    // unittests.test10();
+    setTimeout(function() {
+        unittests.test10();
+    }, 5000);
+
 });

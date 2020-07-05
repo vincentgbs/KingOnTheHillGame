@@ -84,7 +84,7 @@ var game = {
                 let piece = player.pieces[j];
                 if (location.v == piece.location.v &&
                     location.h == piece.location.h) {
-                    return true;
+                    return piece;
                 }
             }
         }
@@ -161,5 +161,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.querySelector("#start_game").onclick=function(){
         this.style.display = 'none';
         game.create_board();
+        // create labels
+        let p0 = game.players[0];
+        let p1 = game.players[1];
+        let k0 = p0.pieces[0];
+        let p0p1 = p0.pieces[1];
+        let p0p2 = p0.pieces[2];
+        let k1 = p1.pieces[0];
+        let p1p1 = p1.pieces[1];
+        let p1p2 = p1.pieces[2];
+        // place pieces on board
+        game.move(k0, {v:1,h:2});
+        game.move(p0p1, {v:1,h:1});
+        game.move(p0p2, {v:1,h:3});
+        game.move(k1, {v:3,h:2});
+        game.move(p1p1, {v:3,h:1});
+        game.move(p1p2, {v:3,h:3});
     }
 });
