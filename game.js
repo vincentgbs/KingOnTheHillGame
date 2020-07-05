@@ -33,8 +33,9 @@ var game = {
             };
             for (j in this.settings.piece_types) {
                 player.pieces.push({
-                    type: this.settings.piece_types[j],
                     player: id,
+                    active: false,
+                    type: this.settings.piece_types[j],
                     location: {v:-1, h:-1, l:-1}
                 });
             }

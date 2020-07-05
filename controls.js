@@ -1,4 +1,5 @@
 var controls = {
+    active: false,
     getCursorPosition: function (canvas, event) {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -8,11 +9,23 @@ var controls = {
     select_piece: function(c, e) {
         let coord = this.getCursorPosition(c, e);
         piece = game.check_for_piece(coord);
-        if (piece && piece.player == game.turn) {
-            console.debug(piece);
-            return piece;
-        } // else
-        console.debug(coord);
+        if(this.active && piece.active) {
+            this.active = false;
+            piece.active = false;
+            canvas.render(game);
+        } else if (!this.active && piece.player == game.turn) {
+            this.active = true;
+            piece.active = true;
+            canvas.render(game);
+        } else {
+            console.debug(coord);
+        }
+    },
+    select_move: function() {
+        //
+    },
+    select_build: function() {
+        //
     }
 }
 
@@ -20,6 +33,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('layout.js loaded');
     const c = document.querySelector("#board");
     c.addEventListener('mousedown', function(e) {
-        let x = controls.select_piece(c, e);
+        controls.select_piece(c, e);
     });
 });
