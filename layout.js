@@ -99,8 +99,12 @@ var canvas = {
                     v: piece.location.v,
                     h: piece.location.h
                 };
-                this.draw_piece(coord, piece.type,
-                    game.settings.piece_colors[i], piece.active);
+                this.draw_piece(
+                    coord,
+                    piece.type,
+                    game.settings.piece_colors[i],
+                    piece.active // affects all pieces after it in loop
+                );
             }
         }
     },

@@ -1,5 +1,5 @@
 var controls = {
-    active: false,
+    active_piece: false,
     getCursorPosition: function (canvas, event) {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -9,12 +9,12 @@ var controls = {
     select_piece: function(c, e) {
         let coord = this.getCursorPosition(c, e);
         piece = game.check_for_piece(coord);
-        if(this.active && piece.active) {
-            this.active = false;
+        if(this.active_piece && piece.active) {
+            this.active_piece = false;
             piece.active = false;
             canvas.render(game);
-        } else if (!this.active && piece.player == game.turn) {
-            this.active = true;
+        } else if (!this.active_piece && piece.player == game.turn) {
+            this.active_piece = true;
             piece.active = true;
             canvas.render(game);
         } else {
