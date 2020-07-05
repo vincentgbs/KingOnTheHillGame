@@ -44,12 +44,12 @@ var canvas = {
         this.ctx.fillRect(location.h*100 + 30,location.v*100 + 30,39,39);
         return this;
     },
-    draw_piece: function(location, type) {
+    draw_piece: function(location, type, color) {
         this.ctx.beginPath();
         this.ctx.arc(location.h*100 + 50, location.v*100 + 50, 25, 0, 2 * Math.PI);
         this.ctx.stroke();
         this.ctx.font = "30px Arial";
-        this.ctx.fillStyle = "black";
+        this.ctx.fillStyle = color;
         this.ctx.textAlign = "center";
         if (type == 'king') {
             this.ctx.fillText('K', location.h*100 + 50, location.v*100 + 60);
@@ -96,7 +96,7 @@ var canvas = {
                     v: piece.location.v,
                     h: piece.location.h
                 };
-                this.draw_piece(coord, piece.type);
+                this.draw_piece(coord, piece.type, game.settings.piece_colors[i]);
             }
         }
     },

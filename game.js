@@ -4,7 +4,8 @@ var game = {
         vertical: 5,
         horizontal: 5,
         level: 4,
-        piece_types: ['king', 'pawn', 'pawn']
+        piece_types: ['king', 'pawn', 'pawn'],
+        piece_colors: ['red', 'blue', 'yellow', 'purple', 'green', 'orange']
     },
     board: [],
     players: [],
