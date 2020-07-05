@@ -130,6 +130,9 @@ var game = {
         if (piece.type == 'king' &&
             this.board[board_location.v][board_location.h].level == 3) {
             console.debug('Winner. Game Over.');
+            game.board = []; // reset board
+            game.players = []; // reset players
+            game.turn = 0; // reset game
         }
         piece.location = {
             v: board_location.v,
@@ -140,6 +143,12 @@ var game = {
     },
     build: function(location) {
         return this.board[location.v][location.h].level++;
+    },
+    take_turn: function() {
+        // player chooses piece from game.get_pieces()
+        // player chooses move from game.filter_move(game.get_adjacent(piece.location))
+        // player chooses build from game.filter_build(game.get_adjacent.piece.location)
+        game.turn = (game.turn+1) % game.settings.no_of_players;
     }
 }
 
