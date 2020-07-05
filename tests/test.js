@@ -103,24 +103,23 @@ var unittests = {
                 reject('Incorrect Starting Location');
             }
         });
-        p.then((message) => {
-            console.debug(message);
+        return p.then((message) => {
             let p0p1 = game.players[0].pieces[1];
             let o = game.filter_move(game.get_adjacent(p0p1.location), p0p1);
             let q = new Promise((resolve, reject) => {
                 let a = game.move(p0p1, o[0]);
                 if (p0p1.location.v == 2 && p0p1.location.h == 1) {
-                    console.debug('Moved to: {v:2, h:1}');
-                    resolve('Passed Unit Test 7');
+                    resolve('Moved to: {v:2, h:1}');
                 } else {
                     console.debug(p0p1.location)
                     reject('Did not move correctly');
                 }
             });
-            q.then((message) => {
-                console.debug(message);
+            return q.then((message) => {
+                return true;
             }).catch((message) => {
                 console.debug(message);
+                return false;
             });
         }).catch((message) => {
             console.debug(message);
@@ -154,7 +153,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
         p.then((message) => {
             console.debug(message);
-            unittests.test7();
+            let p = new Promise((resolve, reject) => {
+                let a = unittests.test7();
+                if (a) {
+                    resolve('Passed Unit Test 7');
+                } else {
+                    reject('Failed Unit Test 7');
+                }
+            });
+            p.then((message) => {
+                console.debug(message);
+            }).catch((message) => {
+                console.debug(message);
+            });
         }).catch((message) => {
             console.debug(message);
         });
