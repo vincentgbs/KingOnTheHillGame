@@ -1,4 +1,5 @@
 var unittests = {
+    delay: 999,
     objectmatch: function(arr1, arr2) {
         return (JSON.stringify(arr1) == JSON.stringify(arr2));
     },
@@ -149,7 +150,7 @@ var unittests = {
             return false;
         } else {
             let p = new Promise((resolve, reject) => {
-                let a = game.build(o[0]);
+                game.build(o[0]);
                 if (game.board[o[0].v][o[0].h].level === 1) {
                     resolve('Build successful (Test 9)');
                 } else {
@@ -191,50 +192,55 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     });
     p.then((message) => {
-        canvas.render(game);
         console.debug(message);
-        let p = new Promise((resolve, reject) => {
-            let a = unittests.test6();
-            if (a) {
-                resolve('Passed Unit Test 6');
-            } else {
-                reject('Failed Unit Test 6');
-            }
-        });
-        p.then((message) => {
-            console.debug(message);
+        setTimeout(function() {
             let p = new Promise((resolve, reject) => {
-                let a = unittests.test7();
+                let a = unittests.test6();
                 if (a) {
-                    resolve('Passed Unit Test 7');
+                    resolve('Passed Unit Test 6');
                 } else {
-                    reject('Failed Unit Test 7');
+                    reject('Failed Unit Test 6');
                 }
             });
             p.then((message) => {
                 console.debug(message);
                 let p = new Promise((resolve, reject) => {
-                    let a = unittests.test8();
+                    let a = unittests.test7();
                     if (a) {
-                        resolve('Passed Unit Test 8');
+                        resolve('Passed Unit Test 7');
                     } else {
-                        reject('Failed Unit Test 8');
+                        reject('Failed Unit Test 7');
                     }
                 });
                 p.then((message) => {
                     console.debug(message);
                     let p = new Promise((resolve, reject) => {
-                        let a = unittests.test9();
+                        let a = unittests.test8();
                         if (a) {
-                            resolve('Passed Unit Test 9');
+                            resolve('Passed Unit Test 8');
                         } else {
-                            reject('Failed Unit Test 9');
+                            reject('Failed Unit Test 8');
                         }
                     });
                     p.then((message) => {
-                        // console.debug(message);
+                        console.debug(message);
+                        setTimeout(function() {
+                            let p = new Promise((resolve, reject) => {
+                                let a = unittests.test9();
+                                if (a) {
+                                    resolve('Passed Unit Test 9');
+                                } else {
+                                    reject('Failed Unit Test 9');
+                                }
+                            });
+                            p.then((message) => {
+                                // console.debug(message);
+                            }).catch((message) => {
+                                // console.debug(message);
+                            });
+                        }, unittests.delay);
                     }).catch((message) => {
-                        // console.debug(message);
+                        console.debug(message);
                     });
                 }).catch((message) => {
                     console.debug(message);
@@ -242,9 +248,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }).catch((message) => {
                 console.debug(message);
             });
-        }).catch((message) => {
-            console.debug(message);
-        });
+        }, unittests.delay);
     }).catch((message) => {
         console.debug(message);
     });

@@ -139,10 +139,13 @@ var game = {
             h: board_location.h,
             l: this.board[board_location.v][board_location.h].level
         };
+        canvas.render(this);
         return piece.location;
     },
     build: function(location) {
-        return this.board[location.v][location.h].level++;
+        this.board[location.v][location.h].level++
+        canvas.render(this);
+        return this;
     },
     take_turn: function() {
         // player chooses piece from game.get_pieces()
