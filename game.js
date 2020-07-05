@@ -13,27 +13,26 @@ var game = {
         this.settings[key] = value;
     },
     create_locations: function() {
-        // document.getElementById("board").style.height = (this.vertical * 100);
-        // document.getElementById("board").style.width = (this.horizontal * 100);
-        for(var i = 0; i < this.vertical; i++) {
+        for(var i = 0; i < this.settings.vertical; i++) {
             row = [];
-            for(var j = 0; j < this.horizontal; j++) {
+            for(var j = 0; j < this.settings.horizontal; j++) {
                 row.push({
                     level: 0
                 });
             }
             this.board.push(row);
         }
+        return this.board;
     },
     create_players: function() {
-        for (var id = 0; id < this.no_of_players; id++) {
+        for (var id = 0; id < this.settings.no_of_players; id++) {
             var player = {
                 player: id,
                 pieces: []
             };
-            for (j in this.piece_types) {
+            for (j in this.settings.piece_types) {
                 player.pieces.push({
-                    type: type,
+                    type: this.settings.piece_types[j],
                     player: id,
                     location: {v:-1, h:-1, l:-1}
                 });
@@ -51,7 +50,7 @@ var game = {
         h = [location.h];
         if (location.v == 0) {
             v.push(location.v+1);
-        } else if (location.v == this.vertical) {
+        } else if (location.v == this.settings.vertical) {
             v.push(location.v-1);
         } else {
             v.push(location.v+1);
@@ -59,7 +58,7 @@ var game = {
         }
         if (location.h == 0) {
             h.push(location.h+1);
-        } else if (location.h == this.horizontal) {
+        } else if (location.h == this.settings.horizontal) {
             h.push(location.h-1);
         } else {
             h.push(location.h+1);
@@ -96,7 +95,7 @@ var game = {
             location = options[i];
             if (this.board[location.v][location.h].level >= 4) {
                 // skip, do not add to filtered
-            } else if (this.board[location.v][location.h].level >= piece.level + 1) {
+            } else if (this.board[location.v][location.h].level >= piece.location.l + 1) {
                 // skip, do not add to filtered
             } else if (this.check_for_piece(location)) {
                 if (piece.type == 'king' && piece.player == this.turn) {
@@ -124,14 +123,20 @@ var game = {
         }
         return filtered;
     },
-    choose_piece: function(player) {
-        //
+    select_piece: function() {
+        // may not be needed
     },
-    move: function(piece, location) {
-        // update piece
+    move: function(piece, board_location) {
+        piece.location = {
+            v: board_location.v,
+            h: board_location.h,
+            l: this.board[board_location.v][board_location.h].level
+        };
+        // check for win condition
+        return piece.location;
     },
     build: function(location) {
-        // update this.board_locations
+        this.board[location.v][location.h].level++;
     }
 }
 

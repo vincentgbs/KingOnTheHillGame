@@ -47,6 +47,25 @@ var unittests = {
         } else {
             console.debug('Passed Unit Test 4');
         }
+    },
+    test5: function() {
+        // create labels
+        let p1 = game.players[0];
+        let p2 = game.players[1];
+        let k1 = p1.pieces[0];
+        let p1p1 = p1.pieces[1];
+        let p1p2 = p1.pieces[2];
+        let k2 = p2.pieces[0];
+        let p2p1 = p2.pieces[1];
+        let p2p2 = p2.pieces[2];
+        // place pieces on board
+        game.move(k1, {v:1,h:2});
+        game.move(p1p1, {v:1,h:1});
+        game.move(p1p2, {v:1,h:3});
+        game.move(k2, {v:3,h:2});
+        game.move(p2p1, {v:3,h:1});
+        game.move(p2p2, {v:3,h:3});
+        console.debug('Passed Unit Test 5');
     }
 }
 
@@ -56,4 +75,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     unittests.test2();
     unittests.test3();
     unittests.test4();
+    unittests.test5();
 });
