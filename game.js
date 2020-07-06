@@ -132,8 +132,10 @@ var game = {
     move: function(piece, board_location) {
         let pawn_swap = this.check_for_piece(board_location);
         if (piece.type == 'king' &&
-            this.board[board_location.v][board_location.h].level == 3) {
-            console.debug('Winner. Game Over.');
+        this.board[board_location.v][board_location.h].level == 3) {
+            console.debug('Winner!');
+            canvas.declare_winner();
+            return false;
         } else if (piece.type == 'king' && pawn_swap) {
             // no need to check piece or player of destination because filter_move should already have removed any illegal options
             pawn_swap.location = piece.location;

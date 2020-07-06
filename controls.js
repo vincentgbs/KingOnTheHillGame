@@ -31,9 +31,10 @@ var controls = {
             for (i in options) {
                 if (coord.h == options[i].h && coord.v == options[i].v) {
                     this.action = 'build';
-                    game.move(this.active_piece, {v:coord.v,h:coord.h});
-                    canvas.render(game);
-                    return true;
+                    if(game.move(this.active_piece, {v:coord.v,h:coord.h})) {
+                        canvas.render(game);
+                        return true;
+                    }
                 }
             } // else
             console.debug('You cannot move there');

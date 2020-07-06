@@ -113,6 +113,15 @@ var canvas = {
     render: function(game) {
         this.redraw_board(game);
         this.redraw_pieces(game);
+    },
+    declare_winner: function() {
+        this.ctx.fillStyle = 'yellow';
+        this.ctx.fillRect(0, 0, game.settings.horizontal*100, game.settings.vertical*50);
+        this.ctx.font = "80px Arial";
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText('Winner', game.settings.horizontal*50, game.settings.vertical*25);
+        return this;
     }
 }
 
