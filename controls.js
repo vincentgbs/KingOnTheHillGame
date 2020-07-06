@@ -1,4 +1,5 @@
 var controls = {
+    start: false,
     action: 'piece',
     active_piece: false,
     getCursorPosition: function (canvas, event) {
@@ -58,12 +59,14 @@ var controls = {
         console.debug('You cannot build there');
     },
     on_click: function(c, e) {
-        if (this.action == 'piece') {
-            this.select_piece(c, e);
-        } else if (this.action == 'move') {
-            this.select_move(c, e);
-        } else if (this.action == 'build') {
-            this.select_build(c, e);
+        if (this.start) {
+            if (this.action == 'piece') {
+                this.select_piece(c, e);
+            } else if (this.action == 'move') {
+                this.select_move(c, e);
+            } else if (this.action == 'build') {
+                this.select_build(c, e);
+            }
         }
     },
     update_turn: function(game) {

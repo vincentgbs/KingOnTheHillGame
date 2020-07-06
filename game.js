@@ -135,9 +135,7 @@ var game = {
         let pawn_swap = this.check_for_piece(board_location);
         if (piece.type == 'king' &&
         this.board[board_location.v][board_location.h].level == 3) {
-            console.debug('Winner!');
-            canvas.declare_winner();
-            return false;
+            return this.winning_move(piece, board_location);
         } else if (piece.type == 'king' && pawn_swap) {
             // no need to check piece or player of destination because filter_move should already have removed any illegal options
             pawn_swap.location = piece.location;
@@ -149,6 +147,17 @@ var game = {
         };
         canvas.render(this);
         return piece.location;
+    },
+    winning_move: function(piece, board_location) {
+        console.debug('Winner!');
+        piece.location = {
+            v: board_location.v,
+            h: board_location.h,
+            l: this.board[board_location.v][board_location.h].level
+        };
+        canvas.render(this);
+        canvas.declare_winner();
+        controls.start = false;
     },
     build: function(location) {
         this.board[location.v][location.h].level++
@@ -167,6 +176,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.querySelector("#start_game").onclick=function(){
         this.style.display = 'none';
         document.querySelector("#fade_out_title").style.display = 'none';
+        controls.start = true;
         game.create_board();
         // create labels
         let p0 = game.players[0];
