@@ -9,6 +9,8 @@ var game = {
     },
     board: [],
     players: [],
+    // log: [],
+    // active_turn: {from: {}, to: {}, build: {}},
     turn: 0,
     updating_settings: function(key, value) {
         this.settings[key] = value;
@@ -154,7 +156,9 @@ var game = {
         return this;
     },
     take_turn: function() {
+        // this.log.push(this.active_turn);
         game.turn = (game.turn+1) % game.settings.no_of_players;
+        // this.active_turn = {};
     }
 }
 
