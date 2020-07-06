@@ -1,6 +1,6 @@
 var controls = {
+    action: 'piece',
     active_piece: false,
-    active_move: false,
     getCursorPosition: function (canvas, event) {
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -10,12 +10,9 @@ var controls = {
     select_piece: function(c, e) {
         let coord = this.getCursorPosition(c, e);
         piece = game.check_for_piece(coord);
-        if(this.active_piece && piece.active) {
-            this.active_piece = false;
-            piece.active = false;
-            canvas.render(game);
-        } else if (!this.active_piece && piece.player == game.turn) {
+        if (!this.active_piece && piece.player == game.turn) {
             this.active_piece = piece; // loose definition
+            this.action = 'move';
             piece.active = true;
             canvas.render(game);
         } else {
@@ -24,24 +21,53 @@ var controls = {
     },
     select_move: function(c, e) {
         let coord = this.getCursorPosition(c, e);
-        let options = game.filter_move(game.get_adjacent(this.active_piece.location));
-        for (i in options) {
-            if (coord.h == options[i].h && coord.v == options[i].v) {
-                console.debug('VALID MOVE');
-            }
-        } // else
-        console.debug('WRONG PLACE');
+        if (this.active_piece.location.h == coord.h &&
+        this.active_piece.location.v == coord.v) {
+            let piece = game.check_for_piece(coord);
+            this.action = 'piece';
+            piece.active = false;
+            this.active_piece = false;
+            canvas.render(game);
+        } else {
+            console.debug(this.active_piece);
+            let options = game.filter_move(game.get_adjacent(this.active_piece.location), this.active_piece);
+            for (i in options) {
+                if (coord.h == options[i].h && coord.v == options[i].v) {
+                    this.action = 'build';
+                    game.move(this.active_piece, {v:coord.v,h:coord.h});
+                    canvas.render(game);
+                    return true;
+                }
+            } // else
+            console.debug('You cannot move there');
+        }
     },
     select_build: function(c, e) {
+        let piece = this.active_piece;
         let coord = this.getCursorPosition(c, e);
+        console.debug(this.active_piece.location);
+        console.debug(this.active_piece);
+        let options = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
+        for (i in options) {
+            if (coord.h == options[i].h && coord.v == options[i].v) {
+                game.build(coord);
+                this.action = 'piece';
+                piece.active = false;
+                this.active_piece = false;
+                game.take_turn();
+                canvas.render(game);
+                return true;
+            }
+        } // else
+        console.debug('You cannot build there');
     },
     on_click: function(c, e) {
-        if (this.active_piece == false && this.active_move == false) {
+        if (this.action == 'piece') {
             this.select_piece(c, e);
-        } else if (this.active_piece == true && this.active_move == false) {
+        } else if (this.action == 'move') {
             this.select_move(c, e);
-        } else if (this.active_piece == true && this.active_move == true) {
-            //
+        } else if (this.action == 'build') {
+            this.select_build(c, e);
         }
     }
 }

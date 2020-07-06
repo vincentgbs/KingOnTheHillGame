@@ -98,10 +98,11 @@ var game = {
             board_loc = options[i];
             if (this.board[board_loc.v][board_loc.h].level >= 4) {
                 // skip, do not add to filtered
-            } else if (this.board[board_loc.v][board_loc.h].level >= piece.location.l + 1) {
+            } else if (this.board[board_loc.v][board_loc.h].level > piece.location.l + 1) {
                 // skip, do not add to filtered
             } else if (this.check_for_piece(board_loc)) {
                 if (piece.type == 'king' && piece.player == this.turn) {
+                    // ADD FUNCTION TO MOVE PAWN
                     filtered.push(board_loc);
                 } else {
                     // skip, do not add to filtered
@@ -113,6 +114,7 @@ var game = {
         return filtered;
     },
     filter_build: function(options, piece) {
+        console.debug(options);
         filtered = [];
         for (i in options) {
             board_loc = options[i];
@@ -151,8 +153,6 @@ var game = {
         return this;
     },
     take_turn: function() {
-        // player chooses move from game.filter_move(game.get_adjacent(piece.location))
-        // player chooses build from game.filter_build(game.get_adjacent(piece.location))
         game.turn = (game.turn+1) % game.settings.no_of_players;
     }
 }
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let k1 = p1.pieces[0];
         let p1p1 = p1.pieces[1];
         let p1p2 = p1.pieces[2];
-        // place pieces on board
+        // create default board
         game.move(k0, {v:1,h:2});
         game.move(p0p1, {v:1,h:1});
         game.move(p0p2, {v:1,h:3});
