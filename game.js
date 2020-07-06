@@ -2,7 +2,7 @@ var game = {
     settings: { // default board
         no_of_players: 2,
         vertical: 5,
-        horizontal: 5,
+        horizontal: 7,
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
         piece_colors: ['blue', 'purple', 'green', 'yellow', 'orange', 'red']
