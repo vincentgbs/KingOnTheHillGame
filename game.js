@@ -67,16 +67,18 @@ var game = {
             h.push(location.h+1);
             h.push(location.h-1);
         }
+        console.debug(v, h);
         options = [];
         for(var i = 0; i < v.length; i++)
         {
              for(var j = 0; j < h.length; j++)
              {
-                 if(!(h[i] == location.h && v[j]== location.v)) {
-                     options.push({h: h[i], v: v[j]});
+                 if(!(h[j] == location.h && v[i]== location.v)) {
+                     options.push({h: h[j], v: v[i]});
                  }
              }
         }
+        console.debug(options);
         return options;
     },
     check_for_piece: function(location) {
@@ -114,7 +116,6 @@ var game = {
         return filtered;
     },
     filter_build: function(options, piece) {
-        console.debug(options);
         filtered = [];
         for (i in options) {
             board_loc = options[i];
@@ -135,9 +136,6 @@ var game = {
         if (piece.type == 'king' &&
             this.board[board_location.v][board_location.h].level == 3) {
             console.debug('Winner. Game Over.');
-            game.board = []; // reset board
-            game.players = []; // reset players
-            game.turn = 0; // reset game
         }
         piece.location = {
             v: board_location.v,
