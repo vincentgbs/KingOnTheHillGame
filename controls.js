@@ -15,8 +15,6 @@ var controls = {
             this.action = 'move';
             piece.active = true;
             canvas.render(game);
-        } else {
-            console.debug(coord);
         }
     },
     select_move: function(c, e) {
@@ -29,7 +27,6 @@ var controls = {
             this.active_piece = false;
             canvas.render(game);
         } else {
-            console.debug(this.active_piece);
             let options = game.filter_move(game.get_adjacent(this.active_piece.location), this.active_piece);
             for (i in options) {
                 if (coord.h == options[i].h && coord.v == options[i].v) {
@@ -45,8 +42,6 @@ var controls = {
     select_build: function(c, e) {
         let piece = this.active_piece;
         let coord = this.getCursorPosition(c, e);
-        console.debug(this.active_piece.location);
-        console.debug(this.active_piece);
         let options = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
         for (i in options) {
             if (coord.h == options[i].h && coord.v == options[i].v) {
