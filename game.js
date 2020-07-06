@@ -5,7 +5,7 @@ var game = {
         horizontal: 5,
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
-        piece_colors: ['red', 'blue', 'yellow', 'purple', 'green', 'orange']
+        piece_colors: ['blue', 'purple', 'green', 'yellow', 'orange', 'red']
     },
     board: [],
     players: [],
@@ -53,32 +53,30 @@ var game = {
         h = [location.h];
         if (location.v == 0) {
             v.push(location.v+1);
-        } else if (location.v == this.settings.vertical) {
+        } else if (location.v >= (this.settings.vertical - 1)) {
             v.push(location.v-1);
         } else {
-            v.push(location.v+1);
             v.push(location.v-1);
+            v.push(location.v+1);
         }
         if (location.h == 0) {
             h.push(location.h+1);
-        } else if (location.h == this.settings.horizontal) {
+        } else if (location.h >= (this.settings.horizontal - 1)) {
             h.push(location.h-1);
         } else {
-            h.push(location.h+1);
             h.push(location.h-1);
+            h.push(location.h+1);
         }
-        console.debug(v, h);
         options = [];
         for(var i = 0; i < v.length; i++)
         {
              for(var j = 0; j < h.length; j++)
              {
-                 if(!(h[j] == location.h && v[i]== location.v)) {
-                     options.push({h: h[j], v: v[i]});
+                 if(!(v[i]== location.v && h[j] == location.h)) {
+                     options.push({v: v[i], h: h[j]});
                  }
              }
         }
-        console.debug(options);
         return options;
     },
     check_for_piece: function(location) {

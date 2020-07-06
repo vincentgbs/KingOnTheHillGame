@@ -25,17 +25,17 @@ var canvas = {
         return this;
     },
     draw_base: function(location) {
-        this.ctx.fillStyle = 'blue';
+        this.ctx.fillStyle = 'green';
         this.ctx.fillRect(location.h*100,location.v*100,99,99);
         return this;
     },
     draw_mid: function(location) {
-        this.ctx.fillStyle = 'green';
+        this.ctx.fillStyle = 'yellow';
         this.ctx.fillRect(location.h*100 + 10,location.v*100 + 10,79,79);
         return this;
     },
     draw_top: function(location) {
-        this.ctx.fillStyle = 'yellow';
+        this.ctx.fillStyle = 'orange';
         this.ctx.fillRect(location.h*100 + 20,location.v*100 + 20,59,59);
         return this;
     },
