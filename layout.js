@@ -113,6 +113,7 @@ var canvas = {
     render: function(game) {
         this.redraw_board(game);
         this.redraw_pieces(game);
+        controls.update_turn(game);
     },
     declare_winner: function() {
         this.ctx.fillStyle = 'yellow';

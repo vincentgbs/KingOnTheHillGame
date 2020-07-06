@@ -6,7 +6,7 @@ var unittests = {
     test1: function() {
         if (this.objectmatch(
             game.get_adjacent({v:0, h:0}),
-            [{h: 0, v: 1},{h: 1, v: 0},{h: 1, v: 1}])
+            [{v: 0, h: 1},{v: 1, h: 0},{v: 1, h: 1}])
         ) {
             console.debug('Passed Unit Test 1');
         } else {
@@ -14,7 +14,8 @@ var unittests = {
             console.debug('Received');
             console.debug(game.get_adjacent({v:0, h:0}));
             console.debug('Expected:');
-            console.debug([[0, 1], [1, 0], [1, 1]]);
+            console.debug([{v: 0, h: 1},{v: 1, h: 0},{v: 1, h: 1}]);
+
         }
     },
     test2: function() {
@@ -29,7 +30,7 @@ var unittests = {
     test3: function() {
         if (this.objectmatch(
             game.get_adjacent({v:1, h:1}),
-            [{h: 1, v: 2}, {h: 1, v: 0}, {h: 2, v: 1}, {h: 2, v: 2}, {h: 2, v: 0}, {h: 0, v: 1}, {h: 0, v: 2}, {h: 0, v: 0}])
+            [{v: 1, h: 0},{v: 1, h: 2},{v: 0, h: 1},{v: 0, h: 0},{v: 0, h: 2},{v: 2, h: 1},{v: 2, h: 0},{v: 2, h: 2}])
         ) {
             console.debug('Passed Unit Test 3');
         } else {
@@ -37,7 +38,9 @@ var unittests = {
             console.debug('Received');
             console.debug(game.get_adjacent({v:1, h:1}));
             console.debug('Expected:');
-            console.debug([[1, 2], [1, 0], [2, 1], [2, 2], [2, 0], [0, 1], [0, 2], [0, 0]]);
+            console.debug([{v: 1, h: 0},{v: 1, h: 2},{v: 0, h: 1},{v: 0, h: 0},{v: 0, h: 2},{v: 2, h: 1},{v: 2, h: 0},{v: 2, h: 2}]);
+
+
         }
     },
     test4: function() {
@@ -85,11 +88,9 @@ var unittests = {
             console.debug('Should not be able to move where another piece is');
             return false;
         } else {
-            if (this.objectmatch(p, [{h:1,v:2},{h:1,v:0},{h:2,v:2},
-                {h:2,v:0},{h:0,v:1},{h:0,v:2},{h:0,v:0}])) {
+            if (this.objectmatch(p, [])) {
                 return true;
             } else {
-                console.debug(o, p);
                 return false;
             }
         }

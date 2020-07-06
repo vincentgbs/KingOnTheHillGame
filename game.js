@@ -173,11 +173,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let p1p1 = p1.pieces[1];
         let p1p2 = p1.pieces[2];
         // create default board
-        game.move(k0, {v:1,h:2});
-        game.move(p0p1, {v:1,h:1});
-        game.move(p0p2, {v:1,h:3});
-        game.move(k1, {v:3,h:2});
-        game.move(p1p1, {v:3,h:1});
-        game.move(p1p2, {v:3,h:3});
+        game.move(k0, {v:0,h:2});
+        game.move(p0p1, {v:0,h:1});
+        game.move(p0p2, {v:0,h:3});
+        game.move(k1, {v:4,h:2});
+        game.move(p1p1, {v:4,h:1});
+        game.move(p1p2, {v:4,h:3});
     }
 });

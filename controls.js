@@ -65,6 +65,11 @@ var controls = {
         } else if (this.action == 'build') {
             this.select_build(c, e);
         }
+    },
+    update_turn: function(game) {
+        let t = document.querySelector("#player_turn");
+        t.style.color = game.settings.piece_colors[game.turn];
+        t.innerHTML = game.settings.piece_colors[game.turn];
     }
 }
 
