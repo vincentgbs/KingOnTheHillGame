@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('game.js loaded');
     document.querySelector("#start_game").onclick=function(){
         this.style.display = 'none';
+        document.querySelector("#fade_out_title").style.display = 'none';
         game.create_board();
         // create labels
         let p0 = game.players[0];
@@ -173,11 +174,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let p1p1 = p1.pieces[1];
         let p1p2 = p1.pieces[2];
         // create default board
-        game.move(k0, {v:0,h:2});
-        game.move(p0p1, {v:0,h:1});
-        game.move(p0p2, {v:0,h:3});
-        game.move(k1, {v:4,h:2});
-        game.move(p1p1, {v:4,h:1});
-        game.move(p1p2, {v:4,h:3});
+        game.move(k0, {v:0,h:3});
+        game.move(p0p1, {v:0,h:2});
+        game.move(p0p2, {v:0,h:4});
+        game.move(k1, {v:4,h:3});
+        game.move(p1p1, {v:4,h:2});
+        game.move(p1p2, {v:4,h:4});
     }
 });

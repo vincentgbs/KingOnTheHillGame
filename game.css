@@ -5,3 +5,9 @@
 #board {
     border: 1px solid #000000;
 }
+
+#fade_out_title {
+    /* display: none; */
+    text-align: center;
+    font-size: 2rem;
+}
