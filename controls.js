@@ -30,7 +30,7 @@ var controls = {
             this.action = 'piece';
             piece.active = false;
             this.active_piece = false;
-            game.highlight_move([]); // un-highlight
+            game.highlight_move([]);
             canvas.render(game);
         } else {
             let options = game.filter_move(game.get_adjacent(this.active_piece.location), this.active_piece);
@@ -38,7 +38,8 @@ var controls = {
                 if (coord.h == options[i].h && coord.v == options[i].v) {
                     this.action = 'build';
                     if(game.move(this.active_piece, {v:coord.v,h:coord.h})) {
-                        game.highlight_move([]); // un-highlight
+                        let builds = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
+                        game.highlight_move(builds);
                         canvas.render(game);
                         return true;
                     }

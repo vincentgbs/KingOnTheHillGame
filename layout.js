@@ -1,8 +1,8 @@
 var canvas = {
     settings: {
         levels: ['lightgreen', 'yellowgreen', 'khaki', 'darksalmon'],
-        highlight_square: 'gainsboro',
-        highlight_piece: 'silver',
+        highlight_square: 'aqua',
+        highlight_piece: 'aqua',
         regular_piece: 'black'
     },
     set: function(canvas, context) {
