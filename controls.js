@@ -15,6 +15,10 @@ var controls = {
             this.active_piece = piece; // loose definition
             this.action = 'move';
             piece.active = true;
+            let moves = game.filter_move(
+                game.get_adjacent(
+                    piece.location), piece);
+            game.highlight_move(moves);
             canvas.render(game);
         }
     },
@@ -26,6 +30,7 @@ var controls = {
             this.action = 'piece';
             piece.active = false;
             this.active_piece = false;
+            game.highlight_move([]); // un-highlight
             canvas.render(game);
         } else {
             let options = game.filter_move(game.get_adjacent(this.active_piece.location), this.active_piece);
@@ -51,6 +56,7 @@ var controls = {
                 this.action = 'piece';
                 piece.active = false;
                 this.active_piece = false;
+                game.highlight_move([]); // un-highlight
                 game.take_turn();
                 canvas.render(game);
                 return true;

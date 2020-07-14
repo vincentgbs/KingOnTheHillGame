@@ -132,6 +132,21 @@ var game = {
     get_pieces: function() {
         return this.players[this.turn].pieces;
     },
+    highlight_move: function(list) {
+        for(var i = 0; i < this.settings.vertical; i++) {
+            row = [];
+            for(var j = 0; j < this.settings.horizontal; j++) {
+                let highlight = false;
+                for (k in list) {
+                    if (i == list[k].v && j == list[k].h) {
+                        highlight = true;
+                    }
+                }
+                this.board[i][j].option = highlight;
+            }
+            this.board.push(row);
+        }
+    },
     move: function(piece, board_location) {
         let pawn_swap = this.check_for_piece(board_location);
         if (piece.type == 'king' &&
