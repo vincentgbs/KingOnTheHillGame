@@ -38,6 +38,7 @@ var controls = {
                 if (coord.h == options[i].h && coord.v == options[i].v) {
                     this.action = 'build';
                     if(game.move(this.active_piece, {v:coord.v,h:coord.h})) {
+                        game.highlight_move([]); // un-highlight
                         canvas.render(game);
                         return true;
                     }

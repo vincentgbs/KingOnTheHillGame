@@ -5,12 +5,12 @@ var game = {
         horizontal: 7,
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
-        piece_colors: ['blue', 'purple', 'green', 'yellow', 'orange', 'red']
+        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow']
     },
     board: [],
     players: [],
     // log: [],
-    // active_turn: {from: {}, to: {}, build: {}},
+    // active_turn: {player: 0, from: {}, to: {}, build: {}},
     turn: 0,
     updating_settings: function(key, value) {
         this.settings[key] = value;

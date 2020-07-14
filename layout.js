@@ -1,4 +1,10 @@
 var canvas = {
+    settings: {
+        levels: ['lightgreen', 'yellowgreen', 'khaki', 'darksalmon'],
+        highlight_square: 'gainsboro',
+        highlight_piece: 'silver',
+        regular_piece: 'black'
+    },
     set: function(canvas, context) {
         this.c = canvas;
         this.ctx = context;
@@ -25,36 +31,36 @@ var canvas = {
         return this;
     },
     draw_base: function(location) {
-        this.ctx.fillStyle = 'green';
+        this.ctx.fillStyle = this.settings.levels[0];
         this.ctx.fillRect(location.h*100,location.v*100,99,99);
         return this;
     },
     draw_mid: function(location) {
-        this.ctx.fillStyle = 'yellow';
+        this.ctx.fillStyle = this.settings.levels[1];
         this.ctx.fillRect(location.h*100 + 10,location.v*100 + 10,79,79);
         return this;
     },
     draw_top: function(location) {
-        this.ctx.fillStyle = 'orange';
+        this.ctx.fillStyle = this.settings.levels[2];
         this.ctx.fillRect(location.h*100 + 20,location.v*100 + 20,59,59);
         return this;
     },
     draw_cap: function(location) {
-        this.ctx.fillStyle = 'red';
+        this.ctx.fillStyle = this.settings.levels[3];
         this.ctx.fillRect(location.h*100 + 30,location.v*100 + 30,39,39);
         return this;
     },
     highlight_square: function(location) {
-        this.ctx.strokeStyle = 'gainsboro';
+        this.ctx.strokeStyle = this.settings.highlight_square;
         this.ctx.strokeRect(location.h*100,location.v*100,99,99);
         return this;
     },
     draw_piece: function(location, type, color, active) {
         this.ctx.beginPath();
         if (active) {
-            this.ctx.strokeStyle = 'silver';
+            this.ctx.strokeStyle = this.settings.highlight_piece;
         } else {
-            this.ctx.strokeStyle = 'black';
+            this.ctx.strokeStyle = this.settings.regular_piece;
         }
         this.ctx.arc(location.h*100 + 50, location.v*100 + 50, 25, 0, 2 * Math.PI);
         this.ctx.stroke();
