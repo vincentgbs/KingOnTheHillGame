@@ -20,7 +20,8 @@ var game = {
             row = [];
             for(var j = 0; j < this.settings.horizontal; j++) {
                 row.push({
-                    level: 0
+                    level: 0,
+                    option: false
                 });
             }
             this.board.push(row);

@@ -44,10 +44,15 @@ var canvas = {
         this.ctx.fillRect(location.h*100 + 30,location.v*100 + 30,39,39);
         return this;
     },
+    highlight_square: function(location) {
+        this.ctx.strokeStyle = 'gainsboro';
+        this.ctx.strokeRect(location.h*100,location.v*100,99,99);
+        return this;
+    },
     draw_piece: function(location, type, color, active) {
         this.ctx.beginPath();
         if (active) {
-            this.ctx.strokeStyle = 'grey';
+            this.ctx.strokeStyle = 'silver';
         } else {
             this.ctx.strokeStyle = 'black';
         }
@@ -88,6 +93,9 @@ var canvas = {
                     this.draw_top(coord);
                     this.draw_cap(coord);
                 }
+                if (location.option) {
+                    this.highlight_square(coord);
+                }
             }
         }
         return this;
@@ -105,7 +113,7 @@ var canvas = {
                     coord,
                     piece.type,
                     game.settings.piece_colors[i],
-                    piece.active // affects all pieces after it in loop
+                    piece.active
                 );
             }
         }
