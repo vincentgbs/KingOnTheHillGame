@@ -9,9 +9,9 @@ var game = {
     },
     board: [],
     players: [],
-    // log: [],
-    // active_turn: {player: 0, from: {}, to: {}, build: {}},
     turn: 0,
+    log: [],
+    active_turn: {player: 0, from: {}, to: {}, build: {}},
     updating_settings: function(key, value) {
         this.settings[key] = value;
     },
@@ -148,6 +148,7 @@ var game = {
         }
     },
     move: function(piece, board_location) {
+        this.active_turn.from = piece.location;
         let pawn_swap = this.check_for_piece(board_location);
         if (piece.type == 'king' &&
         this.board[board_location.v][board_location.h].level == 3) {
@@ -161,6 +162,7 @@ var game = {
             h: board_location.h,
             l: this.board[board_location.v][board_location.h].level
         };
+        this.active_turn.to = board_location;
         canvas.render(this);
         return piece.location;
     },
@@ -177,13 +179,14 @@ var game = {
     },
     build: function(location) {
         this.board[location.v][location.h].level++
+        this.active_turn.build = location;
         canvas.render(this);
         return this;
     },
     take_turn: function() {
-        // this.log.push(this.active_turn);
+        this.log.push(this.active_turn);
         game.turn = (game.turn+1) % game.settings.no_of_players;
-        // this.active_turn = {};
+        this.active_turn = {player: game.turn};
     }
 }
 
