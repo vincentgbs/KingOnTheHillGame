@@ -186,18 +186,26 @@ var game = {
     take_turn: function(turn) {
         if (typeof turn == 'object') {
             if (game.turn == turn.player) {
-                this.active_turn = turn;
-                // controls.select_piece();
+                // this.active_turn = turn;
+                controls.select_piece(turn.from);
+                controls.start = false; // for animation
                 setTimeout(function() {
-                    console.debug('Animate Move');
+                    controls.select_move(turn.to);
+                    setTimeout(function() {
+                        controls.select_build(turn.build);
+                        game.log.push(turn);
+                        game.active_turn = {player: game.turn};
+                        controls.start = true; // for animation
+                    }, 999);
                 }, 999);
             } else {
                 console.debug("Invalid turn");
             }
+        } else {
+            this.log.push(this.active_turn);
+            this.turn = (this.turn+1) % this.settings.no_of_players;
+            this.active_turn = {player: this.turn};
         }
-        this.log.push(this.active_turn);
-        game.turn = (game.turn+1) % game.settings.no_of_players;
-        this.active_turn = {player: game.turn};
     }
 }
 

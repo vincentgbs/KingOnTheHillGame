@@ -8,8 +8,7 @@ var controls = {
         const y = event.clientY - rect.top;
         return {h: Math.floor(x/100), v: Math.floor(y/100)};
     },
-    select_piece: function(c, e) {
-        let coord = this.getCursorPosition(c, e);
+    select_piece: function(coord) {
         piece = game.check_for_piece(coord);
         if (!this.active_piece && piece.player == game.turn) {
             this.active_piece = piece; // loose definition
@@ -22,8 +21,7 @@ var controls = {
             canvas.render(game);
         }
     },
-    select_move: function(c, e) {
-        let coord = this.getCursorPosition(c, e);
+    select_move: function(coord) {
         if (this.active_piece.location.h == coord.h &&
         this.active_piece.location.v == coord.v) {
             let piece = game.check_for_piece(coord);
@@ -48,9 +46,8 @@ var controls = {
             console.debug('You cannot move there');
         }
     },
-    select_build: function(c, e) {
+    select_build: function(coord) {
         let piece = this.active_piece;
-        let coord = this.getCursorPosition(c, e);
         let options = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
         for (i in options) {
             if (coord.h == options[i].h && coord.v == options[i].v) {
@@ -67,13 +64,14 @@ var controls = {
         console.debug('You cannot build there');
     },
     on_click: function(c, e) {
+        let coord = this.getCursorPosition(c, e);
         if (this.start) {
             if (this.action == 'piece') {
-                this.select_piece(c, e);
+                this.select_piece(coord);
             } else if (this.action == 'move') {
-                this.select_move(c, e);
+                this.select_move(coord);
             } else if (this.action == 'build') {
-                this.select_build(c, e);
+                this.select_build(coord);
             }
         }
     },
