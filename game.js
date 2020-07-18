@@ -183,7 +183,18 @@ var game = {
         canvas.render(this);
         return this;
     },
-    take_turn: function() {
+    take_turn: function(turn) {
+        if (typeof turn == 'object') {
+            if (game.turn == turn.player) {
+                this.active_turn = turn;
+                // controls.select_piece();
+                setTimeout(function() {
+                    console.debug('Animate Move');
+                }, 999);
+            } else {
+                console.debug("Invalid turn");
+            }
+        }
         this.log.push(this.active_turn);
         game.turn = (game.turn+1) % game.settings.no_of_players;
         this.active_turn = {player: game.turn};
