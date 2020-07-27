@@ -5,7 +5,8 @@ var game = {
         horizontal: 7,
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
-        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow']
+        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'],
+        animationDelay: 999
     },
     board: [],
     players: [],
@@ -186,18 +187,7 @@ var game = {
     take_turn: function(turn) {
         if (typeof turn == 'object') {
             if (game.turn == turn.player) {
-                // this.active_turn = turn;
-                controls.select_piece(turn.from);
-                controls.start = false; // for animation
-                setTimeout(function() {
-                    controls.select_move(turn.to);
-                    setTimeout(function() {
-                        controls.select_build(turn.build);
-                        game.log.push(turn);
-                        game.active_turn = {player: game.turn};
-                        controls.start = true; // for animation
-                    }, 999);
-                }, 999);
+                canvas.animateTurn(turn);
             } else {
                 console.debug("Invalid turn");
             }

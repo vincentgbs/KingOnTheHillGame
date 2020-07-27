@@ -19,6 +19,8 @@ var controls = {
                     piece.location), piece);
             game.highlight_move(moves);
             canvas.render(game);
+        } else {
+            console.debug("Invalid piece");
         }
     },
     select_move: function(coord) {

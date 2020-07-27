@@ -137,6 +137,19 @@ var canvas = {
         this.ctx.fillStyle = 'black';
         this.ctx.fillText('Winner', game.settings.horizontal*50, game.settings.vertical*25);
         return this;
+    },
+    animateTurn: function(turn) {
+        controls.select_piece(turn.from);
+        controls.start = false; // for animation
+        setTimeout(function() {
+            controls.select_move(turn.to);
+            setTimeout(function() {
+                controls.select_build(turn.build);
+                game.log.push(turn);
+                game.active_turn = {player: game.turn};
+                controls.start = true; // for animation
+            }, game.settings.animationDelay);
+        }, game.settings.animationDelay);
     }
 }
 

@@ -186,6 +186,12 @@ var unittests = {
         game.move(k1, {v:3,h:2});
         game.move(p1p1, {v:3,h:1});
         game.move(p1p2, {v:3,h:3});
+    },
+    test11: function() {
+        game.take_turn({build: {h: 2, v: 2},
+            from: {v: 0, h: 2, l: 0},
+            player: 0,
+            to: {v: 1, h: 2}});
     }
 }
 
