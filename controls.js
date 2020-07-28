@@ -23,13 +23,28 @@ var controls = {
             console.debug("Invalid piece");
         }
     },
+    unselect_piece: function() {
+        this.action = 'piece';
+        let p = new Promise((resolve, reject) => {
+            this.active_piece.active = false
+            if (this.active_piece.active == false) {
+                resolve('Continue');
+            } else {
+                reject('Error');
+            }
+        });
+        return p.then((message) => {
+            this.active_piece = false;
+            return true;
+        }).catch((message) => {
+            console.debug(message);
+            return false;
+        });
+    },
     select_move: function(coord) {
         if (this.active_piece.location.h == coord.h &&
         this.active_piece.location.v == coord.v) {
-            let piece = game.check_for_piece(coord);
-            this.action = 'piece';
-            piece.active = false;
-            this.active_piece = false;
+            this.unselect_piece();
             game.highlight_move([]);
             canvas.render(game);
         } else {
@@ -49,14 +64,12 @@ var controls = {
         }
     },
     select_build: function(coord) {
-        let piece = this.active_piece;
+        // let piece = this.active_piece;
         let options = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
         for (i in options) {
             if (coord.h == options[i].h && coord.v == options[i].v) {
                 game.build(coord);
-                this.action = 'piece';
-                piece.active = false;
-                this.active_piece = false;
+                this.unselect_piece();
                 game.highlight_move([]); // un-highlight
                 game.take_turn();
                 canvas.render(game);

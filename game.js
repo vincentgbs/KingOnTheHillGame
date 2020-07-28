@@ -155,7 +155,6 @@ var game = {
         this.board[board_location.v][board_location.h].level == 3) {
             return this.winning_move(piece, board_location);
         } else if (piece.type == 'king' && pawn_swap) {
-            // no need to check piece or player of destination because filter_move should already have removed any illegal options
             pawn_swap.location = piece.location;
         }
         piece.location = {
@@ -198,6 +197,7 @@ var game = {
         }
     },
     set_board: function() {
+        controls.start = true;
         let start0 = [{v:0,h:3}, {v:0,h:2}, {v:0,h:4}];
         for (i in game.players[0].pieces) {
             game.move(game.players[0].pieces[i], start0[i]);
@@ -213,8 +213,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('game.js loaded');
     document.querySelector("#start_game").onclick=function(){
         this.style.display = 'none';
-        document.querySelector("#fade_out_title").style.display = 'none';
-        controls.start = true;
         game.create_board();
         game.set_board();
     }
