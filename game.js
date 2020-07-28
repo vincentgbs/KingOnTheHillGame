@@ -30,20 +30,24 @@ var game = {
         return this.board;
     },
     create_players: function() {
-        for (var id = 0; id < this.settings.no_of_players; id++) {
-            var player = {
-                player: id,
-                pieces: []
-            };
-            for (j in this.settings.piece_types) {
-                player.pieces.push({
+        if (this.settings.no_of_players > 4) {
+            console.debug('You cannot have more than 4 players');
+        } else {
+            for (var id = 0; id < this.settings.no_of_players; id++) {
+                var player = {
                     player: id,
-                    active: false,
-                    type: this.settings.piece_types[j],
-                    location: {v:-1, h:-1, l:-1}
-                });
+                    pieces: []
+                };
+                for (j in this.settings.piece_types) {
+                    player.pieces.push({
+                        player: id,
+                        active: false,
+                        type: this.settings.piece_types[j],
+                        location: {v:-1, h:-1, l:-1}
+                    });
+                }
+                this.players.push(player);
             }
-            this.players.push(player);
         }
     },
     create_board: function() {

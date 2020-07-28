@@ -30,29 +30,26 @@ var canvas = {
         }
         return this;
     },
-    draw_base: function(location) {
-        this.ctx.fillStyle = this.settings.levels[0];
-        this.ctx.fillRect(location.h*100,location.v*100,99,99);
+    draw_level: function(location, level) {
+        this.ctx.fillStyle = this.settings.levels[level];
+        this.ctx.fillRect(location.h*100 + (10*level), location.v*100 + (10*level), 99 - (20*level), 99 - (20*level));
         return this;
+    },
+    draw_base: function(location) {
+        return this.draw_level(location, 0);
     },
     draw_mid: function(location) {
-        this.ctx.fillStyle = this.settings.levels[1];
-        this.ctx.fillRect(location.h*100 + 10,location.v*100 + 10,79,79);
-        return this;
+        return this.draw_level(location, 1);
     },
     draw_top: function(location) {
-        this.ctx.fillStyle = this.settings.levels[2];
-        this.ctx.fillRect(location.h*100 + 20,location.v*100 + 20,59,59);
-        return this;
+        return this.draw_level(location, 2);
     },
     draw_cap: function(location) {
-        this.ctx.fillStyle = this.settings.levels[3];
-        this.ctx.fillRect(location.h*100 + 30,location.v*100 + 30,39,39);
-        return this;
+        return this.draw_level(location, 3);
     },
     highlight_square: function(location) {
         this.ctx.strokeStyle = this.settings.highlight_square;
-        this.ctx.strokeRect(location.h*100,location.v*100,99,99);
+        this.ctx.strokeRect(location.h*100, location.v*100, 99, 99);
         return this;
     },
     draw_piece: function(location, type, color, active) {
