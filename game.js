@@ -17,9 +17,9 @@ var game = {
         this.settings[key] = value;
     },
     create_locations: function() {
-        for(var i = 0; i < this.settings.vertical; i++) {
+        for(let i = 0; i < this.settings.vertical; i++) {
             row = [];
-            for(var j = 0; j < this.settings.horizontal; j++) {
+            for(let j = 0; j < this.settings.horizontal; j++) {
                 row.push({
                     level: 0,
                     option: false
@@ -30,24 +30,20 @@ var game = {
         return this.board;
     },
     create_players: function() {
-        if (this.settings.no_of_players > 4) {
-            console.debug('You cannot have more than 4 players');
-        } else {
-            for (var id = 0; id < this.settings.no_of_players; id++) {
-                var player = {
+        for (let id = 0; id < this.settings.no_of_players; id++) {
+            var player = {
+                player: id,
+                pieces: []
+            };
+            for (j in this.settings.piece_types) {
+                player.pieces.push({
                     player: id,
-                    pieces: []
-                };
-                for (j in this.settings.piece_types) {
-                    player.pieces.push({
-                        player: id,
-                        active: false,
-                        type: this.settings.piece_types[j],
-                        location: {v:-1, h:-1, l:-1}
-                    });
-                }
-                this.players.push(player);
+                    active: false,
+                    type: this.settings.piece_types[j],
+                    location: {v:-1, h:-1, l:-1}
+                });
             }
+            this.players.push(player);
         }
     },
     create_board: function() {
@@ -138,9 +134,9 @@ var game = {
         return this.players[this.turn].pieces;
     },
     highlight_move: function(list) {
-        for(var i = 0; i < this.settings.vertical; i++) {
+        for(let i = 0; i < this.settings.vertical; i++) {
             row = [];
-            for(var j = 0; j < this.settings.horizontal; j++) {
+            for(let j = 0; j < this.settings.horizontal; j++) {
                 let highlight = false;
                 for (k in list) {
                     if (i == list[k].v && j == list[k].h) {
@@ -200,6 +196,16 @@ var game = {
             this.turn = (this.turn+1) % this.settings.no_of_players;
             this.active_turn = {player: this.turn};
         }
+    },
+    set_board: function() {
+        let start0 = [{v:0,h:3}, {v:0,h:2}, {v:0,h:4}];
+        for (i in game.players[0].pieces) {
+            game.move(game.players[0].pieces[i], start0[i]);
+        }
+        let start1 = [{v:4,h:3}, {v:4,h:2}, {v:4,h:4}];
+        for (i in game.players[1].pieces) {
+            game.move(game.players[1].pieces[i], start1[i]);
+        }
     }
 }
 
@@ -210,21 +216,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         document.querySelector("#fade_out_title").style.display = 'none';
         controls.start = true;
         game.create_board();
-        // create labels
-        let p0 = game.players[0];
-        let p1 = game.players[1];
-        let k0 = p0.pieces[0];
-        let p0p1 = p0.pieces[1];
-        let p0p2 = p0.pieces[2];
-        let k1 = p1.pieces[0];
-        let p1p1 = p1.pieces[1];
-        let p1p2 = p1.pieces[2];
-        // create default board
-        game.move(k0, {v:0,h:3});
-        game.move(p0p1, {v:0,h:2});
-        game.move(p0p2, {v:0,h:4});
-        game.move(k1, {v:4,h:3});
-        game.move(p1p1, {v:4,h:2});
-        game.move(p1p2, {v:4,h:4});
+        game.set_board();
     }
 });

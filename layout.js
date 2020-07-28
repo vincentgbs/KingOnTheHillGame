@@ -16,13 +16,13 @@ var canvas = {
         return this;
     },
     draw_board: function() {
-        for(var i = 1; i <= game.settings.horizontal; i++) {
+        for(let i = 1; i <= game.settings.horizontal; i++) {
             this.ctx.beginPath();
             this.ctx.moveTo(i * 100, 0);
             this.ctx.lineTo(i * 100, game.settings.vertical * 100);
             this.ctx.stroke();
         }
-        for(var i = 1; i <= game.settings.vertical; i++) {
+        for(let i = 1; i <= game.settings.vertical; i++) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, i * 100);
             this.ctx.lineTo(game.settings.horizontal * 100, i * 100);
