@@ -3,12 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>King on the Hill</title>
-        <!-- <title>King of the Hill</title> -->
         <!-- <title>Vertical Chess</title> -->
         <script src="game.js" type="text/javascript"></script>
         <script src="layout.js" type="text/javascript"></script>
         <script src="controls.js" type="text/javascript"></script>
-        <!-- <script src="tests/test.js" type="text/javascript"></script> -->
         <link rel="stylesheet" type="text/css" href="game.css">
     </head>
     <body>
@@ -18,7 +16,9 @@
             <text id="player_turn_label">Number of players: </text>
                 <text id="player_turn"><input id="no_of_players" type="number"
                     value="2" min="2" max="4" size="5"></text>
-            <button id="start_game">Start</button>
+            <text id="game_id"><button id="start_game">Start New Game</button>
+                or Game Id: <input type="text" id="get_game_id"/>
+                <button id="start_game">Join Game</button></text>
         </div>
         <div class="instructions">
             <div id="instructions">King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece.

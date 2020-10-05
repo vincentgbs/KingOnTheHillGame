@@ -6,7 +6,8 @@ var game = {
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
         piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'],
-        animationDelay: 999
+        animationDelay: 999,
+        xhr: new XMLHttpRequest(),
     },
     board: [],
     players: [],
@@ -191,7 +192,9 @@ var game = {
                 console.debug("Invalid turn");
             }
         } else {
-            this.log.push(this.active_turn);
+            let temp = this.active_turn;
+            this.log.push(temp);
+            //
             this.turn = (this.turn+1) % this.settings.no_of_players;
             this.active_turn = {player: this.turn};
         }
@@ -211,16 +214,19 @@ var game = {
         }
     },
     start_game: function() {
-        let n = document.querySelector("#no_of_players").value;
+        // xhr.open('GET', 'localhost');
+        // xhr.send(null);
+        let nop = document.querySelector("#no_of_players").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
-        if(n < 2 || n > 4) {
+        if(nop < 2 || nop > 4) {
             console.debug("Invalid number of players");
             return false;
         } else {
-            game.settings.no_of_players = n;
+            game.settings.no_of_players = nop;
         }
         game.create_board();
-        game.set_board(n);
+        game.set_board(nop);
+        document.querySelector("#game_id").innerHTML = "Game Id: 123456789";
     }
 }
 
