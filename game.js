@@ -7,10 +7,10 @@ var game = {
         piece_types: ['king', 'pawn', 'pawn'],
         piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'],
         animationDelay: 999,
-        xhr: new XMLHttpRequest(),
     },
     board: [],
     players: [],
+    xhr: new XMLHttpRequest(),
     turn: 0,
     log: [],
     active_turn: {player: 0, from: {}, to: {}, build: {}},
@@ -194,7 +194,7 @@ var game = {
         } else {
             let temp = this.active_turn;
             this.log.push(temp);
-            //
+            // game.xhr.send(null);
             this.turn = (this.turn+1) % this.settings.no_of_players;
             this.active_turn = {player: this.turn};
         }
@@ -214,8 +214,8 @@ var game = {
         }
     },
     start_game: function() {
-        // xhr.open('GET', 'localhost');
-        // xhr.send(null);
+        // game.xhr.open('GET', 'localhost');
+        // game.xhr.send(null);
         let nop = document.querySelector("#no_of_players").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
         if(nop < 2 || nop > 4) {
