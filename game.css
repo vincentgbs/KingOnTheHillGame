@@ -1,15 +1,18 @@
 #instructions {
     /* display: none; */
+    margin-top: 1rem;
+    max-width: 750px;
 }
 
 #board {
+    margin: auto;
+    display: block;
     border: 1px solid #000000;
     height: 500px;
     width: 700px;
 }
 
 #title {
-    /* display: none; */
     text-align: center;
     font-size: 2rem;
 }

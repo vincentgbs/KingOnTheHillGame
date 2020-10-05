@@ -15,15 +15,18 @@
         <div id=title>King On The Hill</div>
         <canvas id="board"></canvas>
         <div class="turn">
-            Turn: <text id="player_turn">Player 1</text>
+            <text id="player_turn_label">Number of players: </text>
+                <text id="player_turn"><input id="no_of_players" type="number"
+                    value="2" min="2" max="4" size="5"></text>
             <button id="start_game">Start</button>
         </div>
         <div class="instructions">
-            <div id="instructions">King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece. <br>There are four levels: base, middle, top, cap. You want your king placed on top of the third level (top).
-            <br>You may move your piece to any adjacent square (including diagonals). You may build on any adjacent square (including diagonals).
-            <br>When moving, you cannot move to a space where another piece resides. You cannot move onto a cap. You cannot move up more than one level at a time. You may move down multiple levels.
-            <br>When you build, you cannot build on a square where another piece resides. You cannot build on top of a cap. There is no limitation on the level you can build at: you can be on the ground and build a cap.
-            <br>The king has a special ability: when moving, it can swap places with an adjacent pawn that it controls (same team).</div>
+            <div id="instructions">King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece.
+            <br/><br/>There are four levels: base, middle, top, cap. You want your king placed on top of the third level (top).
+            <br/>You may move your piece to any adjacent square (including diagonals). You may build on any adjacent square (including diagonals).
+            <br/>When moving, you cannot move to a space where another piece resides. You cannot move onto a cap. You cannot move up more than one level at a time. You may move down multiple levels.
+            <br/>When you build, you cannot build on a square where another piece resides. You cannot build on top of a cap. There is no limitation on the level you can build at: you can be on the ground and build a cap.
+            <br/><br/>The king has a special ability: when moving, it can swap places with an adjacent pawn that it controls (same team).</div>
             <!-- <button id="toggle_instructions">toggle instructions</button> -->
         </div>
     </body>

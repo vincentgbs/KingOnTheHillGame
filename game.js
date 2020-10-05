@@ -196,24 +196,37 @@ var game = {
             this.active_turn = {player: this.turn};
         }
     },
-    set_board: function() {
+    set_board: function(no) {
         controls.start = true;
-        let start0 = [{v:0,h:3}, {v:0,h:2}, {v:0,h:4}];
-        for (i in game.players[0].pieces) {
-            game.move(game.players[0].pieces[i], start0[i]);
+        let start = [
+            [{v:0,h:3}, {v:0,h:2}, {v:0,h:4}],
+            [{v:4,h:3}, {v:4,h:2}, {v:4,h:4}],
+            [{v:1,h:0}, {v:2,h:0}, {v:3,h:0}],
+            [{v:1,h:6}, {v:2,h:6}, {v:3,h:6}],
+        ]
+        for (let j = 0; j < no; j++) {
+            for (i in game.players[0].pieces) {
+                game.move(game.players[j].pieces[i], start[j][i]);
+            }
         }
-        let start1 = [{v:4,h:3}, {v:4,h:2}, {v:4,h:4}];
-        for (i in game.players[1].pieces) {
-            game.move(game.players[1].pieces[i], start1[i]);
+    },
+    start_game: function() {
+        let n = document.querySelector("#no_of_players").value;
+        document.querySelector("#player_turn_label").innerHTML = "Turn: ";
+        if(n < 2 || n > 4) {
+            console.debug("Invalid number of players");
+            return false;
+        } else {
+            game.settings.no_of_players = n;
         }
+        game.create_board();
+        game.set_board(n);
     }
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('game.js loaded');
     document.querySelector("#start_game").onclick=function(){
-        this.style.display = 'none';
-        game.create_board();
-        game.set_board();
+        game.start_game();
     }
 });
