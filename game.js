@@ -10,7 +10,6 @@ var game = {
     },
     board: [],
     players: [],
-    xhr: new XMLHttpRequest(),
     turn: 0,
     log: [],
     active_turn: {player: 0, from: {}, to: {}, build: {}},
@@ -194,7 +193,7 @@ var game = {
         } else {
             let temp = this.active_turn;
             this.log.push(temp);
-            // game.xhr.send(null);
+            remote.send_turn(temp);
             this.turn = (this.turn+1) % this.settings.no_of_players;
             this.active_turn = {player: this.turn};
         }
@@ -214,8 +213,7 @@ var game = {
         }
     },
     start_game: function() {
-        // game.xhr.open('GET', 'localhost');
-        // game.xhr.send(null);
+        let id = remote.start_new_game();
         let nop = document.querySelector("#no_of_players").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
         if(nop < 2 || nop > 4) {
@@ -226,7 +224,7 @@ var game = {
         }
         game.create_board();
         game.set_board(nop);
-        document.querySelector("#game_id").innerHTML = "Game Id: 123456789";
+        document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
     }
 }
 
