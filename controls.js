@@ -1,4 +1,5 @@
 var controls = {
+    player: -1,
     start: false,
     action: 'piece',
     active_piece: false,
@@ -79,15 +80,19 @@ var controls = {
         console.debug('You cannot build there');
     },
     on_click: function(c, e) {
-        let coord = this.getCursorPosition(c, e);
-        if (this.start) {
-            if (this.action == 'piece') {
-                this.select_piece(coord);
-            } else if (this.action == 'move') {
-                this.select_move(coord);
-            } else if (this.action == 'build') {
-                this.select_build(coord);
+        if (game.turn == controls.player) {
+            let coord = this.getCursorPosition(c, e);
+            if (this.start) {
+                if (this.action == 'piece') {
+                    this.select_piece(coord);
+                } else if (this.action == 'move') {
+                    this.select_move(coord);
+                } else if (this.action == 'build') {
+                    this.select_build(coord);
+                }
             }
+        } else {
+            console.debug("It's not your turn");
         }
     },
     update_turn: function(game) {

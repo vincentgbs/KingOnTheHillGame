@@ -15,6 +15,7 @@ var remote = {
         return game_id;
     },
     join_game: function(game_id) {
+        controls.player = 1;
         game.create_board();
         game.set_board(2);
     },
@@ -23,8 +24,10 @@ var remote = {
     },
     get_turn: function(game_id) {
         let ping = 0;
-        while(ping < 25) {
-            ping++;
+        while(ping < 72) {
+            setTimeout(function() {
+                ping++;
+            }, 2500);
         }
     },
 }

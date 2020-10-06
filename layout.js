@@ -4,7 +4,8 @@ var canvas = {
         levels: ['lightgreen', 'yellowgreen', 'khaki', 'darksalmon'],
         highlight_square: 'aqua',
         highlight_piece: 'aqua',
-        regular_piece: 'black'
+        regular_piece: 'black',
+        animationDelay: 999,
     },
     set: function(canvas, context) {
         this.c = canvas;
@@ -164,8 +165,8 @@ var canvas = {
                 game.log.push(turn);
                 game.active_turn = {player: game.turn};
                 controls.start = true; // for animation
-            }, game.settings.animationDelay);
-        }, game.settings.animationDelay);
+            }, canvas.settings.animationDelay);
+        }, canvas.settings.animationDelay);
     }
 }
 
@@ -178,5 +179,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     let size = Math.min(window.screen.height, window.screen.width) * (2/3);
     canvas.settings.size = (size/game.settings.vertical);
     canvas.resize(size, size);
-
 });

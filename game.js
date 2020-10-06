@@ -6,7 +6,6 @@ var game = {
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
         piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'],
-        animationDelay: 999,
     },
     board: [],
     players: [],
@@ -222,6 +221,7 @@ var game = {
         } else {
             game.settings.no_of_players = nop;
         }
+        controls.player = 0;
         game.create_board();
         game.set_board(nop);
         document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
