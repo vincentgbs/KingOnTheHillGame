@@ -1,4 +1,5 @@
 var game = {
+    game_id: 'game_id_goes_here',
     settings: { // default board
         no_of_players: 2,
         vertical: 7,
@@ -212,7 +213,6 @@ var game = {
         }
     },
     start_game: function() {
-        let id = remote.start_new_game();
         let nop = document.querySelector("#no_of_players").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
         if(nop < 2 || nop > 4) {
@@ -220,17 +220,13 @@ var game = {
             return false;
         } else {
             game.settings.no_of_players = nop;
+            remote.start_new_game(nop);
         }
-        controls.player = 0;
-        game.create_board();
-        game.set_board(nop);
-        document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
     },
     join_game: function() {
         let id = document.querySelector("#join_game_id").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
         remote.join_game(id);
-        document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
     }
 }
 
