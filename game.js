@@ -225,6 +225,12 @@ var game = {
         game.create_board();
         game.set_board(nop);
         document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
+    },
+    join_game: function() {
+        let id = document.querySelector("#join_game_id").value;
+        document.querySelector("#player_turn_label").innerHTML = "Turn: ";
+        remote.join_game(id);
+        document.querySelector("#game_id").innerHTML = 'Game Id: ' + id;
     }
 }
 
@@ -232,5 +238,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('game.js loaded');
     document.querySelector("#start_game").onclick=function(){
         game.start_game();
+    }
+    document.querySelector("#join_game").onclick=function() {
+        game.join_game();
     }
 });

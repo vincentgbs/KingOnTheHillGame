@@ -177,6 +177,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     let size = Math.min(window.screen.height, window.screen.width) * (2/3);
     canvas.settings.size = (size/game.settings.vertical);
-    c.setAttribute('height', size);
-    c.setAttribute('width', size);
+    canvas.resize(size, size);
+
 });

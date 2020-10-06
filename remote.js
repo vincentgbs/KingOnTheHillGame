@@ -14,7 +14,9 @@ var remote = {
         remote.xhr.send(JSON.stringify(new_game));
         return game_id;
     },
-    join_game: function() {
+    join_game: function(game_id) {
+        game.create_board();
+        game.set_board(2);
     },
     send_turn: function(json) {
         //
