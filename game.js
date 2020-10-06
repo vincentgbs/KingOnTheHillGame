@@ -215,13 +215,8 @@ var game = {
     start_game: function() {
         let nop = document.querySelector("#no_of_players").value;
         document.querySelector("#player_turn_label").innerHTML = "Turn: ";
-        if(nop < 2 || nop > 4) {
-            console.debug("Invalid number of players");
-            return false;
-        } else {
-            game.settings.no_of_players = nop;
-            remote.start_new_game(nop);
-        }
+        game.settings.no_of_players = nop;
+        remote.start_new_game(nop);
     },
     join_game: function() {
         let id = document.querySelector("#join_game_id").value;
