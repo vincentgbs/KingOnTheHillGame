@@ -2,11 +2,12 @@ var controls = {
     start: false,
     action: 'piece',
     active_piece: false,
-    getCursorPosition: function (canvas, event) {
-        const rect = canvas.getBoundingClientRect();
+    getCursorPosition: function (ctx, event) {
+        const rect = ctx.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        return {h: Math.floor(x/100), v: Math.floor(y/100)};
+        return {h: Math.floor(x/canvas.settings.size),
+            v: Math.floor(y/canvas.settings.size)};
     },
     select_piece: function(coord) {
         piece = game.check_for_piece(coord);

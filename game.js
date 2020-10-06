@@ -1,7 +1,7 @@
 var game = {
     settings: { // default board
         no_of_players: 2,
-        vertical: 5,
+        vertical: 7,
         horizontal: 7,
         level: 4,
         piece_types: ['king', 'pawn', 'pawn'],
@@ -202,9 +202,9 @@ var game = {
         controls.start = true;
         let start = [
             [{v:0,h:3}, {v:0,h:2}, {v:0,h:4}],
-            [{v:4,h:3}, {v:4,h:2}, {v:4,h:4}],
-            [{v:1,h:0}, {v:2,h:0}, {v:3,h:0}],
-            [{v:1,h:6}, {v:2,h:6}, {v:3,h:6}],
+            [{v:6,h:3}, {v:6,h:2}, {v:6,h:4}],
+            [{v:2,h:0}, {v:3,h:0}, {v:4,h:0}],
+            [{v:2,h:6}, {v:3,h:6}, {v:4,h:6}],
         ]
         for (let j = 0; j < no; j++) {
             for (i in game.players[0].pieces) {

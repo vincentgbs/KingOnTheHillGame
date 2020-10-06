@@ -1,5 +1,6 @@
 var canvas = {
     settings: {
+        size: 100,
         levels: ['lightgreen', 'yellowgreen', 'khaki', 'darksalmon'],
         highlight_square: 'aqua',
         highlight_piece: 'aqua',
@@ -18,21 +19,26 @@ var canvas = {
     draw_board: function() {
         for(let i = 1; i <= game.settings.horizontal; i++) {
             this.ctx.beginPath();
-            this.ctx.moveTo(i * 100, 0);
-            this.ctx.lineTo(i * 100, game.settings.vertical * 100);
+            this.ctx.moveTo(i * canvas.settings.size, 0);
+            this.ctx.lineTo(i * canvas.settings.size,
+                game.settings.vertical * canvas.settings.size);
             this.ctx.stroke();
         }
         for(let i = 1; i <= game.settings.vertical; i++) {
             this.ctx.beginPath();
-            this.ctx.moveTo(0, i * 100);
-            this.ctx.lineTo(game.settings.horizontal * 100, i * 100);
+            this.ctx.moveTo(0, i * canvas.settings.size);
+            this.ctx.lineTo(game.settings.horizontal * canvas.settings.size,
+                i * canvas.settings.size);
             this.ctx.stroke();
         }
         return this;
     },
     draw_level: function(location, level) {
         this.ctx.fillStyle = this.settings.levels[level];
-        this.ctx.fillRect(location.h*100 + (10*level), location.v*100 + (10*level), 99 - (20*level), 99 - (20*level));
+        this.ctx.fillRect(location.h*canvas.settings.size + ((canvas.settings.size/10)*level),
+            location.v*canvas.settings.size + ((canvas.settings.size/10)*level),
+            (canvas.settings.size-1) - ((canvas.settings.size/5)*level),
+            (canvas.settings.size-1) - ((canvas.settings.size/5)*level));
         return this;
     },
     draw_base: function(location) {
@@ -49,7 +55,9 @@ var canvas = {
     },
     highlight_square: function(location) {
         this.ctx.strokeStyle = this.settings.highlight_square;
-        this.ctx.strokeRect(location.h*100, location.v*100, 99, 99);
+        this.ctx.strokeRect(location.h*canvas.settings.size,
+            location.v*canvas.settings.size,
+            (canvas.settings.size-1), (canvas.settings.size-1));
         return this;
     },
     draw_piece: function(location, type, color, active) {
@@ -59,22 +67,31 @@ var canvas = {
         } else {
             this.ctx.strokeStyle = this.settings.regular_piece;
         }
-        this.ctx.arc(location.h*100 + 50, location.v*100 + 50, 25, 0, 2 * Math.PI);
+        this.ctx.arc(location.h*canvas.settings.size + (canvas.settings.size/2),
+            location.v*canvas.settings.size + (canvas.settings.size/2),
+            (canvas.settings.size/5), 0, 2 * Math.PI);
         this.ctx.stroke();
         this.ctx.font = "30px Arial";
         this.ctx.fillStyle = color;
         this.ctx.textAlign = "center";
         if (type == 'king') {
-            this.ctx.fillText('K', location.h*100 + 50, location.v*100 + 60);
+            this.ctx.fillText('K', location.h*canvas.settings.size
+            + (canvas.settings.size/2), location.v*canvas.settings.size
+            + (canvas.settings.size*(3/5)));
         } else if (type == 'pawn') {
-            this.ctx.fillText('P', location.h*100 + 50, location.v*100 + 60);
+            this.ctx.fillText('P', location.h*canvas.settings.size
+            + (canvas.settings.size/2), location.v*canvas.settings.size
+            + (canvas.settings.size*(3/5)));
         } else {
-            this.ctx.fillText('0', location.h*100 + 50, location.v*100 + 60);
+            this.ctx.fillText('0', location.h*canvas.settings.size
+            + (canvas.settings.size/2), location.v*canvas.settings.size
+            + (canvas.settings.size*(3/5)));
         }
         return this;
     },
     redraw_board: function(game) {
-        canvas.resize(game.settings.vertical * 100, game.settings.horizontal * 100);
+        canvas.resize(game.settings.vertical * canvas.settings.size,
+            game.settings.horizontal * canvas.settings.size);
         canvas.draw_board();
         for(i in game.board) {
             let row = game.board[i];
@@ -128,11 +145,13 @@ var canvas = {
     },
     declare_winner: function() {
         this.ctx.fillStyle = 'yellow';
-        this.ctx.fillRect(0, 0, game.settings.horizontal*100, game.settings.vertical*50);
+        this.ctx.fillRect(0, 0, game.settings.horizontal*canvas.settings.size,
+            game.settings.vertical*(canvas.settings.size/2));
         this.ctx.font = "80px Arial";
         this.ctx.textAlign = "center";
         this.ctx.fillStyle = 'black';
-        this.ctx.fillText('Winner', game.settings.horizontal*50, game.settings.vertical*25);
+        this.ctx.fillText('Winner', game.settings.horizontal*(canvas.settings.size/2),
+            game.settings.vertical*(canvas.settings.size/4));
         return this;
     },
     animateTurn: function(turn) {
@@ -155,4 +174,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const c = document.querySelector("#board");
     const ctx = c.getContext("2d");
     canvas.set(c, ctx);
+
+    let size = Math.min(window.screen.height, window.screen.width) * (2/3);
+    canvas.settings.size = (size/game.settings.vertical);
+    c.setAttribute('height', size);
+    c.setAttribute('width', size);
 });

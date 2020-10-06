@@ -8,11 +8,11 @@
     margin: auto;
     display: block;
     border: 1px solid #000000;
-    height: 500px;
-    width: 700px;
+    max-height: 999px;
+    max-width: 999px;
 }
 
 #title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
