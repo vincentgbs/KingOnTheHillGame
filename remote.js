@@ -49,26 +49,43 @@ var remote = {
         }
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
-            console.debug(remote.xhr.response);
+            let response = JSON.parse(remote.xhr.response);
+            if (response.accepted == 'true') {
+                remote.get_turn(0);
+            } else {
+                console.debug('There was an error');
+            }
         };
-        console.debug(request);
         remote.xhr.send(JSON.stringify(request));
     },
-    get_turn: function() {
+    get_turn: function(ping) {
+        console.log('remote.get_turn');
         let request = {
             user_id: remote.user_id,
-            action: 'send_turn',
+            action: 'get_turn',
             game_id: game.game_id,
             player: controls.player,
         }
-        let ping = 0;
-        while(ping < 72) {
+        remote.xhr.open('POST', remote.url + '/turn');
+        remote.xhr.onload = function () {
+            let response = JSON.parse(remote.xhr.response);
+            console.debug(response);
             setTimeout(function() {
-                ping++;
+                if (ping < 72) {
+                    if (response.waiting == 'true') {
+                        console.debug('ping: ' + ping);
+                        remote.get_turn(ping + 1);
+                    } else {
+                        console.debug('animate turn');
+                    }
+                } else {
+                    console.debug('Opponent turn expired');
+                }
             }, 2500);
-        }
+        };
+        remote.xhr.send(JSON.stringify(request));
     },
-    user_id: 'set_user_id',
+    user_id: false,
     xhr: new XMLHttpRequest(),
     set_user_id: function() {
         const letters = 'bcdfghjkmnpqrstvwxyz';
@@ -83,5 +100,8 @@ var remote = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('remote.js loaded');
-    remote.user_id = remote.set_user_id();
+    if (!remote.user_id) {
+        remote.user_id = remote.set_user_id();
+    }
+
 });
