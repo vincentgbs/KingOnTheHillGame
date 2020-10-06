@@ -185,11 +185,6 @@ var game = {
     },
     take_turn: function(turn) {
         if (typeof turn == 'object') {
-            if (game.turn == turn.player) {
-                canvas.animateTurn(turn);
-            } else {
-                console.debug("Invalid turn");
-            }
         } else {
             let temp = this.active_turn;
             this.log.push(temp);

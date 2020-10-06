@@ -69,14 +69,12 @@ var remote = {
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
-            console.debug(response);
             setTimeout(function() {
                 if (ping < 72) {
                     if (response.waiting == 'true') {
-                        console.debug('ping: ' + ping);
                         remote.get_turn(ping + 1);
                     } else {
-                        console.debug('animate turn');
+                        canvas.animateTurn(response.turn);
                     }
                 } else {
                     console.debug('Opponent turn expired');
@@ -103,5 +101,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (!remote.user_id) {
         remote.user_id = remote.set_user_id();
     }
-
 });
