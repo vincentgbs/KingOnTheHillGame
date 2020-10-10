@@ -3,7 +3,7 @@ let layout = {
         min_players: 2,
         max_players: 4,
         screen_ratio: (2/3),
-        square_size: 0,
+        square_size: null,
     },
     canvas: null,
     context: null,
@@ -41,10 +41,22 @@ let layout = {
         create_start_game_button: function() {
             return `<button id="start_game_button">Start New Game</button>`;
         },
+        activate_start_button: function(button) {
+            button.onclick = function() {
+                let nop = document.querySelector("#no_of_players").value;
+                console.debug('starting new game with '+nop+' players.');
+            }
+        },
         create_join_option: function() {
             return `<label>Game id: </label>
                 <input type="text" id="join_game_id"/>
                 <button id="join_game_button">Join Game</button>`;
+        },
+        activate_join_button: function(button) {
+            button.onclick = function() {
+                let gid = document.querySelector("#join_game_id").value;
+                console.debug('joining game: ' + gid);
+            }
         },
         instruction_text: function() {
             return `<div id="instruction_text">King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece.
@@ -69,4 +81,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         ` <b>OR</b> ` +
         layout.setup.create_join_option();
     document.querySelector("#instructions").innerHTML = layout.setup.instruction_text();
+
+    layout.setup.activate_start_button(document.querySelector("#start_game_button"));
+    layout.setup.activate_join_button(document.querySelector("#join_game_button"));
 });
