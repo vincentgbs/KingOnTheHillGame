@@ -4,11 +4,11 @@ var remote = {
         try {
             response = JSON.parse(response);
             controls.player = response.player;
+            game.create_board();
             if (response.player < 0) {
                 console.debug('The game is already full');
             } else {
                 game.game_id = response.game_id;
-                game.create_board();
                 game.set_board(response.nop);
                 document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
             }
@@ -40,6 +40,7 @@ var remote = {
         remote.xhr.open('POST', remote.url + '/game');
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
+            remote.get_turn(0);
         };
         remote.xhr.send(JSON.stringify(request));
     },
