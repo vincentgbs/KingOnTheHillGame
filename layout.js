@@ -162,8 +162,6 @@ var canvas = {
             controls.select_move(turn.to);
             setTimeout(function() {
                 controls.select_build(turn.build);
-                game.log.push(turn);
-                game.active_turn = {player: game.turn};
                 controls.start = true; // for animation
             }, canvas.settings.animationDelay);
         }, canvas.settings.animationDelay);

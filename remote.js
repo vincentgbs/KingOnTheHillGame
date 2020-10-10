@@ -3,11 +3,15 @@ var remote = {
     start_game: function(response) {
         try {
             response = JSON.parse(response);
-            game.game_id = response.game_id;
             controls.player = response.player;
-            game.create_board();
-            game.set_board(response.nop);
-            document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
+            if (response.player < 0) {
+                console.debug('The game is already full');
+            } else {
+                game.game_id = response.game_id;
+                game.create_board();
+                game.set_board(response.nop);
+                document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
+            }
         }
         catch(err) {
             console.debug(err);
@@ -74,7 +78,13 @@ var remote = {
                     if (response.waiting == 'true') {
                         remote.get_turn(ping + 1);
                     } else {
+                        game.turn = (game.turn+1) % game.settings.no_of_players;
+                        game.log.push(response.turn);
                         canvas.animateTurn(response.turn);
+                        game.active_turn = {player: game.turn};
+                        if (game.turn != controls.player) {
+                            remote.get_turn(ping + 1);
+                        }
                     }
                 } else {
                     console.debug('Opponent turn expired');

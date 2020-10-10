@@ -185,6 +185,7 @@ var game = {
     },
     take_turn: function(turn) {
         if (typeof turn == 'object') {
+            //
         } else {
             let temp = this.active_turn;
             this.log.push(temp);
