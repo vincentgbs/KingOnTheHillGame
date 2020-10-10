@@ -16,10 +16,29 @@ let layout = {
         );
         layout.resize(game.settings.vertical * layout.settings.square_size,
             game.settings.horizontal * layout.settings.square_size);
+        return layout;
     },
     resize: function (height, width) {
         layout.canvas.height = height;
         layout.canvas.width = width;
+        return layout;
+    },
+    draw_board: function() {
+        for(let i = 1; i <= game.settings.horizontal; i++) {
+            layout.context.beginPath();
+            layout.context.moveTo(i * layout.settings.square_size, 0);
+            layout.context.lineTo(i * layout.settings.square_size,
+                game.settings.vertical * layout.settings.square_size);
+            layout.context.stroke();
+        }
+        for(let i = 1; i <= game.settings.vertical; i++) {
+            layout.context.beginPath();
+            layout.context.moveTo(0, i * layout.settings.square_size);
+            layout.context.lineTo(game.settings.horizontal * layout.settings.square_size,
+                i * layout.settings.square_size);
+            layout.context.stroke();
+        }
+        return layout;
     },
 
     setup: {
@@ -73,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('layout.js loaded');
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
+    layout.draw_board();
 
     document.querySelector("#turn").innerHTML =
         layout.setup.create_nop_selector() +
