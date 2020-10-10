@@ -156,6 +156,7 @@ var canvas = {
         return this;
     },
     animateTurn: function(turn) {
+        console.debug(turn);
         controls.select_piece(turn.from);
         controls.start = false; // for animation
         setTimeout(function() {

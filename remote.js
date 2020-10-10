@@ -6,11 +6,13 @@ var remote = {
             controls.player = response.player;
             game.create_board();
             if (response.player < 0) {
-                console.debug('The game is already full');
+                console.log('The game is already full');
+                return false;
             } else {
                 game.game_id = response.game_id;
                 game.set_board(response.nop);
                 document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
+                return true;
             }
         }
         catch(err) {
@@ -39,8 +41,9 @@ var remote = {
         }
         remote.xhr.open('POST', remote.url + '/game');
         remote.xhr.onload = function () {
-            remote.start_game(remote.xhr.response);
-            remote.get_turn(0);
+            if(remote.start_game(remote.xhr.response)) {
+                remote.get_turn(0);
+            }
         };
         remote.xhr.send(JSON.stringify(request));
     },
@@ -58,7 +61,7 @@ var remote = {
             if (response.accepted == 'true') {
                 remote.get_turn(0);
             } else {
-                console.debug('There was an error');
+                console.debug(response);
             }
         };
         remote.xhr.send(JSON.stringify(request));
@@ -78,17 +81,23 @@ var remote = {
                 if (ping < 72) {
                     if (response.waiting == 'true') {
                         remote.get_turn(ping + 1);
+                    } else if (response.invalid == 'true') {
+                        console.debug(response);
+                        return false;
                     } else {
+                        turn = JSON.parse(response.turn);
                         game.turn = (game.turn+1) % game.settings.no_of_players;
-                        game.log.push(response.turn);
-                        canvas.animateTurn(response.turn);
+                        game.log.push(turn);
+                        canvas.animateTurn(turn);
                         game.active_turn = {player: game.turn};
                         if (game.turn != controls.player) {
-                            remote.get_turn(ping + 1);
+                            console.log('Multiplayer game');
+                            // remote.get_turn(ping + 1);
                         }
                     }
-                } else {
-                    console.debug('Opponent turn expired');
+                } else { // ping >= 72
+                    console.debug(response);
+                    console.log('Opponent turn expired: x' + ping);
                 }
             }, 2500);
         };
