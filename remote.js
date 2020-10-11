@@ -73,6 +73,7 @@ var remote = {
             action: 'get_turn',
             game_id: game.game_id,
             player: controls.player,
+            current: game.turn,
         }
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
