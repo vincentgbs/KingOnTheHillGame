@@ -1,5 +1,8 @@
 var remote = {
-    url: 'http://localhost:8080',
+    url: 'http://localhost:8080', // placeholder
+    get_url: function() {
+        remote.url = document.querySelector("#remote_url").value;
+    },
     start_game: function(response) {
         try {
             response = JSON.parse(response);
@@ -21,6 +24,7 @@ var remote = {
         }
     },
     start_new_game: function(nop) {
+        remote.get_url();
         let request = {
             user_id: remote.user_id,
             action: 'start_new_game',
@@ -34,6 +38,7 @@ var remote = {
         remote.xhr.send(JSON.stringify(request));
     },
     join_game: function(game_id) {
+        remote.get_url();
         let request = {
             user_id: remote.user_id,
             action: 'join_game',
@@ -76,7 +81,6 @@ var remote = {
             player: controls.player,
             current: game.turn,
         }
-        // console.debug(request);
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
