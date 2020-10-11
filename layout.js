@@ -162,7 +162,7 @@ var canvas = {
                 controls.select_move(turn.to);
                 setTimeout(function() {
                     controls.select_build(turn.build);
-                    // game.turn = (game.turn+1) % game.settings.no_of_players;
+                    // game.turn++;
                     game.log.push(turn);
                     controls.start = true; // for animation
                 }, canvas.settings.animationDelay);

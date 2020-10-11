@@ -4,7 +4,7 @@ var remote = {
         try {
             response = JSON.parse(response);
             controls.player = response.player;
-            game.create_board();
+            game.create_board(response.nop);
             if (response.player < 0) {
                 console.log('The game is already full');
                 return false;
@@ -54,6 +54,7 @@ var remote = {
             game_id: game.game_id,
             player: controls.player,
             turn: JSON.stringify(turn),
+            current: game.turn,
         }
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
@@ -75,6 +76,7 @@ var remote = {
             player: controls.player,
             current: game.turn,
         }
+        // console.debug(request);
         remote.xhr.open('POST', remote.url + '/turn');
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);

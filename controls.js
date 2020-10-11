@@ -12,7 +12,7 @@ var controls = {
     },
     select_piece: function(coord) {
         piece = game.check_for_piece(coord);
-        if (!this.active_piece && piece.player == game.turn) {
+        if (!this.active_piece && piece.player == (game.turn%game.settings.no_of_players)) {
             this.active_piece = piece; // loose definition
             this.action = 'move';
             piece.active = true;
@@ -82,7 +82,7 @@ var controls = {
         console.debug('You cannot build there');
     },
     on_click: function(c, e) {
-        if (game.turn == controls.player) {
+        if ((game.turn%game.settings.no_of_players) == controls.player) {
             let coord = this.getCursorPosition(c, e);
             if (this.start) {
                 if (this.action == 'piece') {
@@ -99,8 +99,8 @@ var controls = {
     },
     update_turn: function(game) {
         let t = document.querySelector("#player_turn");
-        t.style.color = game.settings.piece_colors[game.turn];
-        t.innerHTML = game.settings.piece_colors[game.turn];
+        t.style.color = game.settings.piece_colors[(game.turn%game.settings.no_of_players)];
+        t.innerHTML = game.settings.piece_colors[(game.turn%game.settings.no_of_players)];
     }
 }
 

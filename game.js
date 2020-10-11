@@ -29,8 +29,9 @@ var game = {
         }
         return this.board;
     },
-    create_players: function() {
-        for (let id = 0; id < this.settings.no_of_players; id++) {
+    create_players: function(nop) {
+        this.settings.no_of_players = nop;
+        for (let id = 0; id < nop; id++) {
             var player = {
                 player: id,
                 pieces: []
@@ -46,9 +47,9 @@ var game = {
             this.players.push(player);
         }
     },
-    create_board: function() {
+    create_board: function(nop) {
         this.create_locations();
-        this.create_players();
+        this.create_players(nop);
         canvas.render(this);
         return this;
     },
@@ -105,7 +106,7 @@ var game = {
             } else if (this.board[board_loc.v][board_loc.h].level > piece.location.l + 1) {
                 // skip, do not add to filtered
             } else if (this.check_for_piece(board_loc)) {
-                if (piece.type == 'king' && piece.player == this.turn) {
+                if (piece.type == 'king' && piece.player == (this.turn%this.settings.no_of_players)) {
                     filtered.push(board_loc);
                 } else {
                     // skip, do not add to filtered
@@ -131,7 +132,7 @@ var game = {
         return filtered;
     },
     get_pieces: function() {
-        return this.players[this.turn].pieces;
+        return this.players[(this.turn%this.settings.no_of_players)].pieces;
     },
     highlight_move: function(list) {
         for(let i = 0; i < this.settings.vertical; i++) {
@@ -190,8 +191,8 @@ var game = {
             let temp = this.active_turn;
             this.log.push(temp);
             remote.send_turn(temp);
-            this.turn = (this.turn+1) % this.settings.no_of_players;
-            this.active_turn = {player: this.turn};
+            this.turn++;
+            this.active_turn = {player: (this.turn%this.settings.no_of_players)};
         }
     },
     set_board: function(no) {
@@ -203,7 +204,10 @@ var game = {
             [{v:3,h:6}, {v:2,h:6}, {v:4,h:6}],
         ]
         for (let j = 0; j < no; j++) {
-            for (i in game.players[0].pieces) {
+            console.debug(j);
+            console.debug(game.players);
+            console.debug(game.players[j]);
+            for (i in game.players[j].pieces) {
                 game.move(game.players[j].pieces[i], start[j][i]);
             }
         }
