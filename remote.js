@@ -99,10 +99,10 @@ var remote = {
                         turn = JSON.parse(response.turn);
                         canvas.animateTurn(turn);
                         game.active_turn = {player: game.turn};
-                        if (game.turn != controls.player) {
+                        if ((game.turn%game.settings.no_of_players) != controls.player) {
+                            // remote.get_turn(ping + 1);
                             console.log('Multiplayer game');
                             return false;
-                            // remote.get_turn(ping + 1);
                         }
                     }
                 } else { // ping >= 72
