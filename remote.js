@@ -1,7 +1,11 @@
 var remote = {
     url: 'http://localhost:8080', // placeholder
     get_url: function() {
-        remote.url = document.querySelector("#remote_url").value;
+        let url = document.querySelector("#remote_url").value;
+        if (url != '') {
+            console.log('New host: ' + url);
+            remote.url = url;
+        }
     },
     start_game: function(response) {
         try {
