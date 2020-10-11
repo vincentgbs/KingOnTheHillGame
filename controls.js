@@ -21,8 +21,10 @@ var controls = {
                     piece.location), piece);
             game.highlight_move(moves);
             canvas.render(game);
+            return true;
         } else {
             console.debug("Invalid piece");
+            return false;
         }
     },
     unselect_piece: function() {

@@ -67,7 +67,7 @@ var remote = {
         remote.xhr.send(JSON.stringify(request));
     },
     get_turn: function(ping) {
-        console.log('remote.get_turn');
+        console.log('remote.get_turn('+ping+')');
         let request = {
             user_id: remote.user_id,
             action: 'get_turn',
@@ -86,12 +86,11 @@ var remote = {
                         return false;
                     } else {
                         turn = JSON.parse(response.turn);
-                        game.turn = (game.turn+1) % game.settings.no_of_players;
-                        game.log.push(turn);
                         canvas.animateTurn(turn);
                         game.active_turn = {player: game.turn};
                         if (game.turn != controls.player) {
                             console.log('Multiplayer game');
+                            return false;
                             // remote.get_turn(ping + 1);
                         }
                     }
