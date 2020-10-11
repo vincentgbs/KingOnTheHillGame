@@ -39,7 +39,7 @@ app.add_middleware(
 )
 
 class Function:
-    def __init__(self, db='kingonthehill'):
+    def __init__(self, db='db.sqlite3'):
         self.conn = sqlite3.connect(db)
         self.cur = self.conn.cursor()
         # self.migrate(True)
