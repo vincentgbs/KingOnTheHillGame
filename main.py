@@ -28,15 +28,16 @@ app.mount("/kothfrontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/fro
 # )
 
 class Function:
-    def __init__(self, db='db.sqlite3'):
+    def __init__(self, debug=False, db='db.sqlite3'):
+        self.debug = debug;
         self.conn = sqlite3.connect(db)
         self.cur = self.conn.cursor()
-        # self.migrate(True)
 
-    def migrate(self, clear=False):
-        if (clear):
-            self.cur.execute('DROP TABLE IF EXISTS `games`');
-            self.cur.execute('DROP TABLE IF EXISTS `turns`');
+    def migrate(self):
+        if (self.debug):
+            print('DROPPING and CREATING `games` and `turns`;')
+        self.cur.execute('DROP TABLE IF EXISTS `games`');
+        self.cur.execute('DROP TABLE IF EXISTS `turns`');
         self.cur.execute('''CREATE TABLE `games` (
             `game_id` varchar(255),
             `user_id` varchar(255),
@@ -46,10 +47,10 @@ class Function:
             `game_id` varchar(255),
             `player` int(2),
             `turn` int(4),
-            `json` varchar(1023))
-            ;''')
+            `json` varchar(1023));''')
         self.conn.commit()
         self.conn.close()
+        return {"DB Migration": "Complete"}
 
     def get_random_string(self, length):
         letters = string.ascii_lowercase
@@ -62,13 +63,15 @@ class Function:
             check = self.get_random_string(12)
         return check
 
-    def find_game_id(self, game_id):
-        # return self.games.find_one({"game_id": game_id})
-        return False
+    def find_game_id(self, gid):
+        game = self.cur.execute('''SELECT `game_id`
+            FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
+        return ((not game is None))
 
     def start_game(self, post):
-        print('start_game called')
-        print(post)
+        if (self.debug):
+            print('start_game called')
+            print(post)
         game = {"user_id": post.user_id, "nop": post.nop, "player": 0,
             "game_id": self.create_unique_game_id()}
         self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
@@ -78,8 +81,9 @@ class Function:
         return game
 
     def join_game(self, post):
-        print('join_game called')
-        print(post)
+        if (self.debug):
+            print('join_game called')
+            print(post)
         row = self.cur.execute('''SELECT `nop`, COUNT(`player`)
         FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
         nop = row[0]
@@ -96,12 +100,13 @@ class Function:
         return post
 
     def send_turn(self, post):
-        print('send_turn called')
-        print(post)
+        if (self.debug):
+            print('send_turn called')
+            print(post)
         game = self.cur.execute('''SELECT `user_id`, `nop`
         FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
         (post.game_id, post.user_id, post.player)).fetchone();
-        if (game[0] == post.user_id):
+        if ((not game is None) and (game[0] == post.user_id)):
             self.cur.execute('''INSERT INTO `turns` (`game_id`, `player`, `turn`, `json`)
             VALUES (?, ?, ?, ?);''', (post.game_id, post.player, post.current, post.turn))
             response = {"accepted": "true"}
@@ -112,12 +117,13 @@ class Function:
         return response
 
     def get_turn(self, post):
-        print('get_turn called')
-        print(post)
+        if (self.debug):
+            print('get_turn called')
+            print(post)
         game = self.cur.execute('''SELECT `user_id`, `nop`
         FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
         (post.game_id, post.user_id, post.player)).fetchone();
-        if (game[0] == post.user_id):
+        if ((not game is None) and (game[0] == post.user_id)):
             turn = self.cur.execute('''SELECT `turn`, `json` FROM `turns` WHERE `game_id`=? AND `turn`>=?;''', (post.game_id, post.current)).fetchone();
             if (turn is None):
                 response = {"waiting": "true"}
@@ -132,6 +138,11 @@ class Function:
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@app.get("/migrate")
+def read_root():
+    f = Function()
+    return f.migrate()
 
 @app.post("/koth")
 async def create_game(post: Game):

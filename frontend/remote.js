@@ -101,7 +101,6 @@ var remote = {
                         game.active_turn = {player: game.turn};
                         if ((game.turn%game.settings.no_of_players) != controls.player) {
                             // remote.get_turn(ping + 1);
-                            console.log('Multiplayer game');
                             return false;
                         }
                     }
