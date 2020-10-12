@@ -1,5 +1,4 @@
 #instructions {
-    /* display: none; */
     margin-top: 3rem;
     max-width: 750px;
 }
@@ -13,4 +12,8 @@
 #title {
     text-align: center;
     font-size: 1.5rem;
+}
+
+#host_div {
+    display: none;
 }

@@ -154,6 +154,8 @@ var game = {
         let pawn_swap = this.check_for_piece(board_location);
         if (piece.type == 'king' &&
         this.board[board_location.v][board_location.h].level == 3) {
+            game.active_turn.to = board_location;
+            remote.send_turn(game.active_turn);
             return this.winning_move(piece, board_location);
         } else if (piece.type == 'king' && pawn_swap) {
             pawn_swap.location = piece.location;
@@ -186,7 +188,7 @@ var game = {
     },
     take_turn: function(turn) {
         if (typeof turn == 'object') {
-            //
+            // moved to canvas.animateTurn()
         } else {
             let temp = this.active_turn;
             this.log.push(temp);
@@ -214,13 +216,13 @@ var game = {
     },
     start_game: function() {
         let nop = document.querySelector("#no_of_players").value;
-        document.querySelector("#player_turn_label").innerHTML = "Turn: ";
+        document.querySelector(".turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
         game.settings.no_of_players = nop;
         remote.start_new_game(nop);
     },
     join_game: function() {
         let id = document.querySelector("#join_game_id").value;
-        document.querySelector("#player_turn_label").innerHTML = "Turn: ";
+        document.querySelector(".turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
         remote.join_game(id);
     }
 }

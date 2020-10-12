@@ -70,7 +70,7 @@ var controls = {
     select_build: function(coord) {
         let options = game.filter_build(game.get_adjacent(this.active_piece.location), this.active_piece);
         for (i in options) {
-            if (coord.h == options[i].h && coord.v == options[i].v) {
+            if ((coord) && coord.h == options[i].h && coord.v == options[i].v) {
                 game.build(coord);
                 this.unselect_piece();
                 game.highlight_move([]); // un-highlight all
@@ -105,7 +105,7 @@ var controls = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.debug('layout.js loaded');
+    console.debug('controls.js loaded');
     const c = document.querySelector("#board");
     c.addEventListener('mousedown', function(e) {
         controls.on_click(c, e);

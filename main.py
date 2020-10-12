@@ -7,23 +7,17 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 
-class Turn(BaseModel):
-    user_id: str
-    action: str
-    game_id: str
-    player: int
-    current: Optional[int] = None
-    turn: Optional[str] = None
-
 class Game(BaseModel):
     user_id: str
     action: str
     game_id: Optional[str]
     player: Optional[int]
     nop: Optional[int] = None
+    current: Optional[int] = None
+    turn: Optional[str] = None
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
+app.mount("/kothfrontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
 
 origins = [
     "http://localhost",
@@ -144,20 +138,14 @@ class Function:
 def read_root():
     return {"Hello": "World"}
 
-@app.post("/game")
+@app.post("/koth")
 async def create_game(post: Game):
     f = Function()
     if (post.action == 'start_new_game'):
         return f.start_game(post)
     elif (post.action == 'join_game'):
         return f.join_game(post)
-    else:
-        return {"Invalid": "Action"}
-
-@app.post("/turn")
-async def process_turn(post: Turn):
-    f = Function()
-    if (post.action == 'send_turn'):
+    elif (post.action == 'send_turn'):
         return f.send_turn(post)
     elif (post.action == 'get_turn'):
         return f.get_turn(post)
