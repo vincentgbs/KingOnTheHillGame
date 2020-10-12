@@ -82,7 +82,15 @@ var controls = {
         console.debug('You cannot build there');
     },
     on_click: function(c, e) {
-        if ((game.turn%game.settings.no_of_players) == controls.player) {
+        let cont = true;
+        if ((game.turn%game.settings.no_of_players) != controls.player) {
+            console.debug("It's not your turn");
+            cont = false;
+        }
+        if (remote.url === false) {
+            cont = true;
+        }
+        if (cont) {
             let coord = this.getCursorPosition(c, e);
             if (this.start) {
                 if (this.action == 'piece') {
@@ -93,8 +101,6 @@ var controls = {
                     this.select_build(coord);
                 }
             }
-        } else {
-            console.debug("It's not your turn");
         }
     },
     update_turn: function(game) {
