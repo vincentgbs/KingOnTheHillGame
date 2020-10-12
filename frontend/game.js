@@ -216,13 +216,13 @@ var game = {
     },
     start_game: function() {
         let nop = document.querySelector("#no_of_players").value;
-        document.querySelector(".turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
+        document.querySelector("#turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
         game.settings.no_of_players = nop;
         remote.start_new_game(nop);
     },
     join_game: function() {
         let id = document.querySelector("#join_game_id").value;
-        document.querySelector(".turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
+        document.querySelector("#turn").innerHTML = 'Turn: <text id="player_turn"></text> <text id="player_turn"></text> <text id="game_id"></text>';
         remote.join_game(id);
     }
 }
