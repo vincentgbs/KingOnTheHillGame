@@ -17,3 +17,14 @@
 #host_div {
     display: none;
 }
+#flash_message {
+    text-align: center;
+    position: fixed; /* Sit on top of the page content */
+    z-index: 2;
+    display: none;
+    min-width: 50%; /* positioning */
+    height: 3rem;
+    top: 10%;
+    left: 10%;
+    background-color: rgba(0,0,0,0.3); /* Black background with opacity */
+}

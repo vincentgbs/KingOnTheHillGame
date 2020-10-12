@@ -168,6 +168,14 @@ var canvas = {
                 }, canvas.settings.animationDelay);
             }, canvas.settings.animationDelay);
         }
+    },
+    flashMessage: function(message, time) {
+        document.querySelector("#flash_message").innerText = message;
+        document.querySelector("#flash_message").style.display = 'block';
+        setTimeout(function() {
+            document.querySelector("#flash_message").innerText = '';
+            document.querySelector("#flash_message").style.display = 'none';
+        }, time);
     }
 }
 
