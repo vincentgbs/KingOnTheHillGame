@@ -181,10 +181,19 @@ var game = {
         return adjacent;
     },
     winning_move: function(piece, location) {
+        console.log('Winner!');
         piece.location = location;
+    },
+    set_board: function() {
+        game.board = game.create_locations();
+        game.players = game.create_players();
+    },
+    start_game: function() {
+        game.turn.active = game.create_turn();
     },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.debug('game.js loaded');
+    test_game.unit_tests();
 });

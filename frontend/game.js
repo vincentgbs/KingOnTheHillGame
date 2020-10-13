@@ -203,9 +203,6 @@ var game = {
             [{v:3,h:6}, {v:2,h:6}, {v:4,h:6}],
         ]
         for (let j = 0; j < no; j++) {
-            console.debug(j);
-            console.debug(game.players);
-            console.debug(game.players[j]);
             for (i in game.players[j].pieces) {
                 game.move(game.players[j].pieces[i], start[j][i]);
             }
