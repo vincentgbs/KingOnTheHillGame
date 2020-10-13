@@ -31,7 +31,7 @@ var game = {
         let board = {
             locations: [],
             check_for_piece: function(location) {
-                return (game.get_piece(location) !== -1);
+                return (game.board.get_piece(location) !== -1);
             },
             get_piece: function(location) {
                 for(i in game.players) {
@@ -69,7 +69,9 @@ var game = {
         };
         for (let i = 0; i < game.settings.piece_types.length; i++) {
             player.pieces.push(
-                game.create_piece(pid, game.settings.piece_types[i])
+                game.create_piece(pid, game.settings.piece_types[i],
+                    game.settings.starting_positions[pid][i].v,
+                    game.settings.starting_positions[pid][i].h)
             );
         }
         return player;
@@ -81,12 +83,12 @@ var game = {
         }
         return players;
     },
-    create_piece: function(pid, type) {
+    create_piece: function(pid, type, v, h) {
         return {
             player: pid,
             active: false,
             type: type,
-            location: game.create_location(-1, -1),
+            location: game.create_location(v, h),
             get_move_options: function() {
                 let filtered = [];
                 let options = game.get_adjacent(this.location);
@@ -94,9 +96,9 @@ var game = {
                     let bl = options[i];
                     if (game.board.locations[bl.row][bl.col].level >= game.settings.level) {
                         // skip, already capped
-                    } else if (this.board[bl.row][bl.col].level > this.location.level + 1) {
+                    } else if (game.board.locations[bl.row][bl.col].level > this.location.level + 1) {
                         // skip, cannot move up more than once level
-                    } else if (game.check_for_piece(bl)) {
+                    } else if (game.board.check_for_piece(bl)) {
                         if (this.type == 'king' &&
                             this.player == (game.turn.current % game.settings.no_of_players)) {
                             filtered.push(bl); // king - pawn swap
