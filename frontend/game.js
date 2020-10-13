@@ -13,9 +13,6 @@ var game = {
     turn: 0,
     log: [],
     active_turn: {player: 0, from: {}, to: {}, build: {}},
-    updating_settings: function(key, value) {
-        this.settings[key] = value;
-    },
     create_locations: function() {
         for(let i = 0; i < this.settings.vertical; i++) {
             row = [];

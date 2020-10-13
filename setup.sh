@@ -1,5 +1,5 @@
 # setup and run repo
-sudo apt install python 3
+sudo apt install python3
 sudo apt install python3-pip
 pip3 install fastapi
 pip3 install uvicorn
