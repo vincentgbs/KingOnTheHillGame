@@ -1,7 +1,7 @@
 var game = {
     settings: {
-        game_id: null,
-        no_of_players: null,
+        game_id: false,
+        no_of_players: false,
         vertical: 7, // odd
         horizontal: 7, // odd
         level: 4,
@@ -14,8 +14,8 @@ var game = {
             [{v:(((7-1)/2)-1),h:(7-1)}, {v:((7-1)/2),h:(7-1)}, {v:(((7-1)/2)+1),h:(7-1)}],
         ],
     },
-    board: {},
-    players: [],
+    board: false, // {}
+    players: false, // {}
     turn: {
         current: 0,
         active: {},
@@ -137,7 +137,7 @@ var game = {
                     (pawn_swap.player == (game.turn.current%game.settings.no_of_players))) {
                         pawn_swap.location = piece.location;
                     }
-                }
+                } // else
                 game.turn.active.to = location;
                 this.location = location;
             },
@@ -181,7 +181,6 @@ var game = {
         return adjacent;
     },
     winning_move: function(piece, location) {
-        console.log('Winner!');
         piece.location = location;
     },
     set_board: function() {
@@ -189,11 +188,12 @@ var game = {
         game.players = game.create_players();
     },
     start_game: function() {
-        game.turn.active = game.create_turn();
+        if (game.settings.no_of_players && game.board && game.players) {
+            game.turn.active = game.create_turn();
+        }
     },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.debug('game.js loaded');
-    test_game.unit_tests();
+    console.log('game.js loaded');
 });
