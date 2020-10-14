@@ -159,7 +159,16 @@ var layout = {
         let turn = document.querySelector("#player_turn");
         turn.style.color = game.settings.piece_colors[game.get_current_player()];
         turn.innerHTML = game.settings.piece_colors[game.get_current_player()];
-    }
+    },
+    flashMessage: function(message, time) {
+        let div = document.querySelector("#flash_message");
+        div.innerText = message;
+        div.style.display = 'block';
+        setTimeout(function() {
+            div.innerText = '';
+            div.style.display = 'none';
+        }, time);
+    },
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {

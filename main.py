@@ -17,7 +17,7 @@ class Game(BaseModel):
     turn: Optional[str] = None
 
 app = FastAPI()
-app.mount("/kothfrontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
+app.mount("/koth-frontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
 
 # app.add_middleware(
 #     CORSMiddleware,
