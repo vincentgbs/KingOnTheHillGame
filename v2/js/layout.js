@@ -64,24 +64,24 @@ var layout = {
             (layout.settings.square_size-1)
         );
     },
-    draw_piece: function(location, type, color, active) {
+    draw_piece: function(piece) {
         layout.context.beginPath();
-        if (active) {
+        if (piece.active) {
             layout.context.strokeStyle = layout.settings.highlight_piece;
         } else {
             layout.context.strokeStyle = layout.settings.regular_piece;
         }
         layout.context.arc(
-            location.col*layout.settings.square_size + (layout.settings.square_size/2),
-            location.row*layout.settings.square_size + (layout.settings.square_size/2),
+            piece.location.col*layout.settings.square_size + (layout.settings.square_size/2),
+            piece.location.row*layout.settings.square_size + (layout.settings.square_size/2),
             (layout.settings.square_size/5), 0, 2 * Math.PI);
         layout.context.stroke();
         layout.context.font = layout.settings.piece_symbol_size;
-        layout.context.fillStyle = color;
+        layout.context.fillStyle = game.settings.piece_colors[piece.player];
         layout.context.textAlign = "center";
-        let symbol = {'king': 'K', 'pawn': 'P'}[type]
-        layout.context.fillText(symbol, location.col*layout.settings.square_size
-        + (layout.settings.square_size/2), location.row*layout.settings.square_size
+        let symbol = {'king': 'K', 'pawn': 'P'}[piece.type]
+        layout.context.fillText(symbol, piece.location.col*layout.settings.square_size
+        + (layout.settings.square_size/2), piece.location.row*layout.settings.square_size
         + (layout.settings.square_size*(3/5)));
     },
     redraw_board: function() {
@@ -93,6 +93,14 @@ var layout = {
                 if (location.highlight) {
                     layout.highlight_square(location);
                 }
+            }
+        }
+    },
+    redraw_pieces: function() {
+        for(let i = 0; i < game.players.length; i++) {
+            let player = game.players[i];
+            for(let j = 0; j < player.pieces.length; j++) {
+                layout.draw_piece(player.pieces[j]);
             }
         }
     },

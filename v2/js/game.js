@@ -101,7 +101,7 @@ var game = {
     },
     create_players: function() {
         let players = [];
-        for (let i = 0; i < this.settings.no_of_players; i++) {
+        for (let i = 0; i < game.settings.no_of_players; i++) {
             players.push(game.create_player(i));
         }
         return players;
@@ -183,7 +183,7 @@ var game = {
         h = [location.col];
         if (location.row == 0) {
             v.push(location.row+1);
-        } else if (location.row >= (this.settings.vertical - 1)) {
+        } else if (location.row >= (game.settings.vertical - 1)) {
             v.push(location.row-1);
         } else {
             v.push(location.row-1);
@@ -191,7 +191,7 @@ var game = {
         }
         if (location.col == 0) {
             h.push(location.col+1);
-        } else if (location.col >= (this.settings.horizontal - 1)) {
+        } else if (location.col >= (game.settings.horizontal - 1)) {
             h.push(location.col-1);
         } else {
             h.push(location.col-1);
