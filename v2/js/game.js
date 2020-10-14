@@ -1,7 +1,7 @@
 var game = {
     settings: {
         game_id: false,
-        no_of_players: false,
+        no_of_players: 2,
         vertical: 7, // odd
         horizontal: 7, // odd
         level: 4,
@@ -221,11 +221,9 @@ var game = {
         piece.location = location;
     },
     start_game: function() {
-        if (game.settings.no_of_players) {
-            game.board = game.create_board();
-            game.players = game.create_players();
-            game.turn.active = game.create_turn(game.get_current_player());
-        }
+        game.board = game.create_board();
+        game.players = game.create_players();
+        game.turn.active = game.create_turn(game.get_current_player());
     },
 }
 

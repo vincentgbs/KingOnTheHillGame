@@ -158,7 +158,6 @@ let test_game = {
     },
     start_game: async function() {
         return new Promise(resolve => {
-            game.settings.no_of_players = 2;
             console.log('game.settings.no_of_players = 2;');
             game.start_game();
             console.log('game.start_game();');
