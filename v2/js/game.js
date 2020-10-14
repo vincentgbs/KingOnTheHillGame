@@ -169,6 +169,10 @@ var game = {
                 }
                 game.turn.active.to = location;
                 this.location = location;
+                let options = piece.get_build_options();
+                for (let i = 0; i < options.length; i++) {
+                    game.board.locations[options[i].row][options[i].col].highlight = true;
+                }
             },
             build: function(location) {
                 this.active = false;

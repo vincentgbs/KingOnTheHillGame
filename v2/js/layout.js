@@ -26,6 +26,8 @@ var layout = {
         layout.canvas.width = width;
     },
     draw_board: function() {
+        layout.resize(game.settings.vertical * layout.settings.square_size,
+            game.settings.horizontal * layout.settings.square_size);
         for(let i = 1; i <= game.settings.horizontal; i++) {
             layout.context.beginPath();
             layout.context.moveTo(i * layout.settings.square_size, 0);
@@ -128,17 +130,17 @@ var layout = {
     },
     animateTurn: function(turn) {
         let player = game.players[turn.pid];
-        let piece = game.board.get_piece(turn.from.location);
+        let piece = game.board.get_piece(turn.from);
         player.select_piece(piece);
         layout.render();
         setTimeout(function(){ // select_piece
             piece.move(turn.to);
             layout.render();
             setTimeout(function(){ // move
-                piece.build(build);
+                piece.build(turn.build);
                 layout.render();
                 setTimeout(function(){ // build
-                    player2.end_turn();
+                    player.end_turn();
                     layout.render();
                 }, layout.settings.animateDelay);
             }, layout.settings.animateDelay);
