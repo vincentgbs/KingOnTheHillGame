@@ -3,9 +3,9 @@ var remote = {
         url: 'http://localhost:8080/koth',
         user_id: '',
         player: 0,
-        local: true,
+        local: false,
         ping_rate: 2500,
-        timeout_x: 70,
+        timeout_x: 50,
     },
     create_request: function(action) {
         return {
@@ -71,7 +71,6 @@ var remote = {
                 if (response.accepted == "true") {
                     remote.get_turn(0);
                 } else {
-                    console.log('response.accepted != "true"');
                     console.debug(response);
                 }
             } catch(err) {
@@ -79,6 +78,7 @@ var remote = {
                 console.debug(remote.xhr.response);
             }
         };
+        console.debug(request);
         remote.xhr.send(JSON.stringify(request));
     },
     get_turn: function(ping) {
@@ -93,7 +93,7 @@ var remote = {
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
                             return remote.get_turn(ping + 1);
-                        } else if (response.turn != "None") {
+                        } else if (response.turn !== null) {
                             turn = JSON.parse(response.turn);
                             layout.animateTurn(turn);
                         } else {
@@ -102,7 +102,7 @@ var remote = {
                         }
                     } else { // ping >= remote.settings.timeout_x
                         console.debug(response);
-                        console.log('Opponent turn expired: x' + ping);
+                        layout.flashMessage('Opponent turn expired: x' + ping);
                     }
                 }, remote.settings.ping_rate);
             } catch(err) {
