@@ -111,10 +111,10 @@ class Kingonthehill:
             FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             post.nop = check[0]
             post.player = check[1] # next_available_spot
-            if (count < nop):
+            if (post.player < post.nop): # add to game
                 self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
-                VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.count, post.nop))
-            else:
+                VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
+            else: # game is already full
                 post.nop = -1
                 post.player = -1
         else:
@@ -147,7 +147,6 @@ class Kingonthehill:
             self.cur.execute('''INSERT INTO `turns` (`game_id`, `player`, `turn`, `json`)
             VALUES (?, ?, ?, ?);''', (post.game_id, post.player, post.current, post.turn))
             response = Response({"accepted":"true"})
-            print(response)
         else:
             response = post
         self.conn.commit()
@@ -157,20 +156,16 @@ class Kingonthehill:
         if (self.debug):
             print('get_turn called')
             print(post)
-        game = self.cur.execute('''SELECT `user_id`, `nop`
-        FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
-        (post.game_id, post.user_id, post.player)).fetchone();
-        if ((not game is None) and (game[0] == post.user_id)):
+        if (self.check_user_and_game(post)):
             turn = self.cur.execute('''SELECT `turn`, `json` FROM `turns` WHERE `game_id`=? AND `turn`>=?;''', (post.game_id, post.current)).fetchone();
             if (turn is None):
-                response = {"waiting": "true"}
+                response = Response({"waiting":"true"})
             else:
-                response = {"turn": turn[1]}
+                response = Response({"turn":turn[1]})
         else: # invalid game_id + user_id + player
-            response = {"invalid": "true"}
+            response = Response({"accepted":"false"})
         self.conn.commit()
-        self.conn.close()
-        return response
+        return self.return_post(response)
 
 @app.get("/")
 def read_root():
@@ -182,7 +177,7 @@ def read_root():
     return k.migrate()
 
 @app.post("/koth")
-async def create_game(post: Game):
+def create_game(post: Game):
     k = Kingonthehill(True)
     if (post.action == 'new_game'):
         return k.new_game(post)
@@ -195,4 +190,4 @@ async def create_game(post: Game):
     elif (post.action == 'get_turn'):
         return k.get_turn(post)
     else:
-        return {"Invalid": "Action"}
+        return {"accepted":"false"}

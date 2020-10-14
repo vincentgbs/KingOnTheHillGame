@@ -4,11 +4,13 @@ var remote = {
         user_id: '',
         player: 0,
         local: true,
+        ping_rate: 2500,
+        timeout_x: 70,
     },
     create_request: function(action) {
         return {
             game_id: game.settings.game_id,
-            user_id: remote.user_id,
+            user_id: remote.settings.user_id,
             player: remote.settings.player,
             action: action,
         };
@@ -75,8 +77,36 @@ var remote = {
         remote.xhr.send(JSON.stringify(request));
     },
     get_turn: function(ping) {
-        console.log('checking: ' + ping);
+        console.log('remote.get_turn('+ping+')');
         let request = remote.create_request('get_turn');
+        remote.xhr.open('POST', remote.settings.url);
+        console.debug(remote.xhr);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                setTimeout(function() {
+                    if (ping < remote.settings.timeout_x) {
+                        if (response.waiting == "true") {
+                            return remote.get_turn(ping + 1);
+                        } else if (response.turn != "None") {
+                            turn = JSON.parse(response.turn);
+                            canvas.animateTurn(turn);
+                            game.active_turn = {player: game.turn};
+                        } else {
+                            console.debug(response);
+                            return false;
+                        }
+                    } else { // ping >= remote.settings.timeout_x
+                        console.debug(response);
+                        console.log('Opponent turn expired: x' + ping);
+                    }
+                }, remote.settings.ping_rate);
+            } catch(err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        }; // remote.xhr.onload()
+        remote.xhr.send(JSON.stringify(request));
     },
     xhr: new XMLHttpRequest(),
     get_url: function() {
@@ -101,9 +131,10 @@ var remote = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.js (1) loaded');
-    if (window.localStorage.getItem('remote_user_id') === null) {
-        window.localStorage.setItem("remote_user_id", remote.set_user_id());
-    } else { // persistence
-        remote.user_id = window.localStorage.getItem('remote_user_id');
-    }
+    window.localStorage.setItem("remote_user_id", remote.set_user_id());
+    // if (window.localStorage.getItem('remote_user_id') === null) {
+    //     window.localStorage.setItem("remote_user_id", remote.set_user_id());
+    // } else { // persistence
+    //     remote.user_id = window.localStorage.getItem('remote_user_id');
+    // }
 });
