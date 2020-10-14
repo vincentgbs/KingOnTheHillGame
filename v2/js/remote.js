@@ -17,15 +17,13 @@ var remote = {
         try {
             response = JSON.parse(response);
             if (response.player < 0) {
-                console.log('The game is already full');
-                return false;
+                layout.flashMessage('The game is already full', 999);
             } else {
-                game.game_id = response.game_id;
-                // game.start_game();
-                // layout.start_game();
-                // layout.render();
-                document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
-                return true;
+                game.settings.game_id = response.game_id;
+                game.settings.no_of_players = response.nop;
+                game.start_game();
+                layout.start_game();
+                layout.render();
             }
         }
         catch(err) {
@@ -34,8 +32,8 @@ var remote = {
         }
     },
     new_game: function() {
-        if (remote.local) {
-            remote.start_game('{"game_id":"0"}');
+        if (remote.settings.local) {
+            remote.start_game('{"game_id":false,"nop":'+game.settings.no_of_players+'}');
         } else {
             let request = remote.create_request('new_game');
             request.nop = game.settings.no_of_players;
@@ -53,6 +51,8 @@ var remote = {
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
         };
+        console.debug(JSON.stringify(request));
+        // remote.xhr.send(JSON.stringify(request));
     },
     rejoin_game: function() {
         let request = remote.create_request('rejoin_game');
@@ -68,6 +68,12 @@ var remote = {
         let url = document.querySelector("#remote_url").value;
         if (url !== "") {
             remote.settings.url = url;
+        }
+    },
+    get_gid: function() {
+        let gid = document.querySelector("#join_game_id").value;
+        if (gid !== "") {
+            game.settings.game_id = gid;
         }
     },
     set_user_id: function() {

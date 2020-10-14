@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (document.querySelector("#remote_url")) {
         document.querySelector("#remote_url").onkeyup = remote.get_url;
     }
+    if (document.querySelector("#join_game_id")) {
+        document.querySelector("#join_game_id").onkeyup = remote.get_gid;
+    }
     if (document.querySelector("#no_of_players")) {
         document.querySelector("#no_of_players").onchange = controls.get_nop;
     }
