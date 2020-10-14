@@ -10,8 +10,9 @@ var controls = {
         }
     },
     start_game: function() {
-        //game.start_game();
-        //layout.start_game();
+        game.start_game();
+        layout.start_game();
+        layout.render();
     },
 }
 
@@ -25,5 +26,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
     if (document.querySelector("#remote_or_local")) {
         document.querySelector("#remote_or_local").onchange = controls.remote_or_local;
+    }
+    if (document.querySelector("#start_game")) {
+        document.querySelector("#start_game").onclick = controls.start_game;
     }
 });

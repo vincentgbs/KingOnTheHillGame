@@ -5,10 +5,7 @@ var remote = {
         player: 0,
         local: true,
     },
-    start_game: function(response) {
-        //
-    },
-    create_request: function(action, pid) {
+    create_request: function(action) {
         return {
             game_id: game.settings.game_id,
             user_id: remote.user_id,
@@ -16,6 +13,9 @@ var remote = {
             action: action,
             nop: game.settings.no_of_players,
         };
+    },
+    start_game: function(response) {
+        //
     },
     new_game: function() {
         let request = remote.create_request('new_game');
