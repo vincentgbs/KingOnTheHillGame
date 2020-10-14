@@ -30,7 +30,7 @@ var layout = {
         if (game.settings.game_id) {
             html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
         }
-        html += ' <button id="start_new_game">Start New Game</button><div id="timer"></div>';
+        html += ' <button id="start_new_game">Start New Game</button>';
         document.querySelector("#turn").innerHTML = html;
     },
     draw_board: function() {
