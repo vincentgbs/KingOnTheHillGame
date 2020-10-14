@@ -11,25 +11,48 @@ var remote = {
             user_id: remote.user_id,
             player: remote.settings.player,
             action: action,
-            nop: game.settings.no_of_players,
         };
     },
     start_game: function(response) {
-        //
+        try {
+            response = JSON.parse(response);
+            // game.start_game();
+            // layout.start_game();
+            // layout.render();
+            if (response.player < 0) {
+                console.log('The game is already full');
+                return false;
+            } else {
+                game.game_id = response.game_id;
+                game.set_board(response.nop);
+                document.querySelector("#game_id").innerHTML = 'Game Id: ' + response.game_id;
+                return true;
+            }
+        }
+        catch(err) {
+            console.debug(err);
+            console.debug(response);
+        }
     },
     new_game: function() {
         let request = remote.create_request('new_game');
+        request.nop = game.settings.no_of_players;
         remote.xhr.open('POST', remote.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
         };
-        remote.xhr.send(JSON.stringify(request));
+        console.debug(JSON.stringify(request));
+        // remote.xhr.send(JSON.stringify(request));
     },
     join_game: function() {
-        //
+        let request = remote.create_request('join_game');
+        remote.xhr.open('POST', remote.url);
+        remote.xhr.onload = function () {
+            remote.start_game(remote.xhr.response);
+        };
     },
     rejoin_game: function() {
-        //
+        let request = remote.create_request('rejoin_game');
     },
     send_turn: function() {
         //

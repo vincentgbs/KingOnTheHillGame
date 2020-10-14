@@ -10,8 +10,8 @@ import sqlite3
 class Game(BaseModel):
     user_id: str
     action: str
-    game_id: Optional[str]
-    player: Optional[int]
+    game_id: str
+    player: int
     nop: Optional[int] = None
     current: Optional[int] = None
     turn: Optional[str] = None
