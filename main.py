@@ -73,9 +73,9 @@ class Kingonthehill:
         return result_str
 
     def create_unique_game_id(self):
-        check = self.get_random_string(7)
+        check = self.get_random_string(9)
         while (self.find_game_id(check)):
-            check = self.get_random_string(7)
+            check = self.get_random_string(9)
         return check
 
     def find_game_id(self, gid):
