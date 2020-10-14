@@ -8,15 +8,22 @@ var controls = {
         } else {
             remote.local = true;
         }
-    }
+    },
+    start_game: function() {
+        //game.start_game();
+        //layout.start_game();
+    },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('controls.js (2) loaded');
-    document.querySelector("#remote_url").onkeyup = function(e) {
-        remote.get_url();
-    };
-
-    document.querySelector("#no_of_players").onchange = controls.get_nop;
-    document.querySelector("#remote_or_local").onchange = controls.remote_or_local;
+    if (document.querySelector("#remote_url")) {
+        document.querySelector("#remote_url").onkeyup = remote.get_url;
+    }
+    if (document.querySelector("#no_of_players")) {
+        document.querySelector("#no_of_players").onchange = controls.get_nop;
+    }
+    if (document.querySelector("#remote_or_local")) {
+        document.querySelector("#remote_or_local").onchange = controls.remote_or_local;
+    }
 });

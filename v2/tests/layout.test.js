@@ -17,6 +17,9 @@ let test_layout = {
                                 test_layout.build(test_game.demo0[3]);
                                 setTimeout(function(){ // test_game.demo1[3]
                                     test_layout.build(test_game.demo1[3]);
+                                    setTimeout(function(){ // declare_winner
+                                        layout.declare_winner();
+                                    }, test_layout.animateDelay); // declare_winner
                                 }, test_layout.animateDelay); // test_game.demo1[3]
                             }, test_layout.animateDelay); // test_game.demo0[3]
                         }, test_layout.animateDelay); // test_game.demo1[2]
