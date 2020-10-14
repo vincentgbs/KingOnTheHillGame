@@ -150,20 +150,23 @@ var game = {
                 return filtered;
             },
             move: function(location) {
+                let piece = this;
                 let pawn_swap = game.board.check_for_piece(location);
                 if (pawn_swap) {
                     pawn_swap = game.board.get_piece(location);
-                    if (this.type == 'king' &&
-                    game.board[location.row][board_location.col].level == game.settings.level-1) {
-                        game.turn.active.to = location;
-                        return game.winning_move(this, location);
-                    } else if ((this.type == 'king') &&
-                    (pawn_swap.player == game.get_current_player())) {
+                    if ((piece.type == 'king') &&
+                    (pawn_swap.player == piece.player) &&
+                    (game.board.locations[location.row][location.col].level == game.settings.level-1)) {
+                        return game.winning_move(piece, location);
+                    } else if ((piece.type == 'king') &&
+                    (pawn_swap.player == piece.player)) {
                         pawn_swap.location = piece.location;
                     } else {
                         return false;
                     }
-                } // else
+                } else if (game.board.locations[location.row][location.col].level == game.settings.level-1) {
+                    return game.winning_move(piece, location);
+                }
                 game.turn.active.to = location;
                 this.location = location;
             },
@@ -209,6 +212,7 @@ var game = {
         return adjacent;
     },
     winning_move: function(piece, location) {
+        game.turn.active.to = location;
         piece.location = location;
     },
     set_board: function() {

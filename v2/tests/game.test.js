@@ -1,5 +1,11 @@
 let test_game = {
     animateDelay: 1,
+    moves: [[ // 8 moves for a player 2 (player[index 1]) win
+            [1, 2],[2, 3],[2, 2],[3, 3],[1, 2],[2, 3],[0, 2],[0, 1],
+        ],[ // move, build, move build...
+            [5, 3],[4, 3],[4, 3],[3, 3],[3, 3],[2, 3],[2, 3],[1, 3],
+        ]
+    ],
     unit_tests: async function() {
         let response = await test_game.start_game();
         console.log(response);
@@ -32,39 +38,39 @@ let test_game = {
             let pawn1 = player1.pieces[0];
             let king1 = player2.pieces[1];
             setTimeout(function(){ // select_piece
-                pawn1.move(game.create_location(2, 2));
+                pawn1.move(game.create_location(test_game.moves[0][2][0], test_game.moves[0][2][1]));
                 setTimeout(function(){ // move
-                    pawn1.build(game.create_location(3, 3));
+                    pawn1.build(game.create_location(test_game.moves[0][3][0], test_game.moves[0][3][1]));
                     setTimeout(function(){ // build
                         player1.end_turn();
                         setTimeout(function(){ // select_piece
-                            king1.move(game.create_location(4, 3));
+                            king1.move(game.create_location(test_game.moves[1][2][0], test_game.moves[1][2][1]));
                             setTimeout(function(){ // move
-                                king1.build(game.create_location(3, 3));
+                                king1.build(game.create_location(test_game.moves[1][3][0], test_game.moves[1][3][1]));
                                 setTimeout(function(){ // build
                                     player2.end_turn();
                                     setTimeout(function(){ // select_piece
-                                        pawn1.move(game.create_location(2, 3));
+                                        pawn1.move(game.create_location(test_game.moves[0][4][0], test_game.moves[0][4][1]));
                                         setTimeout(function(){ // move
-                                            pawn1.build(game.create_location(2, 3));
+                                            pawn1.build(game.create_location(test_game.moves[0][5][0], test_game.moves[0][5][1]));
                                             setTimeout(function(){ // build
                                                 player1.end_turn();
                                                 setTimeout(function(){ // select_piece
-                                                    king1.move(game.create_location(3, 3));
+                                                    king1.move(game.create_location(test_game.moves[1][4][0], test_game.moves[1][4][1]));
                                                     setTimeout(function(){ // move
-                                                        king1.build(game.create_location(2, 3));
+                                                        king1.build(game.create_location(test_game.moves[1][5][0], test_game.moves[1][5][1]));
                                                         setTimeout(function(){ // build
                                                             player2.end_turn();
                                                             setTimeout(function(){ // select_piece
-                                                                pawn1.move(game.create_location(2, 2));
+                                                                pawn1.move(game.create_location(test_game.moves[0][6][0], test_game.moves[0][6][1]));
                                                                 setTimeout(function(){ // move
-                                                                    pawn1.build(game.create_location(2, 1));
+                                                                    pawn1.build(game.create_location(test_game.moves[0][7][0], test_game.moves[0][7][1]));
                                                                     setTimeout(function(){ // build
                                                                         player1.end_turn();
                                                                         setTimeout(function(){ // select_piece
-                                                                            king1.move(game.create_location(2, 3));
+                                                                            king1.move(game.create_location(test_game.moves[1][6][0], test_game.moves[1][6][1]));
                                                                             setTimeout(function(){ // move
-                                                                                king1.build(game.create_location(2, 2));
+                                                                                king1.build(game.create_location(test_game.moves[1][7][0], test_game.moves[1][7][1]));
                                                                                 setTimeout(function(){ // build
                                                                                     player2.end_turn();
                                                                                     resolve('turns3to8() complete'); });
@@ -93,9 +99,9 @@ let test_game = {
             let king1 = player2.pieces[1];
             player2.select_piece(king1);
             setTimeout(function(){ // select_piece
-                king1.move(game.create_location(5, 3));
+                king1.move(game.create_location(test_game.moves[1][0][0], test_game.moves[1][0][1]));
                 setTimeout(function(){ // move
-                    king1.build(game.create_location(4, 3));
+                    king1.build(game.create_location(test_game.moves[1][1][0], test_game.moves[1][1][1]));
                     setTimeout(function(){ // build
                         player2.end_turn();
                         resolve('turn2() complete'); });
@@ -115,7 +121,7 @@ let test_game = {
                     console.debug('FAILED TEST: pawn1 not active');
                 }
                 setTimeout(function(){ // move
-                    pawn1.move(game.create_location(1, 2));
+                    pawn1.move(game.create_location(test_game.moves[0][0][0], test_game.moves[0][0][1]));
                     if(pawn1.location.row == 1) {
                         console.log('pawn1.location.row == 1');
                     } else {
@@ -127,7 +133,7 @@ let test_game = {
                         console.debug('FAILED TEST: pawn1 not at col 2');
                     }
                     setTimeout(function(){ // build
-                        pawn1.build(game.create_location(2, 3));
+                        pawn1.build(game.create_location(test_game.moves[0][1][0], test_game.moves[0][1][1]));
                         if (game.board.locations[2][3].level == 1) {
                             console.log('game.board.locations[2][3].level == 1');
                         } else {
