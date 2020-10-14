@@ -74,7 +74,7 @@ class Kingonthehill:
             print(post)
         post.game_id = self.create_unique_game_id()
         self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
-            VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
+        VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
         self.conn.commit()
         return self.return_post(post)
 
@@ -87,18 +87,24 @@ class Kingonthehill:
         if (self.debug):
             print('join_game called')
             print(post)
-        check = self.cur.execute('''SELECT `nop`, COUNT(`player`)
-        FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
-        nop = check[0]
-        count = check[1]
-        if (count < nop):
-            post.nop = nop
-            post.player = count # next_available_spot
-            self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
-                VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, count, nop))
+        check = self.cur.execute('''SELECT `nop`, `player`
+        FROM `games` WHERE `game_id`=? AND `user_id`=?;''',
+        (post.game_id,post.user_id)).fetchone()
+        if (check is None):
+            check = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+            FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+            post.nop = check[0]
+            post.player = check[1] # next_available_spot
+            if (count < nop):
+                self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
+                VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.count, post.nop))
+            else:
+                post.nop = -1
+                post.player = -1
         else:
-            post.nop = -1
-            post.player = -1
+            post.nop = check[0]
+            post.player = check[1]
+            post = self.rejoin_game(post);
         self.conn.commit()
         return self.return_post(post)
 
@@ -106,7 +112,7 @@ class Kingonthehill:
         if (self.debug):
             print('rejoin_game called')
             print(post)
-        return self.return_post(post)
+        return post
 
     def send_turn(self, post):
         if (self.debug):
@@ -155,7 +161,7 @@ def read_root():
 
 @app.post("/koth")
 async def create_game(post: Game):
-    k = Kingonthehill()
+    k = Kingonthehill(True)
     if (post.action == 'new_game'):
         return k.new_game(post)
     elif (post.action == 'join_game'):
