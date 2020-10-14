@@ -5,9 +5,24 @@ let test_layout = {
         test_layout.build(test_game.demo0[0]);
         setTimeout(function(){
             test_layout.build(test_game.demo1[0]);
-            setTimeout(function(){
+            setTimeout(function(){ // test_game.demo0[1]
                 test_layout.build(test_game.demo0[1]);
-            }, test_layout.animateDelay);
+                setTimeout(function(){ // test_game.demo1[1]
+                    test_layout.build(test_game.demo1[1]);
+                    setTimeout(function(){ // test_game.demo0[2]
+                        test_layout.build(test_game.demo0[2]);
+                        setTimeout(function(){ // test_game.demo1[2]
+                            test_layout.build(test_game.demo1[2]);
+                            setTimeout(function(){ // test_game.demo0[3]
+                                test_layout.build(test_game.demo0[3]);
+                                setTimeout(function(){ // test_game.demo1[3]
+                                    test_layout.build(test_game.demo1[3]);
+                                }, test_layout.animateDelay); // test_game.demo1[3]
+                            }, test_layout.animateDelay); // test_game.demo0[3]
+                        }, test_layout.animateDelay); // test_game.demo1[2]
+                    }, test_layout.animateDelay); // test_game.demo0[2]
+                }, test_layout.animateDelay); // test_game.demo1[1]
+            }, test_layout.animateDelay); // test_game.demo0[1]
         }, test_layout.animateDelay);
     },
     build: function(object) {
