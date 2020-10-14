@@ -37,18 +37,18 @@ var remote = {
         } else {
             let request = remote.create_request('new_game');
             request.nop = game.settings.no_of_players;
-            remote.xhr.open('POST', remote.url);
+            remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
                 remote.start_game(remote.xhr.response);
             };
-            // console.debug(JSON.stringify(request));
+            console.debug(JSON.stringify(request));
             remote.xhr.send(JSON.stringify(request));
         }
     },
     join_game: function() {
         let request = remote.create_request('join_game');
         request.game_id = remote.get_gid();
-        remote.xhr.open('POST', remote.url);
+        remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
         };
@@ -57,7 +57,7 @@ var remote = {
     },
     rejoin_game: function() {
         let request = remote.create_request('rejoin_game');
-        remote.xhr.open('POST', remote.url);
+        remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
         };
