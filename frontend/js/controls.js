@@ -4,9 +4,9 @@ var controls = {
     },
     remote_or_local: function() {
         if (document.querySelector("#remote_or_local").value == 'remote') {
-            remote.local = false;
+            remote.settings.local = false;
         } else {
-            remote.local = true;
+            remote.settings.local = true;
         }
     },
     new_game: function() {

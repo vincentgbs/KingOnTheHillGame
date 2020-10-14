@@ -16,6 +16,7 @@ var remote = {
     start_game: function(response) {
         try {
             response = JSON.parse(response);
+            console.debug(response);
             if (response.player < 0) {
                 layout.flashMessage('The game is already full', 999);
             } else {
