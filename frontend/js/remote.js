@@ -22,6 +22,7 @@ var remote = {
             } else {
                 game.settings.game_id = response.game_id;
                 game.settings.no_of_players = response.nop;
+                remote.settings.player = response.player;
                 game.start_game();
                 layout.start_game();
                 layout.render();
@@ -33,7 +34,7 @@ var remote = {
     },
     new_game: function() {
         if (remote.settings.local) {
-            remote.start_game('{"game_id":false,"nop":'+game.settings.no_of_players+'}');
+            remote.start_game('{"game_id":false,"nop":'+game.settings.no_of_players+',"player":0}');
         } else {
             let request = remote.create_request('new_game');
             request.nop = game.settings.no_of_players;
