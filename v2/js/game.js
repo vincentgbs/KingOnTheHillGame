@@ -219,12 +219,10 @@ var game = {
         game.turn.active.to = location;
         piece.location = location;
     },
-    set_board: function() {
-        game.board = game.create_board();
-        game.players = game.create_players();
-    },
     start_game: function() {
-        if (game.settings.no_of_players && game.board && game.players) {
+        if (game.settings.no_of_players) {
+            game.board = game.create_board();
+            game.players = game.create_players();
             game.turn.active = game.create_turn(game.get_current_player());
         }
     },

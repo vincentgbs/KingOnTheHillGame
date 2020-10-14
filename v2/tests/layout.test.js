@@ -1,19 +1,14 @@
 let test_layout = {
-    demo0: [
-        [0, [0, 2], [1, 2], [2, 3]],
-        [0, [1, 2], [2, 2], [3, 3]],
-        [0, [2, 2], [1, 2], [2, 3]],
-        [0, [1, 2], [0, 2], [0, 1]],
-    ],
-    demo1: [
-        [1, [6, 3], [5, 3], [4, 3]],
-        [1, [5, 3], [4, 3], [3, 3]],
-        [1, [3, 4], [3, 3], [2, 3]],
-        [1, [3, 4], [2, 3], [1, 3]],
-    ],
-    run: function() {
+    animateDelay: 2500,
+    run_test: function() {
         test_game.start_game();
-        test_layout.build(test_layout.demo0[0]);
+        test_layout.build(test_game.demo0[0]);
+        setTimeout(function(){
+            test_layout.build(test_game.demo1[0]);
+            setTimeout(function(){
+                test_layout.build(test_game.demo0[1]);
+            }, test_layout.animateDelay);
+        }, test_layout.animateDelay);
     },
     build: function(object) {
         let turn = game.create_turn(object[0]);
@@ -26,5 +21,5 @@ let test_layout = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.test.js loaded');
-    test_layout.run();
+    // test_layout.run_test();
 });
