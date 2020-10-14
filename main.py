@@ -61,8 +61,7 @@ class Kingonthehill:
             `nop` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `turns` (
             `game_id` varchar(255),
-            `player` int(2),
-            `turn` int(4),
+            `current` int(4),
             `json` varchar(1023));''')
         self.conn.commit()
         self.conn.close()
@@ -144,8 +143,8 @@ class Kingonthehill:
             print('send_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            self.cur.execute('''INSERT INTO `turns` (`game_id`, `player`, `turn`, `json`)
-            VALUES (?, ?, ?, ?);''', (post.game_id, post.player, post.current, post.turn))
+            self.cur.execute('''INSERT INTO `turns` (`game_id`, `current`, `json`)
+            VALUES (?, ?, ?);''', (post.game_id, post.current, post.turn))
             response = Response({"accepted":"true"})
         else:
             response = post
@@ -157,10 +156,12 @@ class Kingonthehill:
             print('get_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            turn = self.cur.execute('''SELECT `turn`, `json` FROM `turns` WHERE `game_id`=? AND `turn`>=?;''', (post.game_id, post.current)).fetchone();
+            turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+            WHERE `game_id`=? AND `current`>=?;''', (post.game_id, post.current)).fetchone();
             if (turn is None):
                 response = Response({"waiting":"true"})
             else:
+                print(turn)
                 response = Response({"turn":turn[1]})
         else: # invalid game_id + user_id + player
             response = Response({"accepted":"false"})

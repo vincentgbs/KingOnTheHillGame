@@ -13,6 +13,7 @@ var remote = {
             user_id: remote.settings.user_id,
             player: remote.settings.player,
             action: action,
+            current: game.turn.current,
         };
     },
     start_game: function(response) {
@@ -54,11 +55,15 @@ var remote = {
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
+            setTimeout(function() {
+                return remote.get_turn(0);
+            }, remote.settings.ping_rate);
         };
         remote.xhr.send(JSON.stringify(request));
     },
     send_turn: function() {
         let request = remote.create_request('send_turn');
+        request.turn = JSON.stringify(game.turn.active);
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {
@@ -80,18 +85,17 @@ var remote = {
         console.log('remote.get_turn('+ping+')');
         let request = remote.create_request('get_turn');
         remote.xhr.open('POST', remote.settings.url);
-        console.debug(remote.xhr);
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
+                console.debug(response);
                 setTimeout(function() {
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
                             return remote.get_turn(ping + 1);
                         } else if (response.turn != "None") {
                             turn = JSON.parse(response.turn);
-                            canvas.animateTurn(turn);
-                            game.active_turn = {player: game.turn};
+                            layout.animateTurn(turn);
                         } else {
                             console.debug(response);
                             return false;

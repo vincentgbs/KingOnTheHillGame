@@ -1,6 +1,6 @@
 let test_layout = {
     animateDelay: 2500,
-    run_test: function() {
+    animate: function() {
         test_layout.start_game();
         test_layout.build(test_game.demo0[0]);
         setTimeout(function(){
@@ -38,10 +38,11 @@ let test_layout = {
         turn.to = game.create_location(object[2][0], object[2][1]);
         turn.build = game.create_location(object[3][0], object[3][1]);
         layout.animateTurn(turn);
+        return turn;
     },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.test.js loaded');
-    // test_layout.run_test();
+    // test_layout.animate();
 });
