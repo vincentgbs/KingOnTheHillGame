@@ -23,9 +23,34 @@ let test_game = {
     turn1: async function() {
         return new Promise(resolve => {
             let pawn1 = game.players[0].pieces[0];
-            let options1 = pawn1.get_move_options();
-            if (options1.length == 4) {
-                console.log('pawn1.options.length == 4');
+            let options = pawn1.get_move_options();
+            if (options.length == 4) {
+                console.log('options.length == 4');
+            } else {
+                console.log('FAILED TEST: move options is not 4');
+            }
+            pawn1.move(game.create_location(1, 2));
+            if(pawn1.location.row == 1) {
+                console.log('pawn1.location.row == 1');
+            } else {
+                console.log('FAILED TEST: pawn1 not at row 1');
+            }
+            if(pawn1.location.col == 2) {
+                console.log('pawn1.location.col == 2');
+            } else {
+                console.log('FAILED TEST: pawn1 not at col 2');
+            }
+            options = pawn1.get_build_options();
+            if (options.length == 7) {
+                console.log('options.length == 7');
+            } else {
+                console.log('FAILED TEST: build options is not 7');
+            }
+            pawn1.build(game.create_location(2, 3));
+            if (game.board.locations[2][3].level == 1) {
+                console.log('game.board.locations[2][3].level == 1');
+            } else {
+                console.log('FAILED TEST: board.locations[2][3] is not level 1');
             }
         resolve('turn1() complete'); });
     },

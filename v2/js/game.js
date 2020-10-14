@@ -118,7 +118,7 @@ var game = {
                     let bl = options[i];
                     if (game.board.locations[bl.row][bl.col].level >= game.settings.level) {
                         // skip, already capped
-                    } else if (game.check_for_piece(bl)) {
+                    } else if (game.board.check_for_piece(bl)) {
                         // skip, cannot build where another piece is
                     } else {
                         filtered.push(bl);
@@ -138,6 +138,8 @@ var game = {
                     } else if ((this.type == 'king') &&
                     (pawn_swap.player == (game.turn.current%game.settings.no_of_players))) {
                         pawn_swap.location = piece.location;
+                    } else {
+                        return false;
                     }
                 } // else
                 game.turn.active.to = location;
