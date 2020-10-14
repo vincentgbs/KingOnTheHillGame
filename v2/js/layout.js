@@ -1,4 +1,4 @@
-let layout = {
+var layout = {
     settings: {
         screen_ratio: (2/3),
         square_size: null,
@@ -50,6 +50,11 @@ let layout = {
             (layout.settings.square_size-1) - ((layout.settings.square_size/5)*level)
         );
     },
+    draw_levels: function(location, level) {
+        for(let i = 0; i < level; i++) {
+            layout.draw_level(location, i);
+        }
+    },
     highlight_square: function(location) {
         layout.context.strokeStyle = layout.settings.highlight_square;
         layout.context.strokeRect(
@@ -79,7 +84,18 @@ let layout = {
         + (layout.settings.square_size/2), location.row*layout.settings.square_size
         + (layout.settings.square_size*(3/5)));
     },
-
+    redraw_board: function() {
+        layout.draw_board();
+        for(let i = 0; i < game.settings.vertical; i++) {
+            for(let j = 0; j < game.settings.horizontal; j++) {
+                let location = game.board.locations[i][j];
+                layout.draw_levels(location, location.level);
+                if (location.highlight) {
+                    layout.highlight_square(location);
+                }
+            }
+        }
+    },
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {

@@ -51,7 +51,7 @@ var game = {
             },
             unhighlight_locations: function() {
                 let board = this;
-                for (let i = 0; i < game.settings.vertical; i++) {
+                for(let i = 0; i < game.settings.vertical; i++) {
                     for(let j = 0; j < game.settings.horizontal; j++) {
                         board.locations[i][j].highlight = false;
                     }
