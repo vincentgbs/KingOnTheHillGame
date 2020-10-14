@@ -179,7 +179,7 @@ def read_root():
 
 @app.post("/koth")
 def create_game(post: Request):
-    k = Kingonthehill(True)
+    k = Kingonthehill(False)
     if (post.action == 'new_game'):
         return k.new_game(post)
     elif (post.action == 'join_game'):

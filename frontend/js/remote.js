@@ -13,7 +13,6 @@ var remote = {
             user_id: remote.settings.user_id,
             player: remote.settings.player,
             action: action,
-            current: game.turn.current,
         };
     },
     start_game: function(response) {
@@ -65,8 +64,9 @@ var remote = {
         let request = remote.create_request('send_turn');
         if (turn) {
             request.turn = JSON.stringify(turn);
+            request.current = game.turn.current; // timing issues
         } else {
-            request.turn = JSON.stringify(game.turn.active);
+            request.turn = JSON.stringify(game.turn.active); // timing issues
         }
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
