@@ -18,11 +18,14 @@ var game = {
     players: false, // {}
     turn: {
         current: 0,
-        active: {},
+        active: false,
     },
     log: [],
     create_turn: function(pid) {
         return {pid: pid, from: {}, to: {}, build: {}};
+    },
+    get_current_player: function() {
+        return (game.turn.current%game.settings.no_of_players);
     },
     create_location: function(row, col) {
         return {row:row, col:col, level: 0, highlight: false};
@@ -100,7 +103,7 @@ var game = {
                         // skip, cannot move up more than once level
                     } else if (game.board.check_for_piece(bl)) {
                         if (this.type == 'king' &&
-                            this.player == (game.turn.current % game.settings.no_of_players)) {
+                            this.player == game.get_current_player()) {
                             filtered.push(bl); // king - pawn swap
                         } else {
                             // skip, cannot move where another piece is
@@ -136,7 +139,7 @@ var game = {
                         game.turn.active.to = location;
                         return game.winning_move(this, location);
                     } else if ((this.type == 'king') &&
-                    (pawn_swap.player == (game.turn.current%game.settings.no_of_players))) {
+                    (pawn_swap.player == game.get_current_player())) {
                         pawn_swap.location = piece.location;
                     } else {
                         return false;
@@ -144,6 +147,7 @@ var game = {
                 } // else
                 game.turn.active.to = location;
                 this.location = location;
+                this.active = false;
             },
             build: function(location) {
                 game.board.locations[location.row][location.col].level++;
