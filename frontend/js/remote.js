@@ -41,7 +41,6 @@ var remote = {
             remote.xhr.onload = function () {
                 remote.start_game(remote.xhr.response);
             };
-            console.debug(JSON.stringify(request));
             remote.xhr.send(JSON.stringify(request));
         }
     },

@@ -27,7 +27,7 @@ app.mount("/koth-frontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/fr
 #     allow_headers=["*"],
 # )
 
-class Function:
+class Kingonthehill:
     def __init__(self, debug=False, db='db.sqlite3'):
         self.debug = debug;
         self.conn = sqlite3.connect(db)
@@ -65,39 +65,48 @@ class Function:
 
     def find_game_id(self, gid):
         game = self.cur.execute('''SELECT `game_id`
-            FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
+        FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
         return ((not game is None))
 
-    def start_game(self, post):
+    def new_game(self, post):
         if (self.debug):
-            print('start_game called')
+            print('new_game called')
             print(post)
-        game = {"user_id": post.user_id, "nop": post.nop, "player": 0,
-            "game_id": self.create_unique_game_id()}
+        post.game_id = self.create_unique_game_id()
         self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
-            VALUES (?, ?, ?, ?);''', (game["game_id"], game["user_id"], game["player"], game["nop"]))
+            VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
         self.conn.commit()
+        return self.return_post(post)
+
+    def return_post(self, post):
         self.conn.close()
-        return game
+        post.user_id = None # never return user_id
+        return post
 
     def join_game(self, post):
         if (self.debug):
             print('join_game called')
             print(post)
-        row = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+        check = self.cur.execute('''SELECT `nop`, COUNT(`player`)
         FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
-        nop = row[0]
-        count = row[1]
-        post.nop = nop # game.number_of_players
+        nop = check[0]
+        count = check[1]
         if (count < nop):
+            post.nop = nop
             post.player = count # next_available_spot
             self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
                 VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, count, nop))
         else:
+            post.nop = -1
             post.player = -1
         self.conn.commit()
-        self.conn.close()
-        return post
+        return self.return_post(post)
+
+    def rejoin_game(self, post):
+        if (self.debug):
+            print('rejoin_game called')
+            print(post)
+        return self.return_post(post)
 
     def send_turn(self, post):
         if (self.debug):
@@ -141,19 +150,21 @@ def read_root():
 
 @app.get("/migrate")
 def read_root():
-    f = Function()
-    return f.migrate()
+    k = Kingonthehill()
+    return k.migrate()
 
 @app.post("/koth")
 async def create_game(post: Game):
-    f = Function()
-    if (post.action == 'start_new_game'):
-        return f.start_game(post)
+    k = Kingonthehill()
+    if (post.action == 'new_game'):
+        return k.new_game(post)
     elif (post.action == 'join_game'):
-        return f.join_game(post)
+        return k.join_game(post)
+    elif (post.action == 'rejoin_game'):
+        return k.rejoin_game(post)
     elif (post.action == 'send_turn'):
-        return f.send_turn(post)
+        return k.send_turn(post)
     elif (post.action == 'get_turn'):
-        return f.get_turn(post)
+        return k.get_turn(post)
     else:
         return {"Invalid": "Action"}
