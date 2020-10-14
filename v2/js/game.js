@@ -30,7 +30,7 @@ var game = {
     create_location: function(row, col) {
         return {row:row, col:col, level: 0, highlight: false};
     },
-    create_locations: function() {
+    create_board: function() {
         let board = {
             locations: [],
             check_for_piece: function(location) {
@@ -134,7 +134,7 @@ var game = {
                 }
                 return filtered;
             },
-            get_build_options: function(piece) {
+            get_build_options: function() {
                 filtered = [];
                 let options = game.get_adjacent(this.location);
                 for (i in options) {
@@ -167,7 +167,8 @@ var game = {
                 game.turn.active.to = location;
                 this.location = location;
             },
-            build: function(location) { // end
+            build: function(location) {
+                this.active = false;
                 game.turn.active.build = location;
                 game.board.locations[location.row][location.col].level++;
                 game.board.unhighlight_locations();
@@ -211,7 +212,7 @@ var game = {
         piece.location = location;
     },
     set_board: function() {
-        game.board = game.create_locations();
+        game.board = game.create_board();
         game.players = game.create_players();
     },
     start_game: function() {

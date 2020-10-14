@@ -1,4 +1,5 @@
 let test_game = {
+    animateDelay: 1,
     unit_tests: async function() {
         let response = await test_game.start_game();
         console.log(response);
@@ -14,63 +15,129 @@ let test_game = {
             response = await test_game.turn2();
             console.log(response);
         }
+        if (response == 'turn2() complete') {
+            response = await test_game.turns3to();
+            console.log(response);
+        }
     },
     // example: async function() {
     //     return new Promise(resolve => {
     //         // test goes here
     //     resolve('example complete'); });
     // },
+    turns3to: async function() {
+        return new Promise(resolve => {
+            let player1 = game.players[0];
+            let player2 = game.players[1];
+            let pawn1 = player1.pieces[0];
+            let king1 = player2.pieces[1];
+            setTimeout(function(){ // select_piece
+                pawn1.move(game.create_location(2, 2));
+                setTimeout(function(){ // move
+                    pawn1.build(game.create_location(3, 3));
+                    setTimeout(function(){ // build
+                        player1.end_turn();
+                        setTimeout(function(){ // select_piece
+                            king1.move(game.create_location(4, 3));
+                            setTimeout(function(){ // move
+                                king1.build(game.create_location(3, 3));
+                                setTimeout(function(){ // build
+                                    player2.end_turn();
+                                    setTimeout(function(){ // select_piece
+                                        pawn1.move(game.create_location(2, 3));
+                                        setTimeout(function(){ // move
+                                            pawn1.build(game.create_location(2, 3));
+                                            setTimeout(function(){ // build
+                                                player1.end_turn();
+                                                setTimeout(function(){ // select_piece
+                                                    king1.move(game.create_location(3, 3));
+                                                    setTimeout(function(){ // move
+                                                        king1.build(game.create_location(2, 3));
+                                                        setTimeout(function(){ // build
+                                                            player2.end_turn();
+                                                            setTimeout(function(){ // select_piece
+                                                                pawn1.move(game.create_location(2, 2));
+                                                                setTimeout(function(){ // move
+                                                                    pawn1.build(game.create_location(2, 1));
+                                                                    setTimeout(function(){ // build
+                                                                        player1.end_turn();
+                                                                        setTimeout(function(){ // select_piece
+                                                                            king1.move(game.create_location(2, 3));
+                                                                            setTimeout(function(){ // move
+                                                                                king1.build(game.create_location(2, 2));
+                                                                                setTimeout(function(){ // build
+                                                                                    player2.end_turn();
+                                                                                    resolve('turns3to8() complete'); });
+                                                                                }, test_game.animateDelay); // build
+                                                                            }, test_game.animateDelay); // move
+                                                                        }, test_game.animateDelay); // select_piece
+                                                                    }, test_game.animateDelay); // build
+                                                                }, test_game.animateDelay); // move
+                                                            }, test_game.animateDelay); // select_piece
+                                                        }, test_game.animateDelay); // build
+                                                    }, test_game.animateDelay); // move
+                                                }, test_game.animateDelay); // select_piece
+                                            }, test_game.animateDelay); // build
+                                        }, test_game.animateDelay); // move
+                                    }, test_game.animateDelay); // select_piece
+                                }, test_game.animateDelay); // build
+                            }, test_game.animateDelay); // move
+                        }, test_game.animateDelay); // select_piece
+                    }, test_game.animateDelay); // build
+                }, test_game.animateDelay); // move
+            }, test_game.animateDelay); // select_piece
+    },
     turn2: async function() {
         return new Promise(resolve => {
-            // test goes here
-        resolve('turn2() complete'); });
+            let player2 = game.players[game.get_current_player()];
+            let king1 = player2.pieces[1];
+            player2.select_piece(king1);
+            setTimeout(function(){ // select_piece
+                king1.move(game.create_location(5, 3));
+                setTimeout(function(){ // move
+                    king1.build(game.create_location(4, 3));
+                    setTimeout(function(){ // build
+                        player2.end_turn();
+                        resolve('turn2() complete'); });
+                    }, test_game.animateDelay);
+                }, test_game.animateDelay);
+            }, test_game.animateDelay);
     },
     turn1: async function() {
         return new Promise(resolve => {
             let player1 = game.players[game.get_current_player()];
             let pawn1 = player1.pieces[0];
             player1.select_piece(pawn1);
-            if (pawn1.active) {
-                console.log('pawn1.active == true');
-            } else {
-                console.debug('FAILED TEST: pawn1 not active');
-            }
-            let options = pawn1.get_move_options();
-            if (options.length == 4) {
-                console.log('options.length == 4');
-            } else {
-                console.debug('FAILED TEST: move options is not 4');
-            }
-            pawn1.move(game.create_location(1, 2));
-            if(pawn1.location.row == 1) {
-                console.log('pawn1.location.row == 1');
-            } else {
-                console.debug('FAILED TEST: pawn1 not at row 1');
-            }
-            if(pawn1.location.col == 2) {
-                console.log('pawn1.location.col == 2');
-            } else {
-                console.debug('FAILED TEST: pawn1 not at col 2');
-            }
-            options = pawn1.get_build_options();
-            if (options.length == 7) {
-                console.log('options.length == 7');
-            } else {
-                console.debug('FAILED TEST: build options is not 7');
-            }
-            pawn1.build(game.create_location(2, 3));
-            if (game.board.locations[2][3].level == 1) {
-                console.log('game.board.locations[2][3].level == 1');
-            } else {
-                console.debug('FAILED TEST: board.locations[2][3] is not level 1');
-            }
-            player1.end_turn();
-            if (game.turn.current == 1) {
-                console.log('game.turn.current == 1');
-            } else {
-                console.debug('FAILED TEST: game.turn.current is not 1');
-            }
-        resolve('turn1() complete'); });
+            setTimeout(function(){ // select_piece
+                if (pawn1.active) {
+                    console.log('pawn1.active == true');
+                } else {
+                    console.debug('FAILED TEST: pawn1 not active');
+                }
+                setTimeout(function(){ // move
+                    pawn1.move(game.create_location(1, 2));
+                    if(pawn1.location.row == 1) {
+                        console.log('pawn1.location.row == 1');
+                    } else {
+                        console.debug('FAILED TEST: pawn1 not at row 1');
+                    }
+                    if(pawn1.location.col == 2) {
+                        console.log('pawn1.location.col == 2');
+                    } else {
+                        console.debug('FAILED TEST: pawn1 not at col 2');
+                    }
+                    setTimeout(function(){ // build
+                        pawn1.build(game.create_location(2, 3));
+                        if (game.board.locations[2][3].level == 1) {
+                            console.log('game.board.locations[2][3].level == 1');
+                        } else {
+                            console.debug('FAILED TEST: board.locations[2][3] is not level 1');
+                        }
+                        player1.end_turn();
+                        resolve('turn1() complete'); });
+                    }, test_game.animateDelay); // build
+                }, test_game.animateDelay); // move
+            }, test_game.animateDelay); // select_piece
     },
     start_game: async function() {
         return new Promise(resolve => {
