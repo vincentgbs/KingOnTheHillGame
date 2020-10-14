@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 
-class Game(BaseModel):
+class Request(BaseModel):
     user_id: str
     action: str
     game_id: str
@@ -178,7 +178,7 @@ def read_root():
     return k.migrate()
 
 @app.post("/koth")
-def create_game(post: Game):
+def create_game(post: Request):
     k = Kingonthehill(True)
     if (post.action == 'new_game'):
         return k.new_game(post)

@@ -61,9 +61,13 @@ var remote = {
         };
         remote.xhr.send(JSON.stringify(request));
     },
-    send_turn: function() {
+    send_turn: function(turn) {
         let request = remote.create_request('send_turn');
-        request.turn = JSON.stringify(game.turn.active);
+        if (turn) {
+            request.turn = JSON.stringify(turn);
+        } else {
+            request.turn = JSON.stringify(game.turn.active);
+        }
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {
