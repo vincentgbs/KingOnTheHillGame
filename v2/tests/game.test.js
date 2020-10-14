@@ -174,5 +174,5 @@ let test_game = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('game.test.js loaded');
-    test_game.unit_tests();
+    // test_game.unit_tests();
 });

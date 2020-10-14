@@ -4,10 +4,10 @@ var layout = {
         square_size: null,
         level_colors: ['lightgreen', 'yellowgreen', 'khaki', 'darksalmon'],
         highlight_square: 'aqua',
-        // regular_square: 'black',
         highlight_piece: 'aqua',
         regular_piece: 'black',
         piece_symbol_size: '30px Arial',
+        animateDelay: 999,
     },
     canvas: null,
     context: null,
@@ -104,10 +104,50 @@ var layout = {
             }
         }
     },
+    render: function(game) {
+        layout.redraw_board(game);
+        layout.redraw_pieces(game);
+    },
+    declare_winner: function() {
+        let setting = {
+            message: 'Winner',
+            background_fill: 'yellow',
+            font_size: '80px Arial',
+            font_color: 'black',
+        }
+        layout.context.fillStyle = setting.background_fill;
+        layout.context.fillRect(0, 0, game.settings.horizontal*layout.settings.square_size,
+            game.settings.vertical*(layout.settings.square_size/2));
+        layout.context.font = setting.font_size;
+        layout.context.textAlign = "center";
+        layout.context.fillStyle = setting.font_color;
+        layout.context.fillText(setting.message,
+            game.settings.horizontal*(layout.settings.square_size/2),
+            game.settings.vertical*(layout.settings.square_size/4)
+        );
+    },
+    animateTurn: function(turn) {
+        let player = game.players[turn.pid];
+        let piece = game.board.get_piece(turn.from.location);
+        player.select_piece(piece);
+        layout.render();
+        setTimeout(function(){ // select_piece
+            piece.move(turn.to);
+            layout.render();
+            setTimeout(function(){ // move
+                piece.build(build);
+                layout.render();
+                setTimeout(function(){ // build
+                    player2.end_turn();
+                    layout.render();
+                }, layout.settings.animateDelay);
+            }, layout.settings.animateDelay);
+        }, layout.settings.animateDelay);
+    },
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('layout.js loaded');
+    console.log('layout.js (1) loaded');
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
 });

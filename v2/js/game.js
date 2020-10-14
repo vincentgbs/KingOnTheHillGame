@@ -227,5 +227,5 @@ var game = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('game.js loaded');
+    console.log('game.js (0) loaded');
 });
