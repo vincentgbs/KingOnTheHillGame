@@ -25,8 +25,7 @@ var remote = {
                 layout.start_game();
                 layout.render();
             }
-        }
-        catch(err) {
+        } catch(err) {
             console.debug(err);
             console.debug(response);
         }
@@ -41,40 +40,44 @@ var remote = {
             remote.xhr.onload = function () {
                 remote.start_game(remote.xhr.response);
             };
-            console.debug(JSON.stringify(request));
-            // remote.xhr.send(JSON.stringify(request));
+            // console.debug(JSON.stringify(request));
+            remote.xhr.send(JSON.stringify(request));
         }
     },
     join_game: function() {
         let request = remote.create_request('join_game');
+        request.game_id = remote.get_gid();
+        remote.xhr.open('POST', remote.url);
+        remote.xhr.onload = function () {
+            remote.start_game(remote.xhr.response);
+        };
+        // console.debug(JSON.stringify(request));
+        remote.xhr.send(JSON.stringify(request));
+    },
+    rejoin_game: function() {
+        let request = remote.create_request('rejoin_game');
         remote.xhr.open('POST', remote.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
         };
         console.debug(JSON.stringify(request));
-        // remote.xhr.send(JSON.stringify(request));
-    },
-    rejoin_game: function() {
-        let request = remote.create_request('rejoin_game');
     },
     send_turn: function() {
-        //
+        let request = remote.create_request('send_turn');
     },
     get_turn: function() {
-        //
+        let request = remote.create_request('get_turn');
     },
     xhr: new XMLHttpRequest(),
     get_url: function() {
         let url = document.querySelector("#remote_url").value;
-        if (url !== "") {
-            remote.settings.url = url;
-        }
+        if (url != "") { remote.settings.url = url; }
+        return url;
     },
     get_gid: function() {
         let gid = document.querySelector("#join_game_id").value;
-        if (gid !== "") {
-            game.settings.game_id = gid;
-        }
+        if (gid != "") { game.settings.game_id = gid; }
+        return gid;
     },
     set_user_id: function() {
         const letters = 'abcdefghijklmnopqrstuvwxyz';

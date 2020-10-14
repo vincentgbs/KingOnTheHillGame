@@ -3,15 +3,12 @@
     <head>
         <meta charset="utf-8">
         <title>King on the Hill</title>
-        <!-- <script src="library/js/timer.js" type="text/javascript"></script> -->
-        <script src="js/game.js" type="text/javascript"></script>
-        <script src="tests/game.test.js" type="text/javascript"></script>
-        <script src="js/layout.js" type="text/javascript"></script>
-        <script src="tests/layout.test.js" type="text/javascript"></script>
-        <script src="js/remote.js" type="text/javascript"></script>
-        <script src="js/controls.js" type="text/javascript"></script>
-        <!-- <link rel="stylesheet" type="text/css" href="library/css/timer.css"> -->
-        <link rel="stylesheet" type="text/css" href="css/game.css">
+        <!-- <title>Vertical Chess</title> -->
+        <script src="game.js" type="text/javascript"></script>
+        <script src="layout.js" type="text/javascript"></script>
+        <script src="controls.js" type="text/javascript"></script>
+        <script src="remote.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="game.css">
     </head>
     <body>
         <div id=title>King On The Hill</div>
@@ -20,7 +17,7 @@
         <div id="turn">
             <div id="host_div">
                 <label>Host: </label>
-                <input type="text" id="remote_url" value="http://localhost:8080/koth" size="50"/>
+                <input type="text" id="remote_url" value="http://localhost:8080/koth"/>
             </div>
             <text id="nop_div">
                 <label>Number of players: </label>
@@ -32,17 +29,17 @@
             </text>
             <text id="remote_div">
                 <select id="remote_or_local">
-                    <option>local</option>
                     <option>remote</option>
+                    <option disabled>local</option>
                 </select>
             </text>
-            <button id="new_game">Start New Game</button>
+            <button id="start_game">Start New Game</button>
             <b>OR</b>
-            <div id="gid_div">
+            <text id="gid_div">
                 <label>Game id: </label>
                 <input type="text" id="join_game_id"/>
-                <button id="join_game">Join Game</button>
-            </div>
+            </text>
+            <button id="join_game">Join Game</button>
         </div>
         <div id="instructions">
             King on the Hill is a simple game, where you try to get your king on top of a hill. Each player begins with one king and two pawns. On your turn, you must move one piece and build with the moved piece.
