@@ -22,7 +22,7 @@ var game = {
     },
     log: [],
     create_turn: function(pid) {
-        return {pid: pid, from: {}, to: {}, build: {}};
+        return {pid: pid, from: false, to: false, build: false};
     },
     get_current_player: function() {
         return (game.turn.current%game.settings.no_of_players);
@@ -48,7 +48,15 @@ var game = {
                     }
                 }
                 return -1;
-            }
+            },
+            unhighlight_locations: function() {
+                let board = this;
+                for (let i = 0; i < game.settings.vertical; i++) {
+                    for(let j = 0; j < game.settings.horizontal; j++) {
+                        board.locations[i][j].highlight = false;
+                    }
+                }
+            },
         };
         for(let i = 0; i < game.settings.vertical; i++) {
             row = [];
@@ -65,10 +73,22 @@ var game = {
             pieces: [],
             select_piece: function(piece) {
                 piece.active = true;
+                game.turn.active.from = piece.location;
+                let options = piece.get_move_options();
+                for (let i = 0; i < options.length; i++) {
+                    game.board.locations[options[i].row][options[i].col].highlight = true;
+                }
             },
             unselect_piece: function(piece) {
                 piece.active = false;
+                game.turn.active.from = {};
+                game.board.unhighlight_locations();
             },
+            end_turn: function() {
+                game.turn.current++;
+                game.log.push(game.turn.active);
+                game.turn.active = game.create_turn(game.get_current_player());
+            }
         };
         for (let i = 0; i < game.settings.piece_types.length; i++) {
             player.pieces.push(
@@ -130,7 +150,6 @@ var game = {
                 return filtered;
             },
             move: function(location) {
-                game.turn.active.from = this.location;
                 let pawn_swap = game.board.check_for_piece(location);
                 if (pawn_swap) {
                     pawn_swap = game.board.get_piece(location);
@@ -147,11 +166,11 @@ var game = {
                 } // else
                 game.turn.active.to = location;
                 this.location = location;
-                this.active = false;
             },
-            build: function(location) {
-                game.board.locations[location.row][location.col].level++;
+            build: function(location) { // end
                 game.turn.active.build = location;
+                game.board.locations[location.row][location.col].level++;
+                game.board.unhighlight_locations();
             },
         };
     },
@@ -197,7 +216,7 @@ var game = {
     },
     start_game: function() {
         if (game.settings.no_of_players && game.board && game.players) {
-            game.turn.active = game.create_turn();
+            game.turn.active = game.create_turn(game.get_current_player());
         }
     },
 }

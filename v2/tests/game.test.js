@@ -27,7 +27,6 @@ let test_game = {
     },
     turn1: async function() {
         return new Promise(resolve => {
-            game.turn.active = game.create_turn(game.get_current_player());
             let player1 = game.players[game.get_current_player()];
             let pawn1 = player1.pieces[0];
             player1.select_piece(pawn1);
@@ -36,7 +35,6 @@ let test_game = {
             } else {
                 console.debug('FAILED TEST: pawn1 not active');
             }
-            game.turn.active.from = pawn1.location;
             let options = pawn1.get_move_options();
             if (options.length == 4) {
                 console.log('options.length == 4');
@@ -44,7 +42,6 @@ let test_game = {
                 console.debug('FAILED TEST: move options is not 4');
             }
             pawn1.move(game.create_location(1, 2));
-            game.turn.active.to = pawn1.location;
             if(pawn1.location.row == 1) {
                 console.log('pawn1.location.row == 1');
             } else {
@@ -61,16 +58,18 @@ let test_game = {
             } else {
                 console.debug('FAILED TEST: build options is not 7');
             }
-            let build_at = game.create_location(2, 3);
-            pawn1.build(build_at);
-            game.turn.active.build = build_at;
+            pawn1.build(game.create_location(2, 3));
             if (game.board.locations[2][3].level == 1) {
                 console.log('game.board.locations[2][3].level == 1');
             } else {
                 console.debug('FAILED TEST: board.locations[2][3] is not level 1');
             }
-            game.turn.current++;
-            game.log.push(game.turn.active);
+            player1.end_turn();
+            if (game.turn.current == 1) {
+                console.log('game.turn.current == 1');
+            } else {
+                console.debug('FAILED TEST: game.turn.current is not 1');
+            }
         resolve('turn1() complete'); });
     },
     start_game: async function() {
