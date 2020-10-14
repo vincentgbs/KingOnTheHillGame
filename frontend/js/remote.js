@@ -57,8 +57,25 @@ var remote = {
     },
     send_turn: function() {
         let request = remote.create_request('send_turn');
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                if (response.accepted == "true") {
+                    remote.get_turn(0);
+                } else {
+                    console.log('response.accepted != "true"');
+                    console.debug(response);
+                }
+            } catch(err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.xhr.send(JSON.stringify(request));
     },
-    get_turn: function() {
+    get_turn: function(ping) {
+        console.log('checking: ' + ping);
         let request = remote.create_request('get_turn');
     },
     xhr: new XMLHttpRequest(),

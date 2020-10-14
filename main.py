@@ -16,6 +16,22 @@ class Game(BaseModel):
     current: Optional[int] = None
     turn: Optional[str] = None
 
+class Response(BaseModel):
+    def __init__(self, dictionary):
+        BaseModel.__init__(self)
+        if("user_id" in dictionary.keys()):
+            self.user_id = dictionary["user_id"]
+        if("accepted" in dictionary.keys()):
+            self.accepted = dictionary["accepted"]
+        if("waiting" in dictionary.keys()):
+            self.waiting = dictionary["waiting"]
+        if("turn" in dictionary.keys()):
+            self.turn = dictionary["turn"]
+    user_id: Optional[str] = None
+    accepted: Optional[bool] = None
+    waiting: Optional[bool] = None
+    turn: Optional[str] = None
+
 app = FastAPI()
 app.mount("/koth-frontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
 
@@ -114,22 +130,28 @@ class Kingonthehill:
             print(post)
         return post
 
+    def check_user_and_game(self, post):
+        game = self.cur.execute('''SELECT `user_id`
+        FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
+        (post.game_id, post.user_id, post.player)).fetchone();
+        if (not game is None): # game != null
+            if (game[0] == post.user_id):
+                return True
+        return False # else
+
     def send_turn(self, post):
         if (self.debug):
             print('send_turn called')
             print(post)
-        game = self.cur.execute('''SELECT `user_id`, `nop`
-        FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
-        (post.game_id, post.user_id, post.player)).fetchone();
-        if ((not game is None) and (game[0] == post.user_id)):
+        if (self.check_user_and_game(post)):
             self.cur.execute('''INSERT INTO `turns` (`game_id`, `player`, `turn`, `json`)
             VALUES (?, ?, ?, ?);''', (post.game_id, post.player, post.current, post.turn))
-            response = {"accepted": "true"}
+            response = Response({"accepted":"true"})
+            print(response)
         else:
             response = post
         self.conn.commit()
-        self.conn.close()
-        return response
+        return self.return_post(response)
 
     def get_turn(self, post):
         if (self.debug):
