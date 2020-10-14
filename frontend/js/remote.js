@@ -62,12 +62,8 @@ var remote = {
     },
     send_turn: function(turn) {
         let request = remote.create_request('send_turn');
-        if (turn) {
-            request.turn = JSON.stringify(turn);
-            request.current = game.turn.current; // timing issues
-        } else {
-            request.turn = JSON.stringify(game.turn.active); // timing issues
-        }
+        request.current = turn.current;
+        request.turn = JSON.stringify(turn);
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {
@@ -88,6 +84,7 @@ var remote = {
     get_turn: function(ping) {
         console.log('remote.get_turn('+ping+')');
         let request = remote.create_request('get_turn');
+        request.current = game.get_current_turn();
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {

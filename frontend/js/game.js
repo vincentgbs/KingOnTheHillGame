@@ -22,7 +22,11 @@ var game = {
     },
     log: [],
     create_turn: function(pid) {
-        return {pid: pid, from: false, to: false, build: false};
+        return {current: game.get_current_turn(),
+        pid: pid, from: false, to: false, build: false};
+    },
+    get_current_turn: function() {
+        return game.turn.current;
     },
     get_current_player: function() {
         return (game.turn.current%game.settings.no_of_players);
