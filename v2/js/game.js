@@ -2,11 +2,11 @@ var game = {
     settings: {
         game_id: false,
         no_of_players: 2,
-        vertical: 7, // odd
-        horizontal: 7, // odd
-        level: 4,
-        piece_types: ['pawn', 'king', 'pawn'],
-        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'],
+        vertical: 7, // static
+        horizontal: 7, // static
+        level: 4, // static
+        piece_types: ['pawn', 'king', 'pawn'], // static
+        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'], // static
         starting_positions: [
             [{v:0,h:(((7-1)/2)-1)}, {v:0,h:((7-1)/2)}, {v:0,h:(((7-1)/2)+1)}],
             [{v:(7-1),h:(((7-1)/2)-1)}, {v:(7-1),h:((7-1)/2)}, {v:(7-1),h:(((7-1)/2)+1)}],
