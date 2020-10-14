@@ -25,6 +25,14 @@ var layout = {
         layout.canvas.height = height;
         layout.canvas.width = width;
     },
+    start_game: function() {
+        let html = '<label>Turn: </label><text id="player_turn"></text>';
+        if (game.settings.game_id) {
+            html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
+        }
+        html += ' <button id="start_new_game">Start New Game</button';
+        document.querySelector("#turn").innerHTML = html;
+    },
     draw_board: function() {
         layout.resize(game.settings.vertical * layout.settings.square_size,
             game.settings.horizontal * layout.settings.square_size);
@@ -109,6 +117,7 @@ var layout = {
     render: function(game) {
         layout.redraw_board(game);
         layout.redraw_pieces(game);
+        layout.update_turn();
     },
     declare_winner: function() {
         let setting = {
@@ -146,6 +155,11 @@ var layout = {
             }, layout.settings.animateDelay);
         }, layout.settings.animateDelay);
     },
+    update_turn: function() {
+        let turn = document.querySelector("#player_turn");
+        turn.style.color = game.settings.piece_colors[game.get_current_player()];
+        turn.innerHTML = game.settings.piece_colors[game.get_current_player()];
+    }
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {

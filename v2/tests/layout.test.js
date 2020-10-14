@@ -1,7 +1,7 @@
 let test_layout = {
     animateDelay: 2500,
     run_test: function() {
-        test_game.start_game();
+        test_layout.start_game();
         test_layout.build(test_game.demo0[0]);
         setTimeout(function(){
             test_layout.build(test_game.demo1[0]);
@@ -24,6 +24,10 @@ let test_layout = {
                 }, test_layout.animateDelay); // test_game.demo1[1]
             }, test_layout.animateDelay); // test_game.demo0[1]
         }, test_layout.animateDelay);
+    },
+    start_game: function() {
+        test_game.start_game();
+        layout.start_game();
     },
     build: function(object) {
         let turn = game.create_turn(object[0]);

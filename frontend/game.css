@@ -13,7 +13,9 @@
     text-align: center;
     font-size: 1.5rem;
 }
-
+#host_div {
+    display: none;
+}
 #flash_message {
     text-align: center;
     position: fixed; /* Sit on top of the page content */
