@@ -69,7 +69,10 @@ var remote = {
             try {
                 let response = JSON.parse(remote.xhr.response);
                 if (response.accepted == "true") {
-                    remote.get_turn(0);
+                    setTimeout(function() {
+                        remote.get_turn(0);
+                    }, remote.settings.ping_rate);
+                    return true;
                 } else {
                     console.debug(response);
                 }
@@ -82,14 +85,13 @@ var remote = {
         remote.xhr.send(JSON.stringify(request));
     },
     get_turn: function(ping) {
-        console.log('remote.get_turn('+ping+')');
         let request = remote.create_request('get_turn');
         request.current = game.get_current_turn();
+        console.log('remote.get_turn('+request.current+', '+ping+')');
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                console.debug(response);
                 setTimeout(function() {
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
