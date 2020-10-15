@@ -18,7 +18,6 @@ var remote = {
     start_game: function(response) {
         try {
             response = JSON.parse(response);
-            console.debug(response);
             if (response.player < 0) {
                 layout.flashMessage('The game is already full', 999);
             } else {
@@ -81,7 +80,6 @@ var remote = {
                 console.debug(remote.xhr.response);
             }
         };
-        console.debug(request);
         remote.xhr.send(JSON.stringify(request));
     },
     get_turn: function(ping) {

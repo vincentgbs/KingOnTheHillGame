@@ -1,54 +1,130 @@
 let test_remote = {
-    animateDelay: 999,
+    animateDelay: 5000,
     player0: {
         user_id: null,
-        send_player0: function(index) {
+        current: null,
+        send_turn: function(index) {
             remote.settings.user_id = test_remote.player0.user_id;
             remote.settings.player = 0;
             let turn = test_layout.build(test_game.demo0[index]);
+            turn.current = test_remote.player0.current;
             remote.send_turn(turn);
+            setTimeout(function() {
+                test_remote.player0.current++;
+            }, 999);
         },
-        get_player0: function() {
+        get_turn: function() {
             remote.settings.user_id = remote.player0.user_id;
             remote.settings.player = 0;
+            remote.get_turn(40);
         },
     },
     player1: {
         user_id: null,
-        send_player1: function(index) {
+        current: null,
+        send_turn: function(index) {
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
             let turn = test_layout.build(test_game.demo1[index]);
+            turn.current = test_remote.player1.current;
             remote.send_turn(turn);
+            setTimeout(function() {
+                test_remote.player1.current++;
+            }, 999);
         },
-        get_player1: function() {
+        get_turn: function() {
             remote.settings.user_id = remote.player1.user_id;
             remote.settings.player = 1;
-
+            remote.get_turn(40);
         },
     },
-    test: function() {
-        test_remote.start_game();
-        setTimeout(function() {
-            test_remote.player0.send_player0(0);
-            setTimeout(function() {
-                //
-            }, (5 * test_remote.animateDelay));
-        }, test_remote.animateDelay);
+    test: async function() {
+        let response = await test_remote.start_game();
+        console.log(response);
+        setTimeout(function() { // test_remote.player0.send_turn(0)
+            test_remote.player0.send_turn(0);
+            test_remote.clearPingTimeout();
+            setTimeout(function() { // test_remote.player1.send_turn(0);
+                test_remote.player1.send_turn(0);
+                test_remote.clearPingTimeout();
+                setTimeout(function() { // test_remote.player0.send_turn(1)
+                    test_remote.player0.send_turn(1);
+                    test_remote.clearPingTimeout();
+                    setTimeout(function() { // test_remote.player1.send_turn(1);
+                        test_remote.player1.send_turn(1);
+                        test_remote.clearPingTimeout();
+                        setTimeout(function() { // test_remote.player0.send_turn(2)
+                            test_remote.player0.send_turn(2);
+                            test_remote.clearPingTimeout();
+                            setTimeout(function() { // test_remote.player1.send_turn(2);
+                                test_remote.player1.send_turn(2);
+                                test_remote.clearPingTimeout();
+                                setTimeout(function() { // test_remote.player0.send_turn(3)
+                                    test_remote.player0.send_turn(3);
+                                    test_remote.clearPingTimeout();
+                                    setTimeout(function() { // test_remote.player1.send_turn(3);
+                                        test_remote.player1.send_turn(3);
+                                        test_remote.clearPingTimeout();
+                                    }, (test_remote.animateDelay)); // test_remote.player1.send_turn(3);
+                                }, test_remote.animateDelay); // test_remote.player0.send_turn(3)
+                            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(2);
+                        }, test_remote.animateDelay); // test_remote.player0.send_turn(2)
+                    }, (test_remote.animateDelay)); // test_remote.player1.send_turn(1);
+                }, test_remote.animateDelay); // test_remote.player0.send_turn(1)
+            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(0);
+        }, test_remote.animateDelay); // test_remote.player0.send_turn(0)
     },
-    start_game: function() {
-        remote.settings.local = false;
-        test_layout.start_game();
-        test_remote.player0.user_id = remote.settings.user_id;
-        remote.new_game();
-        setTimeout(function(){
-            test_remote.player1.user_id = remote.set_user_id();
-            remote.join_game();
-        }, (5 * test_remote.animateDelay));
+    start_game: async function() {
+        return new Promise(resolve => {
+            remote.settings.local = false;
+            test_layout.start_game();
+            test_remote.player0.user_id = remote.settings.user_id;
+            remote.new_game();
+            setTimeout(function(){
+                test_remote.player1.user_id = remote.set_user_id();
+                remote.join_game();
+                resolve('start_game() complete');
+            }, (test_remote.animateDelay));
+        }); // Promise
+    },
+    clearPingTimeout: function() {
+        clearTimeout(remote.timeout);
+        clearTimeout(remote.timeout);
+        clearTimeout(remote.timeout);
+        setTimeout(function() {
+            clearTimeout(remote.timeout);
+            clearTimeout(remote.timeout);
+            clearTimeout(remote.timeout);
+            setTimeout(function() {
+                clearTimeout(remote.timeout);
+                clearTimeout(remote.timeout);
+                clearTimeout(remote.timeout);
+                setTimeout(function() {
+                    clearTimeout(remote.timeout);
+                    clearTimeout(remote.timeout);
+                    clearTimeout(remote.timeout);
+                    setTimeout(function() {
+                        clearTimeout(remote.timeout);
+                        clearTimeout(remote.timeout);
+                        clearTimeout(remote.timeout);
+                        setTimeout(function() {
+                            clearTimeout(remote.timeout);
+                            clearTimeout(remote.timeout);
+                            clearTimeout(remote.timeout);
+                            setTimeout(function() {
+                                clearTimeout(remote.timeout);
+                                clearTimeout(remote.timeout);
+                                clearTimeout(remote.timeout);
+                            }, 10);
+                        }, 10);
+                    }, 10);
+                }, 1);
+            }, 1);
+        }, 1);
     },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.test.js loaded');
-    test_remote.test();
+    // test_remote.test();
 });
