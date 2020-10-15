@@ -125,14 +125,23 @@ var remote = {
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
-                if (remote.settings.ping_rate < 3600000) { // max 1 hour
-                    remote.settings.ping_rate *= 5; // slow ping rate
-                }
+                remote.slow_ping_rate();
             }
             remote.xhr.send(JSON.stringify(request));
         } catch (err) {
             console.debug(err);
             console.debug(request);
+        }
+    },
+    slow_ping_rate: function() {
+        if (remote.settings.ping_rate < 3600000) { // max 1 hour
+            remote.settings.ping_rate *= 2; // slow ping rate
+            if (remote.settings.ping_rate < 600000) { // 10 min
+                remote.settings.ping_rate *= 2; // slow ping rate more
+            }
+            if (remote.settings.ping_rate > 3600000) { // max 1 hour
+                remote.settings.ping_rate = 3600000; // 1 hour
+            }
         }
     },
     get_url: function() {
