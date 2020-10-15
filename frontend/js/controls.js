@@ -111,7 +111,15 @@ var controls = {
     join_game: async function() {
         let response = await remote.join_game();
         controls.settings.player = response.player;
-        if (response.current > 1) {
+        if (response.current < 0) {
+            remote.timeout = setTimeout(function() {
+                remote.get_turn(-remote.settings.timeout_x);
+            }, remote.settings.ping_rate);
+        } else if (response.current == 0) {
+            remote.timeout = setTimeout(function() {
+                remote.get_turn(0);
+            }, remote.settings.ping_rate);
+        } else if (response.current >= 1) {
             console.log('Need to catch up more turns');
         }
         controls.start = true;

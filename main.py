@@ -105,11 +105,12 @@ class Kingonthehill:
         check = self.cur.execute('''SELECT `nop`, `player`
         FROM `games` WHERE `game_id`=? AND `user_id`=?;''',
         (post.game_id,post.user_id)).fetchone()
+        post.current = -1
         if (check is None):
-            check = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+            game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
-            post.nop = check[0]
-            post.player = check[1] # next_available_spot
+            post.nop = game[0]
+            post.player = game[1] # next_available_spot
             if (post.player < post.nop): # add to game
                 self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
                 VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))

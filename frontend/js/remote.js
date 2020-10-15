@@ -58,16 +58,13 @@ var remote = {
             request.game_id = remote.get_gid();
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
-                remote.start_game(remote.xhr.response);
                 try {
+                    remote.start_game(remote.xhr.response);
                     resolve(JSON.parse(remote.xhr.response));
                 } catch (err) {
                     console.debug(err);
                     console.debug(remote.xhr.response);
                 }
-                remote.timeout = setTimeout(function() {
-                    remote.get_turn(0);
-                }, remote.settings.ping_rate);
             };
             remote.send_request(request);
         });
