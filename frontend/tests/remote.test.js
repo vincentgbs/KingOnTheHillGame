@@ -2,8 +2,9 @@ let test_remote = {
     animateDelay: 5000,
     player0: {
         user_id: null,
-        current: null,
+        current: 0,
         send_turn: function(index) {
+            console.log('player0.send_turn: ' + index);
             remote.settings.user_id = test_remote.player0.user_id;
             remote.settings.player = 0;
             let turn = test_remote.build(test_game.demo0[index]);
@@ -14,15 +15,18 @@ let test_remote = {
             }, 999);
         },
         get_turn: function() {
-            remote.settings.user_id = remote.player0.user_id;
+            console.log('player0.get_turn: ' + test_remote.player0.current);
             remote.settings.player = 0;
-            remote.get_turn(40);
+            remote.settings.user_id = test_remote.player0.user_id;
+            game.turn.current = test_remote.player0.current;
+            remote.get_turn(remote.settings.timeout_x-1);
         },
     },
     player1: {
         user_id: null,
-        current: null,
+        current: 0,
         send_turn: function(index) {
+            console.log('player1.send_turn :' + index);
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
             let turn = test_remote.build(test_game.demo1[index]);
@@ -33,27 +37,33 @@ let test_remote = {
             }, 999);
         },
         get_turn: function() {
-            remote.settings.user_id = remote.player1.user_id;
+            console.log('player1.get_turn: ' + test_remote.player1.current);
             remote.settings.player = 1;
-            remote.get_turn(40);
+            remote.settings.user_id = test_remote.player1.user_id;
+            game.turn.current = test_remote.player1.current;
+            remote.get_turn(remote.settings.timeout_x-1);
         },
     },
     test: async function() {
         let response = await test_remote.start_game();
-        console.log(response);
+        console.log('test_remote.' + response);
         setTimeout(function() { // test_remote.player0.send_turn(0)
             test_remote.player0.send_turn(0);
             test_remote.clearPingTimeout();
             setTimeout(function() { // test_remote.player1.send_turn(0);
+                test_remote.player1.get_turn();
                 test_remote.player1.send_turn(0);
                 test_remote.clearPingTimeout();
                 setTimeout(function() { // test_remote.player0.send_turn(1)
+                    test_remote.player0.get_turn();
                     test_remote.player0.send_turn(1);
                     test_remote.clearPingTimeout();
                     setTimeout(function() { // test_remote.player1.send_turn(1);
+                        test_remote.player1.get_turn();
                         test_remote.player1.send_turn(1);
                         test_remote.clearPingTimeout();
                         setTimeout(function() { // test_remote.player0.send_turn(2)
+                            test_remote.player0.get_turn();
                             test_remote.player0.send_turn(2);
                             test_remote.clearPingTimeout();
                             setTimeout(function() { // test_remote.player1.send_turn(2);
@@ -91,7 +101,7 @@ let test_remote = {
             setTimeout(function(){
                 test_remote.player1.user_id = remote.set_user_id();
                 remote.join_game();
-                resolve('test_remote.start_game() complete');
+                resolve('start_game() complete');
             }, (test_remote.animateDelay));
         }); // Promise
     },
@@ -107,26 +117,6 @@ let test_remote = {
                 clearTimeout(remote.timeout);
                 clearTimeout(remote.timeout);
                 clearTimeout(remote.timeout);
-                setTimeout(function() {
-                    clearTimeout(remote.timeout);
-                    clearTimeout(remote.timeout);
-                    clearTimeout(remote.timeout);
-                    setTimeout(function() {
-                        clearTimeout(remote.timeout);
-                        clearTimeout(remote.timeout);
-                        clearTimeout(remote.timeout);
-                        setTimeout(function() {
-                            clearTimeout(remote.timeout);
-                            clearTimeout(remote.timeout);
-                            clearTimeout(remote.timeout);
-                            setTimeout(function() {
-                                clearTimeout(remote.timeout);
-                                clearTimeout(remote.timeout);
-                                clearTimeout(remote.timeout);
-                            }, 10);
-                        }, 10);
-                    }, 10);
-                }, 1);
             }, 1);
         }, 1);
     },

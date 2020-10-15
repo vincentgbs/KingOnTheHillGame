@@ -95,12 +95,14 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                remote.timeout = setTimeout(function() {
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
-                            return remote.get_turn(ping + 1);
+                            remote.timeout = setTimeout(function() {
+                                return remote.get_turn(ping + 1);
+                            }, remote.settings.ping_rate);
                         } else if (response.turn !== null) {
                             turn = JSON.parse(response.turn);
+                            console.debug(turn);
                             layout.animateTurn(turn);
                         } else {
                             console.debug(response);
@@ -109,7 +111,6 @@ var remote = {
                         console.debug(response);
                         layout.flashMessage('Opponent turn expired: x' + ping, 9999);
                     }
-                }, remote.settings.ping_rate);
             } catch(err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);
