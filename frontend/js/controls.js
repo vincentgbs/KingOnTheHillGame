@@ -58,8 +58,9 @@ var controls = {
             let player = game.players[game.get_current_player()];
             let piece = game.board.get_piece(game.turn.active.to);
             piece.build(location);
-            player.end_turn();
             controls.action = 'piece';
+            remote.send_turn(game.turn.active);
+            player.end_turn();
             layout.render();
         } else {
             console.log('Invalid build');
