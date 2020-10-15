@@ -90,7 +90,7 @@ var remote = {
     get_turn: function(ping) {
         let request = remote.create_request('get_turn');
         request.current = game.get_current_turn();
-        console.log('remote.get_turn('+request.current+', '+ping+')');
+        // console.log('remote.get_turn('+request.current+', '+ping+')');
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {

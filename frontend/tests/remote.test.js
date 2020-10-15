@@ -67,12 +67,15 @@ let test_remote = {
                             test_remote.player0.send_turn(2);
                             test_remote.clearPingTimeout();
                             setTimeout(function() { // test_remote.player1.send_turn(2);
+                                test_remote.player1.get_turn();
                                 test_remote.player1.send_turn(2);
                                 test_remote.clearPingTimeout();
                                 setTimeout(function() { // test_remote.player0.send_turn(3)
+                                    test_remote.player0.get_turn();
                                     test_remote.player0.send_turn(3);
                                     test_remote.clearPingTimeout();
                                     setTimeout(function() { // test_remote.player1.send_turn(3);
+                                        test_remote.player1.get_turn();
                                         test_remote.player1.send_turn(3);
                                         test_remote.clearPingTimeout();
                                     }, (test_remote.animateDelay)); // test_remote.player1.send_turn(3);
