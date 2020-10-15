@@ -52,7 +52,7 @@ var remote = {
             }
         }
     },
-    join_game: async function() {
+    join_game: function() {
         return new Promise(resolve => {
             let request = remote.create_request('join_game');
             request.game_id = remote.get_gid();

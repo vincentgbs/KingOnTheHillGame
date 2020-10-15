@@ -10,6 +10,22 @@ var controls = {
         return {col: Math.floor(x/layout.settings.square_size),
             row: Math.floor(y/layout.settings.square_size)};
     },
+    select_piece: function(cd) {
+        let location = game.create_location(cd.row, cd.col);
+        let piece = game.board.check_for_piece(location);
+        if (piece) {
+            piece = game.board.get_piece(location);
+            console.debug(piece);
+        } else {
+            console.log('Invalid piece');
+        }
+    },
+    select_move: function(coord) {
+        //
+    },
+    select_build: function(coord) {
+        //
+    },
     on_click: function(c, e) {
         let cont = true;
         if (game.get_current_turn() != controls.settings.player) {
@@ -19,12 +35,22 @@ var controls = {
             cont = true;
         }
         if (cont) {
-            let coord = this.getCursorPosition(c, e);
-            console.debug(coord);
+            let coord = controls.getCursorPosition(c, e);
+            if (game.board && game.players) {
+                if (controls.action == 'piece') {
+                    return controls.select_piece(coord);
+                } else if (controls.action == 'move') {
+                    return controls.select_move(coord);
+                } else if (controls.action == 'build') {
+                    return controls.select_build(coord);
+                }
+            } // else
+            console.debug(controls.action);
         } else {
             console.debug("It's not your turn");
         }
     },
+    action: 'piece',
     get_nop: function() {
         game.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
@@ -40,8 +66,7 @@ var controls = {
         remote.new_game();
     },
     join_game: async function() {
-        let player = await remote.join_game();
-        console.log(player);
+        controls.settings.player = await remote.join_game();
     },
 }
 

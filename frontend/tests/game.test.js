@@ -37,7 +37,7 @@ let test_game = {
     //         // test goes here
     //     resolve('example complete'); });
     // },
-    turns3to: async function() {
+    turns3to: function() {
         return new Promise(resolve => {
             let player1 = game.players[0];
             let player2 = game.players[1];
@@ -99,7 +99,7 @@ let test_game = {
                 }, test_game.animateDelay); // move
             }, test_game.animateDelay); // select_piece
     },
-    turn2: async function() {
+    turn2: function() {
         return new Promise(resolve => {
             let player2 = game.players[game.get_current_player()];
             let king1 = player2.pieces[1];
@@ -115,7 +115,7 @@ let test_game = {
                 }, test_game.animateDelay);
             }, test_game.animateDelay);
     },
-    turn1: async function() {
+    turn1: function() {
         return new Promise(resolve => {
             let player1 = game.players[game.get_current_player()];
             let pawn1 = player1.pieces[0];
@@ -156,7 +156,7 @@ let test_game = {
                 }, test_game.animateDelay); // move
             }, test_game.animateDelay); // select_piece
     },
-    start_game: async function() {
+    start_game: function() {
         return new Promise(resolve => {
             console.log('game.settings.no_of_players = 2;');
             game.start_game();
