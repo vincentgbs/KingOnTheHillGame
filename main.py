@@ -161,7 +161,6 @@ class Kingonthehill:
             if (turn is None):
                 response = Response({"waiting":"true"})
             else:
-                print(turn)
                 response = Response({"turn":turn[1]})
         else: # invalid game_id + user_id + player
             response = Response({"accepted":"false"})
