@@ -4,6 +4,7 @@ let test_remote = {
     player0: {
         user_id: null,
         send_turn: function(index) {
+            game.turn.current = (index * 2);
             console.log('player0.send_turn: ' + game.get_current_turn());
             remote.settings.user_id = test_remote.player0.user_id;
             remote.settings.player = 0;
@@ -13,7 +14,8 @@ let test_remote = {
                 game.turn.current++;
             }, test_remote.sendDelay + 1);
         },
-        get_turn: function() {
+        get_turn: function(index) {
+            game.turn.current = (index * 2) - 1;
             console.log('player0.get_turn: ' + game.get_current_turn());
             remote.settings.player = 0;
             remote.settings.user_id = test_remote.player0.user_id;
@@ -23,14 +25,16 @@ let test_remote = {
     player1: {
         user_id: null,
         send_turn: function(index) {
+            game.turn.current = (index * 2) - 1;
             console.log('player1.send_turn: ' + game.get_current_turn());
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
             let turn = test_remote.build(test_game.demo1[index]);
             remote.send_turn(turn);
         },
-        get_turn: function() {
-            console.log('player0.get_turn: ' + game.get_current_turn());
+        get_turn: function(index) {
+            game.turn.current = (index * 2);
+            console.log('player1.get_turn: ' + game.get_current_turn());
             remote.settings.player = 1;
             remote.settings.user_id = test_remote.player1.user_id;
             remote.get_turn(remote.settings.timeout_x-1);
@@ -42,36 +46,47 @@ let test_remote = {
         setTimeout(function() { // test_remote.player0.send_turn(0)
             test_remote.player0.send_turn(0);
             setTimeout(function() { // test_remote.player1.send_turn(0);
-                game.turn.current--;
-                test_remote.player1.get_turn();
+                test_remote.player1.get_turn(0);
                 setTimeout(function () {
                     test_remote.player1.send_turn(0);
                     setTimeout(function() { // test_remote.player0.send_turn(1)
-                        game.turn.current--;
-                        test_remote.player0.get_turn();
+                        test_remote.player0.get_turn(1);
                         setTimeout(function() {
                             test_remote.player0.send_turn(1);
                             setTimeout(function() { // test_remote.player1.send_turn(1);
-                                test_remote.player1.get_turn();
-                                test_remote.player1.send_turn(1);
-                                setTimeout(function() { // test_remote.player0.send_turn(2)
-                                    test_remote.player0.get_turn();
-                                    test_remote.player0.send_turn(2);
-                                    setTimeout(function() { // test_remote.player1.send_turn(2);
-                                        test_remote.player1.get_turn();
-                                        test_remote.player1.send_turn(2);
-                                        setTimeout(function() { // test_remote.player0.send_turn(3)
-                                            test_remote.player0.get_turn();
-                                            test_remote.player0.send_turn(3);
-                                            setTimeout(function() { // test_remote.player1.send_turn(3);
-                                                test_remote.player1.get_turn();
-                                                test_remote.player1.send_turn(3);
-                                            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(3);
-                                        }, test_remote.animateDelay); // test_remote.player0.send_turn(3)
-                                    }, (test_remote.animateDelay)); // test_remote.player1.send_turn(2);
-                                }, test_remote.animateDelay); // test_remote.player0.send_turn(2)
-                            }, test_remote.sendDelay);
-                        }, (test_remote.animateDelay)); // test_remote.player1.send_turn(1);
+                                test_remote.player1.get_turn(1);
+                                setTimeout(function() {
+                                    test_remote.player1.send_turn(1);
+                                    setTimeout(function() { // test_remote.player0.send_turn(2)
+                                        test_remote.player0.get_turn(2);
+                                        setTimeout(function() {
+                                            test_remote.player0.send_turn(2);
+                                            setTimeout(function() { // test_remote.player1.send_turn(2);
+                                                test_remote.player1.get_turn(2);
+                                                setTimeout(function() {
+                                                    test_remote.player1.send_turn(2);
+                                                    setTimeout(function() { // test_remote.player0.send_turn(3)
+                                                        test_remote.player0.get_turn(3);
+                                                        setTimeout(function() {
+                                                            test_remote.player0.send_turn(3);
+                                                            setTimeout(function() { // test_remote.player1.send_turn(3);
+                                                                test_remote.player1.get_turn(3);
+                                                                setTimeout(function() {
+                                                                    test_remote.player1.send_turn(3);
+                                                                    setTimeout(function() {
+                                                                        test_remote.player0.get_turn(4);
+                                                                    }, test_remote.animateDelay);
+                                                                }, test_remote.sendDelay);
+                                                            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(3);
+                                                        }, test_remote.sendDelay);
+                                                    }, test_remote.animateDelay); // test_remote.player0.send_turn(3)
+                                                }, test_remote.sendDelay);
+                                            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(2);
+                                        }, test_remote.sendDelay);
+                                    }, test_remote.animateDelay); // test_remote.player0.send_turn(2)
+                                }, test_remote.sendDelay);
+                            }, (test_remote.animateDelay)); // test_remote.player1.send_turn(1);
+                        }, test_remote.sendDelay);
                     }, test_remote.animateDelay); // test_remote.player0.send_turn(1)
                 }, test_remote.sendDelay);
             }, (test_remote.animateDelay)); // test_remote.player1.send_turn(0);
