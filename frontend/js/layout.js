@@ -187,22 +187,24 @@ var layout = {
         );
     },
     animateTurn: function(turn) {
-        let player = game.players[turn.pid];
-        let piece = game.board.get_piece(turn.from);
-        player.select_piece(piece);
-        layout.render();
-        setTimeout(function(){ // select_piece
-            piece.move(turn.to);
+        return new Promise(resolve => {
+            let player = game.players[turn.pid];
+            let piece = game.board.get_piece(turn.from);
+            player.select_piece(piece);
             layout.render();
-            setTimeout(function(){ // move
-                piece.build(turn.build);
+            setTimeout(function(){ // select_piece
+                piece.move(turn.to);
                 layout.render();
-                setTimeout(function(){ // build
+                setTimeout(function(){ // move
+                    piece.build(turn.build);
                     player.end_turn();
-                    layout.render();
+                    setTimeout(function(){ // build
+                        layout.render();
+                        resolve('animateTurn() complete');
+                    }, layout.settings.animateDelay);
                 }, layout.settings.animateDelay);
             }, layout.settings.animateDelay);
-        }, layout.settings.animateDelay);
+        });
     },
     update_turn: function() {
         let turn = document.querySelector("#player_turn");

@@ -68,7 +68,7 @@ var controls = {
     },
     on_click: function(c, e) {
         let cont = true;
-        if (game.get_current_turn() != controls.settings.player) {
+        if (game.get_current_player() != controls.settings.player) {
             cont = false;
         }
         if (remote.settings.local ===  true) {
