@@ -65,7 +65,7 @@ class Kingonthehill:
             `json` varchar(1023));''')
         self.conn.commit()
         self.conn.close()
-        return {"DB Migration": "Complete"}
+        return {"Migration": "Complete"}
 
     def get_random_string(self, length):
         letters = string.ascii_lowercase
@@ -127,6 +127,10 @@ class Kingonthehill:
         if (self.debug):
             print('rejoin_game called')
             print(post)
+        turns = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+        WHERE `game_id`=? AND `current`>=?;''', (post.game_id, post.current)).fetchall();
+        for turn in turns:
+            print(turn)
         return post
 
     def check_user_and_game(self, post):
@@ -171,7 +175,7 @@ class Kingonthehill:
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/migrate")
+@app.get("/koth-migrate")
 def read_root():
     k = Kingonthehill()
     return k.migrate()
