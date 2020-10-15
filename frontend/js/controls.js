@@ -3,6 +3,7 @@ var controls = {
         player: -1,
         winnerDelay: 500,
         winnerRefresh: 10,
+        rejoinDelay: 100,
     },
     getCursorPosition: function (ctx, event) {
         const rect = ctx.getBoundingClientRect();
@@ -114,15 +115,18 @@ var controls = {
         if (response.current < 0) {
             remote.timeout = setTimeout(function() {
                 remote.get_turn(-remote.settings.timeout_x);
+                controls.start = true;
             }, remote.settings.ping_rate);
-        } else if (response.current == 0) {
-            remote.timeout = setTimeout(function() {
-                remote.get_turn(0);
-            }, remote.settings.ping_rate);
-        } else if (response.current >= 1) {
-            console.log('Need to catch up more turns');
+        } else {
+            for(let i = 0; i <= response.current; i++) {
+                remote.timeout = setTimeout(function() {
+                    remote.get_turn(0);
+                }, layout.settings.animateDelay * 3 * i);
+            }
+            setTimeout(function() {
+                controls.start = true;
+            }, layout.settings.animateDelay * 3 * response.current);
         }
-        controls.start = true;
     },
     declare_winner: function(count) {
         controls.start = false;
