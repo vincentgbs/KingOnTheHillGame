@@ -230,7 +230,7 @@ var game = {
         game.turn.active.to = location;
         piece.location = location;
         game.board.unhighlight_locations();
-        controls.declare_winner(); // exception to build up approach
+        controls.declare_winner(0); // exception to build up approach
     },
     start_game: function() {
         game.board = game.create_board();

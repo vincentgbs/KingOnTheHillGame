@@ -1,7 +1,8 @@
 var controls = {
     settings: {
         player: -1,
-        winDelay: 999,
+        winnerDelay: 500,
+        winnerRefresh: 10,
     },
     getCursorPosition: function (ctx, event) {
         const rect = ctx.getBoundingClientRect();
@@ -110,11 +111,14 @@ var controls = {
         controls.settings.player = await remote.join_game();
         controls.start = true;
     },
-    declare_winner: function() {
+    declare_winner: function(count) {
         controls.start = false;
-        setTimeout(function(){
-            layout.declare_winner();
-        }, controls.settings.winDelay);
+        layout.declare_winner();
+        if (count < controls.settings.winnerRefresh) {
+            setTimeout(function(){
+                controls.declare_winner(count + 1);
+            }, controls.settings.winnerDelay);
+        }
     },
 }
 
