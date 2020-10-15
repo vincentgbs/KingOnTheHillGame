@@ -121,6 +121,7 @@ var remote = {
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
     send_request: function(request) {
+        if (remote.settings.local) { return false; }
         try {
             remote.xhr.send(JSON.stringify(request));
         } catch (err) {
