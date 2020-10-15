@@ -161,6 +161,7 @@ var remote = {
     },
     set_user_id: function() {
         const letters = 'abcdefghijklmnopqrstuvwxyz';
+        remote.settings.user_id = '';
         for (let i = 0; i < 50; i++) {
             let j = Math.floor(Math.random() * letters.length);
             remote.settings.user_id += letters[j];
@@ -177,6 +178,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if (window.localStorage.getItem('remote_user_id') === null) {
         window.localStorage.setItem("remote_user_id", remote.set_user_id());
     } else { // persistence
-        remote.user_id = window.localStorage.getItem('remote_user_id');
+        remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
 });
