@@ -124,6 +124,9 @@ var remote = {
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
+                if (remote.settings.ping_rate < 999999) {
+                    remote.settings.ping_rate *= 10;
+                }
             }
             remote.xhr.send(JSON.stringify(request));
         } catch (err) {
