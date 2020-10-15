@@ -102,7 +102,6 @@ var remote = {
                             }, remote.settings.ping_rate);
                         } else if (response.turn !== null) {
                             turn = JSON.parse(response.turn);
-                            console.debug(turn);
                             layout.animateTurn(turn);
                         } else {
                             console.debug(response);
