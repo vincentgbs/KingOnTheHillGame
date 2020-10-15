@@ -1,7 +1,7 @@
 var controls = {
     settings: {
         player: -1,
-        start: false,
+        winDelay: 999,
     },
     getCursorPosition: function (ctx, event) {
         const rect = ctx.getBoundingClientRect();
@@ -39,19 +39,16 @@ var controls = {
     },
     select_move: function(coord) {
         let location = game.board.get_location(coord);
-        let piece = game.board.check_for_piece(location);
-        if (piece) {
-            piece = game.board.get_piece(location);
-            if (piece.active) {
-                return controls.unselect_piece(piece);
-            }
-        } else if (location.highlight) {
-            piece = game.board.get_piece(game.turn.active.from);
+        let piece = game.board.get_piece(game.turn.active.from);
+        if (location.highlight) {
             piece.move(location);
             controls.action = 'build';
             layout.render();
+        } else if (piece.location.row == location.row &&
+        piece.location.col == location.col && piece.active) {
+            return controls.unselect_piece(piece);
         } else {
-            console.debug('Invalid move');
+            console.log('Invalid move');
         }
     },
     select_build: function(coord) {
@@ -59,10 +56,12 @@ var controls = {
         if (location.highlight) {
             let player = game.players[game.get_current_player()];
             let piece = game.board.get_piece(game.turn.active.to);
-
+            piece.build(location);
             player.end_turn();
             controls.action = 'piece';
             layout.render();
+        } else {
+            console.log('Invalid build');
         }
     },
     on_click: function(c, e) {
@@ -75,7 +74,7 @@ var controls = {
         }
         if (cont) {
             let coord = controls.getCursorPosition(c, e);
-            if (game.board && game.players) {
+            if (controls.start) {
                 if (controls.action == 'piece') {
                     return controls.select_piece(coord);
                 } else if (controls.action == 'move') {
@@ -83,13 +82,15 @@ var controls = {
                 } else if (controls.action == 'build') {
                     return controls.select_build(coord);
                 }
-            } // else
-            console.debug(controls.action);
+            } else {
+                console.log('Game has not started');
+            }
         } else {
-            console.debug("It's not your turn");
+            console.log("It's not your turn");
         }
     },
     action: 'piece',
+    start: false,
     get_nop: function() {
         game.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
@@ -103,9 +104,17 @@ var controls = {
     new_game: function() {
         controls.settings.player = 0;
         remote.new_game();
+        controls.start = true;
     },
     join_game: async function() {
         controls.settings.player = await remote.join_game();
+        controls.start = true;
+    },
+    declare_winner: function() {
+        controls.start = false;
+        setTimeout(function(){
+            layout.declare_winner();
+        }, controls.settings.winDelay);
     },
 }
 

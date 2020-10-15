@@ -179,6 +179,7 @@ var game = {
                 game.turn.active.to = location;
                 this.location = location;
                 game.board.unhighlight_locations();
+                // highlight build options
                 let options = piece.get_build_options();
                 for (let i = 0; i < options.length; i++) {
                     game.board.locations[options[i].row][options[i].col].highlight = true;
@@ -228,6 +229,8 @@ var game = {
     winning_move: function(piece, location) {
         game.turn.active.to = location;
         piece.location = location;
+        game.board.unhighlight_locations();
+        controls.declare_winner(); // exception to build up approach
     },
     start_game: function() {
         game.board = game.create_board();
