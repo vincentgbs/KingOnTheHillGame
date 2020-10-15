@@ -10,21 +10,38 @@ var controls = {
         return {col: Math.floor(x/layout.settings.square_size),
             row: Math.floor(y/layout.settings.square_size)};
     },
-    select_piece: function(cd) {
-        let location = game.create_location(cd.row, cd.col);
+    select_piece: function(coord) {
+        let location = game.create_location(coord.row, coord.col);
         let piece = game.board.check_for_piece(location);
         if (piece) {
             piece = game.board.get_piece(location);
-            console.debug(piece);
+            if (piece.player == game.get_current_player()) {
+                console.debug(piece);
+                // select
+            } else {
+                console.log('Not your piece');
+            }
         } else {
-            console.log('Invalid piece');
+            console.log('Not a piece');
         }
     },
-    select_move: function(coord) {
+    unselect_piece: function(coord) {
         //
     },
+    select_move: function(coord) {
+        let location = game.create_location(coord.row, coord.col);
+        let piece = game.board.check_for_piece(location);
+        if (piece) {
+            piece = game.board.get_piece(location);
+            if (piece.active) {
+                controls.unselect_piece();
+            }
+        } else {
+            // build
+        }
+    },
     select_build: function(coord) {
-        //
+        //game.players[game.get_current_player()].end_turn();
     },
     on_click: function(c, e) {
         let cont = true;
