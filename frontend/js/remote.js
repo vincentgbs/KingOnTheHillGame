@@ -52,17 +52,20 @@ var remote = {
             }
         }
     },
-    join_game: function() {
-        let request = remote.create_request('join_game');
-        request.game_id = remote.get_gid();
-        remote.xhr.open('POST', remote.settings.url);
-        remote.xhr.onload = function () {
-            remote.start_game(remote.xhr.response);
-            remote.timeout = setTimeout(function() {
-                return remote.get_turn(0);
-            }, remote.settings.ping_rate);
-        };
-        remote.send_request(request);
+    join_game: async function() {
+        return new Promise(resolve => {
+            let request = remote.create_request('join_game');
+            request.game_id = remote.get_gid();
+            remote.xhr.open('POST', remote.settings.url);
+            remote.xhr.onload = function () {
+                remote.start_game(remote.xhr.response);
+                resolve(JSON.parse(remote.xhr.response).player);
+                remote.timeout = setTimeout(function() {
+                    remote.get_turn(0);
+                }, remote.settings.ping_rate);
+            };
+            remote.send_request(request);
+        });
     },
     send_turn: function(turn) {
         let request = remote.create_request('send_turn');

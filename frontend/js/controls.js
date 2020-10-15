@@ -13,7 +13,6 @@ var controls = {
     on_click: function(c, e) {
         let cont = true;
         if (game.get_current_turn() != controls.settings.player) {
-            console.debug("It's not your turn");
             cont = false;
         }
         if (remote.settings.local ===  true) {
@@ -22,6 +21,8 @@ var controls = {
         if (cont) {
             let coord = this.getCursorPosition(c, e);
             console.debug(coord);
+        } else {
+            console.debug("It's not your turn");
         }
     },
     get_nop: function() {
@@ -35,10 +36,12 @@ var controls = {
         }
     },
     new_game: function() {
+        controls.settings.player = 0;
         remote.new_game();
     },
-    join_game: function() {
-        remote.join_game();
+    join_game: async function() {
+        let player = await remote.join_game();
+        console.log(player);
     },
 }
 
