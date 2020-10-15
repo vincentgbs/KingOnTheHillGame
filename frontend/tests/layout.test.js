@@ -31,6 +31,7 @@ let test_layout = {
     start_game: function() {
         test_game.start_game();
         layout.start_game();
+        layout.render();
     },
     build: function(object) {
         let turn = game.create_turn(object[0]);

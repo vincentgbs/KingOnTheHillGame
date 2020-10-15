@@ -12,7 +12,7 @@ let test_game = {
         [1, [4, 3], [3, 3], [2, 3]],
         [1, [3, 3], [2, 3], [1, 3]],
     ],
-    unit_tests: async function() {
+    test: async function() {
         let response = await test_game.start_game();
         console.log(response);
         // if (response == 'example complete') {
@@ -182,5 +182,5 @@ let test_game = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('game.test.js loaded');
-    // test_game.unit_tests();
+    // test_game.test();
 });

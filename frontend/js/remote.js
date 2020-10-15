@@ -54,7 +54,7 @@ var remote = {
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             remote.start_game(remote.xhr.response);
-            setTimeout(function() {
+            remote.timeout = setTimeout(function() {
                 return remote.get_turn(0);
             }, remote.settings.ping_rate);
         };
@@ -69,9 +69,9 @@ var remote = {
             try {
                 let response = JSON.parse(remote.xhr.response);
                 if (response.accepted == "true") {
-                    setTimeout(function() {
+                    remote.timeout = setTimeout(function() {
                         remote.get_turn(0);
-                    }, remote.settings.ping_rate);
+                    }, 2 * remote.settings.ping_rate);
                     return true;
                 } else {
                     console.debug(response);
@@ -92,7 +92,7 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                setTimeout(function() {
+                remote.timeout = setTimeout(function() {
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
                             return remote.get_turn(ping + 1);
@@ -116,13 +116,19 @@ var remote = {
         remote.xhr.send(JSON.stringify(request));
     },
     xhr: new XMLHttpRequest(),
+    timeout: null, // ping timeout
     get_url: function() {
         let url = document.querySelector("#remote_url").value;
         if (url != "") { remote.settings.url = url; }
         return url;
     },
     get_gid: function() {
-        let gid = document.querySelector("#join_game_id").value;
+        let gid;
+        if (document.querySelector("#join_game_id")) {
+            gid = document.querySelector("#join_game_id").value;
+        } else {
+            gid = document.querySelector("#game_id").innerText;
+        }
         if (gid != "") { game.settings.game_id = gid; }
         return gid;
     },
@@ -138,10 +144,9 @@ var remote = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.js (1) loaded');
-    window.localStorage.setItem("remote_user_id", remote.set_user_id());
-    // if (window.localStorage.getItem('remote_user_id') === null) {
-    //     window.localStorage.setItem("remote_user_id", remote.set_user_id());
-    // } else { // persistence
-    //     remote.user_id = window.localStorage.getItem('remote_user_id');
-    // }
+    if (window.localStorage.getItem('remote_user_id') === null) {
+        window.localStorage.setItem("remote_user_id", remote.set_user_id());
+    } else { // persistence
+        remote.user_id = window.localStorage.getItem('remote_user_id');
+    }
 });
