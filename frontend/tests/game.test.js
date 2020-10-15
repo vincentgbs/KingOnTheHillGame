@@ -21,15 +21,15 @@ let test_game = {
         // }
         if (response == 'start_game() complete') {
             response = await test_game.turn1();
-            console.log(response);
+            console.log('test_game.' + response);
         }
         if (response == 'turn1() complete') {
             response = await test_game.turn2();
-            console.log(response);
+            console.log('test_game.' + response);
         }
         if (response == 'turn2() complete') {
             response = await test_game.turns3to();
-            console.log(response);
+            console.log('test_game.' + response);
         }
     },
     // example: async function() {

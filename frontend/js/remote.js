@@ -104,11 +104,10 @@ var remote = {
                             layout.animateTurn(turn);
                         } else {
                             console.debug(response);
-                            return false;
                         }
                     } else { // ping >= remote.settings.timeout_x
                         console.debug(response);
-                        layout.flashMessage('Opponent turn expired: x' + ping);
+                        layout.flashMessage('Opponent turn expired: x' + ping, 9999);
                     }
                 }, remote.settings.ping_rate);
             } catch(err) {
@@ -123,10 +122,13 @@ var remote = {
     send_request: function(request) {
         if (remote.settings.local) { return false; }
         try {
+            remote.xhr.onerror = function() {
+                layout.flashMessage('Error connecting to server', 9999);
+            }
             remote.xhr.send(JSON.stringify(request));
         } catch (err) {
             console.debug(err);
-            layout.flashMessage('Error connecting to server', 9999);
+            console.debug(request);
         }
     },
     get_url: function() {

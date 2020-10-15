@@ -6,7 +6,7 @@ let test_remote = {
         send_turn: function(index) {
             remote.settings.user_id = test_remote.player0.user_id;
             remote.settings.player = 0;
-            let turn = test_layout.build(test_game.demo0[index]);
+            let turn = test_remote.build(test_game.demo0[index]);
             turn.current = test_remote.player0.current;
             remote.send_turn(turn);
             setTimeout(function() {
@@ -25,7 +25,7 @@ let test_remote = {
         send_turn: function(index) {
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
-            let turn = test_layout.build(test_game.demo1[index]);
+            let turn = test_remote.build(test_game.demo1[index]);
             turn.current = test_remote.player1.current;
             remote.send_turn(turn);
             setTimeout(function() {
@@ -74,6 +74,14 @@ let test_remote = {
             }, (test_remote.animateDelay)); // test_remote.player1.send_turn(0);
         }, test_remote.animateDelay); // test_remote.player0.send_turn(0)
     },
+    build: function(object, current) {
+        let turn = game.create_turn(object[0]);
+        turn.from = game.create_location(object[1][0], object[1][1]);
+        turn.to = game.create_location(object[2][0], object[2][1]);
+        turn.build = game.create_location(object[3][0], object[3][1]);
+        turn.current = current;
+        return turn;
+    },
     start_game: async function() {
         return new Promise(resolve => {
             remote.settings.local = false;
@@ -83,7 +91,7 @@ let test_remote = {
             setTimeout(function(){
                 test_remote.player1.user_id = remote.set_user_id();
                 remote.join_game();
-                resolve('start_game() complete');
+                resolve('test_remote.start_game() complete');
             }, (test_remote.animateDelay));
         }); // Promise
     },
