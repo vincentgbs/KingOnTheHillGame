@@ -95,7 +95,6 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                console.debug(response);
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
                             remote.timeout = setTimeout(function() {
