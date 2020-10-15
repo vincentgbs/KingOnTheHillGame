@@ -127,10 +127,10 @@ class Kingonthehill:
         if (self.debug):
             print('rejoin_game called')
             print(post)
-        turns = self.cur.execute('''SELECT `current`, `json` FROM `turns`
-        WHERE `game_id`=? AND `current`>=? ORDER BY `current` ASC;''', (post.game_id, post.current)).fetchall();
-        for turn in turns:
-            print(turn)
+        last_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+        WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
+        if (not last_turn is None):
+            post.current = last_turn[0]
         return post
 
     def check_user_and_game(self, post):
@@ -182,7 +182,7 @@ def read_root():
 
 @app.post("/koth-actions")
 def create_game(post: Request):
-    k = Kingonthehill(False)
+    k = Kingonthehill(True)
     if (post.action == 'new_game'):
         return k.new_game(post)
     elif (post.action == 'join_game'):

@@ -109,7 +109,11 @@ var controls = {
         controls.start = true;
     },
     join_game: async function() {
-        controls.settings.player = await remote.join_game();
+        let response = await remote.join_game();
+        controls.settings.player = response.player;
+        if (response.current > 1) {
+            console.log('Need to catch up more turns');
+        }
         controls.start = true;
     },
     declare_winner: function(count) {

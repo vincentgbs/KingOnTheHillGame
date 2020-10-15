@@ -59,7 +59,12 @@ var remote = {
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
                 remote.start_game(remote.xhr.response);
-                resolve(JSON.parse(remote.xhr.response).player);
+                try {
+                    resolve(JSON.parse(remote.xhr.response));
+                } catch (err) {
+                    console.debug(err);
+                    console.debug(remote.xhr.response);
+                }
                 remote.timeout = setTimeout(function() {
                     remote.get_turn(0);
                 }, remote.settings.ping_rate);
