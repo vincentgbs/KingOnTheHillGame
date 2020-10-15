@@ -11,13 +11,15 @@ var controls = {
             row: Math.floor(y/layout.settings.square_size)};
     },
     select_piece: function(coord) {
-        let location = game.create_location(coord.row, coord.col);
+        let location = game.board.get_location(coord);
         let piece = game.board.check_for_piece(location);
         if (piece) {
             piece = game.board.get_piece(location);
             if (piece.player == game.get_current_player()) {
-                console.debug(piece);
-                // select
+                let player = game.players[game.get_current_player()];
+                player.select_piece(piece);
+                controls.action = 'move';
+                layout.render();
             } else {
                 console.log('Not your piece');
             }
@@ -25,23 +27,43 @@ var controls = {
             console.log('Not a piece');
         }
     },
-    unselect_piece: function(coord) {
-        //
+    unselect_piece: function(piece) {
+        if (piece.player == game.get_current_player()) {
+            let player = game.players[game.get_current_player()];
+            player.unselect_piece(piece);
+            controls.action = 'piece';
+            layout.render();
+        } else {
+            console.log('Not your piece');
+        }
     },
     select_move: function(coord) {
-        let location = game.create_location(coord.row, coord.col);
+        let location = game.board.get_location(coord);
         let piece = game.board.check_for_piece(location);
         if (piece) {
             piece = game.board.get_piece(location);
             if (piece.active) {
-                controls.unselect_piece();
+                return controls.unselect_piece(piece);
             }
+        } else if (location.highlight) {
+            piece = game.board.get_piece(game.turn.active.from);
+            piece.move(location);
+            controls.action = 'build';
+            layout.render();
         } else {
-            // build
+            console.debug('Invalid move');
         }
     },
     select_build: function(coord) {
-        //game.players[game.get_current_player()].end_turn();
+        let location = game.board.get_location(coord);
+        if (location.highlight) {
+            let player = game.players[game.get_current_player()];
+            let piece = game.board.get_piece(game.turn.active.to);
+
+            player.end_turn();
+            controls.action = 'piece';
+            layout.render();
+        }
     },
     on_click: function(c, e) {
         let cont = true;

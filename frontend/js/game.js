@@ -47,11 +47,14 @@ var game = {
                         let piece = player.pieces[j];
                         if (location.row == piece.location.row &&
                             location.col == piece.location.col) {
-                            return piece; // loose definition
+                            return piece;
                         }
                     }
                 }
                 return -1;
+            },
+            get_location: function(coord) {
+                return game.board.locations[coord.row][coord.col];
             },
             unhighlight_locations: function() {
                 let board = this;
@@ -92,7 +95,7 @@ var game = {
                 game.turn.current++;
                 game.log.push(game.turn.active);
                 game.turn.active = game.create_turn(game.get_current_player());
-            }
+            },
         };
         for (let i = 0; i < game.settings.piece_types.length; i++) {
             player.pieces.push(
@@ -160,7 +163,8 @@ var game = {
                     pawn_swap = game.board.get_piece(location);
                     if ((piece.type == 'king') &&
                     (pawn_swap.player == piece.player) &&
-                    (game.board.locations[location.row][location.col].level == game.settings.level-1)) {
+                    (game.board.locations[location.row][location.col].level ==
+                    game.settings.level-1)) {
                         return game.winning_move(piece, location);
                     } else if ((piece.type == 'king') &&
                     (pawn_swap.player == piece.player)) {
@@ -168,7 +172,8 @@ var game = {
                     } else {
                         return false;
                     }
-                } else if (game.board.locations[location.row][location.col].level == game.settings.level-1) {
+                } else if (game.board.locations[location.row][location.col].level ==
+                game.settings.level-1) {
                     return game.winning_move(piece, location);
                 }
                 game.turn.active.to = location;
