@@ -26,7 +26,7 @@ let test_remote = {
         user_id: null,
         current: 0,
         send_turn: function(index) {
-            console.log('player1.send_turn :' + index);
+            console.log('player1.send_turn: ' + index);
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
             let turn = test_remote.build(test_game.demo1[index]);
@@ -49,35 +49,27 @@ let test_remote = {
         console.log('test_remote.' + response);
         setTimeout(function() { // test_remote.player0.send_turn(0)
             test_remote.player0.send_turn(0);
-            test_remote.clearPingTimeout();
             setTimeout(function() { // test_remote.player1.send_turn(0);
                 test_remote.player1.get_turn();
                 test_remote.player1.send_turn(0);
-                test_remote.clearPingTimeout();
                 setTimeout(function() { // test_remote.player0.send_turn(1)
                     test_remote.player0.get_turn();
                     test_remote.player0.send_turn(1);
-                    test_remote.clearPingTimeout();
                     setTimeout(function() { // test_remote.player1.send_turn(1);
                         test_remote.player1.get_turn();
                         test_remote.player1.send_turn(1);
-                        test_remote.clearPingTimeout();
                         setTimeout(function() { // test_remote.player0.send_turn(2)
                             test_remote.player0.get_turn();
                             test_remote.player0.send_turn(2);
-                            test_remote.clearPingTimeout();
                             setTimeout(function() { // test_remote.player1.send_turn(2);
                                 test_remote.player1.get_turn();
                                 test_remote.player1.send_turn(2);
-                                test_remote.clearPingTimeout();
                                 setTimeout(function() { // test_remote.player0.send_turn(3)
                                     test_remote.player0.get_turn();
                                     test_remote.player0.send_turn(3);
-                                    test_remote.clearPingTimeout();
                                     setTimeout(function() { // test_remote.player1.send_turn(3);
                                         test_remote.player1.get_turn();
                                         test_remote.player1.send_turn(3);
-                                        test_remote.clearPingTimeout();
                                     }, (test_remote.animateDelay)); // test_remote.player1.send_turn(3);
                                 }, test_remote.animateDelay); // test_remote.player0.send_turn(3)
                             }, (test_remote.animateDelay)); // test_remote.player1.send_turn(2);
@@ -97,6 +89,7 @@ let test_remote = {
     },
     start_game: async function() {
         return new Promise(resolve => {
+            remote.settings.ping_rate = 3600000;
             remote.settings.local = false;
             test_layout.start_game();
             test_remote.player0.user_id = remote.settings.user_id;
@@ -108,24 +101,9 @@ let test_remote = {
             }, (test_remote.animateDelay));
         }); // Promise
     },
-    clearPingTimeout: function() {
-        clearTimeout(remote.timeout);
-        clearTimeout(remote.timeout);
-        clearTimeout(remote.timeout);
-        setTimeout(function() {
-            clearTimeout(remote.timeout);
-            clearTimeout(remote.timeout);
-            clearTimeout(remote.timeout);
-            setTimeout(function() {
-                clearTimeout(remote.timeout);
-                clearTimeout(remote.timeout);
-                clearTimeout(remote.timeout);
-            }, 1);
-        }, 1);
-    },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.test.js loaded');
-    // test_remote.test();
+    test_remote.test();
 });

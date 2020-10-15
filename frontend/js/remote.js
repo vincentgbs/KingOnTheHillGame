@@ -90,11 +90,12 @@ var remote = {
     get_turn: function(ping) {
         let request = remote.create_request('get_turn');
         request.current = game.get_current_turn();
-        // console.log('remote.get_turn('+request.current+', '+ping+')');
+        console.log('remote.get_turn('+request.current+', '+ping+')');
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
+                console.debug(response);
                     if (ping < remote.settings.timeout_x) {
                         if (response.waiting == "true") {
                             remote.timeout = setTimeout(function() {
@@ -124,8 +125,8 @@ var remote = {
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
-                if (remote.settings.ping_rate < 999999) {
-                    remote.settings.ping_rate *= 10;
+                if (remote.settings.ping_rate < 3600000) { // max 1 hour
+                    remote.settings.ping_rate *= 5; // slow ping rate
                 }
             }
             remote.xhr.send(JSON.stringify(request));
