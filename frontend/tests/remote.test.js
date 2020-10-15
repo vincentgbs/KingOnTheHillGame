@@ -25,7 +25,7 @@ let test_remote = {
     player1: {
         user_id: null,
         send_turn: function(index) {
-            game.turn.current = (index * 2) - 1;
+            game.turn.current = (index * 2) + 1;
             console.log('player1.send_turn: ' + game.get_current_turn());
             remote.settings.user_id = test_remote.player1.user_id;
             remote.settings.player = 1;
