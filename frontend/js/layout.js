@@ -30,8 +30,57 @@ var layout = {
         if (game.settings.game_id) {
             html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
         }
-        html += ' <button id="start_new_game">Start New Game</button>';
+        html += ' <button id="reset_options">Reset Options</button>';
         document.querySelector("#turn").innerHTML = html;
+        if (document.querySelector("#reset_options")) {
+            document.querySelector("#reset_options").onclick = layout.reset_options;
+        }
+    },
+    reset_options: function() {
+        document.querySelector("#turn").innerHTML = `
+        <div id="host_div">
+            <label>Host: </label>
+            <input type="text" id="remote_url" value="`+remote.settings.url+`"size="50"/>
+        </div>
+        <text id="nop_div">
+            <label>Number of players: </label>
+            <select id="no_of_players">
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+        </text>
+        <text id="remote_div">
+            <select id="remote_or_local">
+                <option>remote</option>
+                <option>local</option>
+            </select>
+        </text>
+        <button id="new_game">Start New Game</button>
+        <b>OR</b>
+        <div id="gid_div">
+            <label>Game id: </label>
+            <input type="text" id="join_game_id"/>
+            <button id="join_game">Join Game</button>
+        </div>`;
+        if (document.querySelector("#remote_url")) {
+            document.querySelector("#remote_url").onkeyup = remote.get_url;
+        }
+        if (document.querySelector("#join_game_id")) {
+            document.querySelector("#join_game_id").onkeyup = remote.get_gid;
+        }
+        if (document.querySelector("#no_of_players")) {
+            document.querySelector("#no_of_players").onchange = controls.get_nop;
+        }
+        if (document.querySelector("#remote_or_local")) {
+            document.querySelector("#remote_or_local").onchange = controls.remote_or_local;
+        }
+        if (document.querySelector("#new_game")) {
+            document.querySelector("#new_game").onclick = controls.new_game;
+        }
+        if (document.querySelector("#join_game")) {
+            document.querySelector("#join_game").onclick = controls.join_game;
+        }
     },
     draw_board: function() {
         layout.resize(game.settings.vertical * layout.settings.square_size,
@@ -175,4 +224,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.js (1) loaded');
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
+    layout.reset_options();
 });

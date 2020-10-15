@@ -171,9 +171,6 @@ var remote = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.js (1) loaded');
-    if (document.querySelector("#remote_url")) {
-        document.querySelector("#remote_url").value = remote.settings.url;
-    }
     if (window.localStorage.getItem('remote_user_id') === null) {
         window.localStorage.setItem("remote_user_id", remote.set_user_id());
     } else { // persistence
