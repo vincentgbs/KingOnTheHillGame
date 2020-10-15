@@ -1,6 +1,6 @@
 var remote = {
     settings: {
-        url: 'http://localhost:8080/koth',
+        url: 'http://localhost:8080/koth-actions',
         user_id: '',
         player: 0,
         local: false,
@@ -44,7 +44,12 @@ var remote = {
             remote.xhr.onload = function () {
                 remote.start_game(remote.xhr.response);
             };
-            remote.xhr.send(JSON.stringify(request));
+            try {
+                remote.xhr.send(JSON.stringify(request));
+            } catch (err) {
+                console.debug(err);
+                layout.flashMessage('Error connecting to server', 9999);
+            }
         }
     },
     join_game: function() {
@@ -57,7 +62,7 @@ var remote = {
                 return remote.get_turn(0);
             }, remote.settings.ping_rate);
         };
-        remote.xhr.send(JSON.stringify(request));
+        remote.send_request(request);
     },
     send_turn: function(turn) {
         let request = remote.create_request('send_turn');
@@ -80,7 +85,7 @@ var remote = {
                 console.debug(remote.xhr.response);
             }
         };
-        remote.xhr.send(JSON.stringify(request));
+        remote.send_request(request);
     },
     get_turn: function(ping) {
         let request = remote.create_request('get_turn');
@@ -111,10 +116,18 @@ var remote = {
                 console.debug(remote.xhr.response);
             }
         }; // remote.xhr.onload()
-        remote.xhr.send(JSON.stringify(request));
+        remote.send_request(request);
     },
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
+    send_request: function(request) {
+        try {
+            remote.xhr.send(JSON.stringify(request));
+        } catch (err) {
+            console.debug(err);
+            layout.flashMessage('Error connecting to server', 9999);
+        }
+    },
     get_url: function() {
         let url = document.querySelector("#remote_url").value;
         if (url != "") { remote.settings.url = url; }
@@ -142,6 +155,9 @@ var remote = {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('remote.js (1) loaded');
+    if (document.querySelector("#remote_url")) {
+        document.querySelector("#remote_url").value = remote.settings.url;
+    }
     if (window.localStorage.getItem('remote_user_id') === null) {
         window.localStorage.setItem("remote_user_id", remote.set_user_id());
     } else { // persistence

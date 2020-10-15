@@ -33,7 +33,7 @@ class Response(BaseModel):
     turn: Optional[str] = None
 
 app = FastAPI()
-app.mount("/koth-frontend", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
+app.mount("/koth", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
 
 # app.add_middleware(
 #     CORSMiddleware,
@@ -177,7 +177,7 @@ def read_root():
     k = Kingonthehill()
     return k.migrate()
 
-@app.post("/koth")
+@app.post("/koth-actions")
 def create_game(post: Request):
     k = Kingonthehill(False)
     if (post.action == 'new_game'):

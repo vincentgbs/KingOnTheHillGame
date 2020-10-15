@@ -1,4 +1,7 @@
 var controls = {
+    settings: {
+        //
+    },
     get_nop: function() {
         game.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
