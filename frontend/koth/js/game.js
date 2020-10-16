@@ -235,7 +235,10 @@ var game = {
     start_game: function() {
         game.board = game.create_board();
         game.players = game.create_players();
-        game.turn.active = game.create_turn(game.get_current_player());
+        game.turn = {
+            current: 0,
+            active: game.create_turn(game.get_current_player()),
+        };
     },
 }
 

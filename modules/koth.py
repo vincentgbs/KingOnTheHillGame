@@ -69,6 +69,11 @@ class Kingonthehill:
         FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
         return ((not game is None))
 
+    def return_post(self, post):
+        self.conn.close()
+        post.user_id = None # never return user_id
+        return post
+
     def new_game(self, post):
         if (self.debug):
             print('new_game called')
@@ -78,11 +83,6 @@ class Kingonthehill:
         VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
         self.conn.commit()
         return self.return_post(post)
-
-    def return_post(self, post):
-        self.conn.close()
-        post.user_id = None # never return user_id
-        return post
 
     def join_game(self, post):
         if (self.debug):
@@ -100,10 +100,10 @@ class Kingonthehill:
             if (post.player < post.nop): # add to game
                 self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
                 VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
-            else: # game is already full
+            else: # game is full
                 post.nop = -1
                 post.player = -1
-        else:
+        else: # rejoin game
             post.nop = check[0]
             post.player = check[1]
             post = self.rejoin_game(post);
@@ -116,7 +116,7 @@ class Kingonthehill:
             print(post)
         last_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
         WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
-        if (not last_turn is None):
+        if (not last_turn is None): # game already started
             post.current = last_turn[0]
         return post
 
@@ -134,6 +134,11 @@ class Kingonthehill:
             print('send_turn called')
             print(post)
         if (self.check_user_and_game(post)):
+            last_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+            WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
+            if (not last_turn is None):
+                if((last_turn[0]+1) != post.current):
+                    return Response({"accepted":"false"})
             self.cur.execute('''INSERT INTO `turns` (`game_id`, `current`, `json`)
             VALUES (?, ?, ?);''', (post.game_id, post.current, post.turn))
             response = Response({"accepted":"true"})

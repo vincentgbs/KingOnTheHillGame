@@ -82,9 +82,11 @@ var remote = {
                         remote.get_turn(0);
                     }, 2 * remote.settings.ping_rate);
                     return true;
-                } else {
-                    console.debug(response);
-                }
+                } else if (response.accepted == "false") {
+                    layout.flashMessage('Invalid move', 9999);
+                    return false;
+                } // else
+                console.debug(response);
             } catch(err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);
