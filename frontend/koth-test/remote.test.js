@@ -116,7 +116,4 @@ let test_remote = {
     },
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('remote.test.js loaded');
-    // test_remote.test();
-});
+console.log('test_remote (remote.test.js) loaded');

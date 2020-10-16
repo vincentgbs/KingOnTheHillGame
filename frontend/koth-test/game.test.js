@@ -180,7 +180,4 @@ let test_game = {
     },
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('game.test.js loaded');
-    // test_game.test();
-});
+console.log('test_game (game.test.js) loaded');

@@ -1,6 +1,6 @@
 let test_layout = {
     animateDelay: 2500,
-    animate: function() {
+    test: function() {
         test_layout.start_game();
         test_layout.build(test_game.demo0[0]);
         setTimeout(function(){
@@ -43,7 +43,4 @@ let test_layout = {
     },
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('layout.test.js loaded');
-    // test_layout.animate();
-});
+console.log('test_layout (layout.test.js) loaded');

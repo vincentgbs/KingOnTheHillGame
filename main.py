@@ -3,8 +3,14 @@ from fastapi.staticfiles import StaticFiles
 # from fastapi.middleware.cors import CORSMiddleware
 from modules.koth import Kingonthehill, Request, Response
 
+debug = False
+
 app = FastAPI()
-app.mount("/koth", StaticFiles(directory="/vagrant/KingOnTheHillGame/frontend"), name="static")
+
+kothroot = "/vagrant/KingOnTheHillGame/frontend"
+app.mount("/koth", StaticFiles(directory=kothroot+"/koth"), name="koth")
+if (debug):
+    app.mount("/koth-test", StaticFiles(directory=kothroot+"/koth-test"), name="koth-test")
 
 # app.add_middleware(
 #     CORSMiddleware,
@@ -25,7 +31,7 @@ def read_root():
 
 @app.post("/koth-actions")
 def create_game(post: Request):
-    k = Kingonthehill(True)
+    k = Kingonthehill(debug)
     if (post.action == 'new_game'):
         return k.new_game(post)
     elif (post.action == 'join_game'):
