@@ -48,6 +48,7 @@ class Kingonthehill:
         self.cur.execute('''CREATE TABLE `turns` (
             `game_id` varchar(255),
             `current` int(4),
+            `player` int(2) DEFAULT NULL,
             `json` varchar(1023));''')
         self.conn.commit()
         self.conn.close()
@@ -134,13 +135,13 @@ class Kingonthehill:
             print('send_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            last_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+            last_turn = self.cur.execute('''SELECT `current`, `player`, `json` FROM `turns`
             WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
             if (not last_turn is None):
-                if((last_turn[0]+1) != post.current):
+                if((last_turn[0]+1 != post.current) or (last_turn[1]+1 != post.player)):
                     return Response({"accepted":"false"})
-            self.cur.execute('''INSERT INTO `turns` (`game_id`, `current`, `json`)
-            VALUES (?, ?, ?);''', (post.game_id, post.current, post.turn))
+            self.cur.execute('''INSERT INTO `turns` (`game_id`, `current`, `player`, `json`)
+            VALUES (?, ?, ?, ?);''', (post.game_id, post.current, post.player, post.turn))
             response = Response({"accepted":"true"})
         else:
             response = post
