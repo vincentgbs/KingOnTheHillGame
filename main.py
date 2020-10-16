@@ -7,10 +7,12 @@ debug = False
 
 app = FastAPI()
 
-kothroot = "/vagrant/KingOnTheHillGame/frontend"
-app.mount("/koth", StaticFiles(directory=kothroot+"/koth"), name="koth")
+frontendroot = "/vagrant/KingOnTheHillGame/frontend"
+app.mount("/koth", StaticFiles(directory=frontendroot+"/koth"), name="koth")
 if (debug):
-    app.mount("/koth-test", StaticFiles(directory=kothroot+"/koth-test"), name="koth-test")
+    app.mount("/koth-test", StaticFiles(directory=frontendroot+"/koth-test"), name="koth-test")
+
+app.mount("/pkd", StaticFiles(directory=frontendroot+"/pkd"), name="pkd")
 
 # app.add_middleware(
 #     CORSMiddleware,

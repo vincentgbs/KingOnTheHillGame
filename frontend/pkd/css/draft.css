@@ -1,0 +1,28 @@
+#title {
+    text-align: center;
+    font-size: 1.5rem;
+}
+#board {
+    margin: auto;
+    display: block;
+}
+
+#flash_message {
+    text-align: center;
+    position: fixed; /* Sit on top of the page content */
+    z-index: 2;
+    display: none;
+    min-width: 50%; /* positioning */
+    height: 3rem;
+    top: 10%;
+    left: 10%;
+    background-color: rgba(0,0,0,0.3); /* Black background with opacity */
+}
+
+.table { display: table; }
+.tableheading { display: table-header-group; }
+.tablebody { display: table-row-group; }
+.tablefoot { display: table-footer-group; }
+.tablecell { display: table-cell; }
+.basic-border { border: 1px solid #000000; }
+.center-div { margin: auto; }
