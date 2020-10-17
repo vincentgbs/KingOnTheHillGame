@@ -1,7 +1,9 @@
 let draft = {
     settings: {
+        draft_id: false,
         no_of_players: 4,
         bosses: [],
+        max_time: false,
         started: false,
     },
     players: [],
@@ -45,7 +47,7 @@ let draft = {
         };
     },
     add_boss: function(boss) {
-        if (started) {
+        if (draft.settings.started) {
             console.log('Draft has already started');
         } else {
             draft.settings.bosses.push(boss);
@@ -57,8 +59,9 @@ let draft = {
                 draft.players.push(draft.create_player(i));
             }
             for (let i = 0; i < options; i++) {
-                create_option(i, options[i]);
+                draft.create_option(i, options[i]);
             }
+            draft.settings.started = true;
         } else {
             console.log('You should add bosses before starting to draft');
         }

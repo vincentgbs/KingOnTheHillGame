@@ -5,15 +5,18 @@ let layout = {
     },
     display_options: function() {
         layout.board.innerHTML = `<div id="options">
-            <label>Number of players: </label>
-            <select id="no_of_players">
-                <option>2</option>
-                <option>3</option>
-                <option selected>4</option>
-                <option>5</option>
-                <option>6</option>
-            </select>
-            <div id="add_bosses">
+            <div id="nop_div">
+                <label>Number of players: </label>
+                <select id="no_of_players">
+                    <option>2</option>
+                    <option>3</option>
+                    <option selected>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select>
+                <button id="start_draft_button">Start draft</button>
+            </div>
+            <div id="add_bosses_div">
                 <div id="display_boss" class="table">
                     <div class="tablebody"><div class="tablecell basic-border">Bosses: </div></div>
                 </div>
@@ -25,7 +28,10 @@ let layout = {
     add_boss: function() {
         let boss = layout.add_div(false, "tablecell basic-border",
             document.querySelector("#display_boss").firstElementChild);
-        boss.innerHTML = document.querySelector("#add_boss_input").value;
+         let new_boss = document.querySelector("#add_boss_input").value;
+         if (new_boss != '') {
+             boss.innerHTML = new_boss;
+         }
     },
     display_table: function() {
         let table = layout.add_div('draft_table', 'table center-div', layout.board);
