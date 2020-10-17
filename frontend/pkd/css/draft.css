@@ -6,6 +6,10 @@
     margin: auto;
     display: block;
 }
+#display_boss > .tablebody > .tablecell {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
 
 #flash_message {
     text-align: center;

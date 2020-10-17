@@ -1,13 +1,37 @@
 let layout = {
     board: null,
     set_board: function(div) {
-        draft.board = div;
+        layout.board = div;
     },
-    display_table: function(players) {
-        let table = draft.add_div('draft_table', 'table center-div', draft.board);
-        let head = draft.add_div('draft_head', 'tableheading', table);
-        for (let i = 0; i < players; i++) {
-            let cell = draft.add_div(false, 'tablecell basic-border', head);
+    display_options: function() {
+        layout.board.innerHTML = `<div id="options">
+            <label>Number of players: </label>
+            <select id="no_of_players">
+                <option>2</option>
+                <option>3</option>
+                <option selected>4</option>
+                <option>5</option>
+                <option>6</option>
+            </select>
+            <div id="add_bosses">
+                <div id="display_boss" class="table">
+                    <div class="tablebody"><div class="tablecell basic-border">Bosses: </div></div>
+                </div>
+                <label>Add bosses: </label><input type="text" id="add_boss_input"/>
+                <button id="add_boss_button">Add</button>
+            </div>
+        </div>`;
+    },
+    add_boss: function() {
+        let boss = layout.add_div(false, "tablecell basic-border",
+            document.querySelector("#display_boss").firstElementChild);
+        boss.innerHTML = document.querySelector("#add_boss_input").value;
+    },
+    display_table: function() {
+        let table = layout.add_div('draft_table', 'table center-div', layout.board);
+        let head = layout.add_div('draft_head', 'tableheading', table);
+        for (let i = 0; i < draft.settings.no_of_players; i++) {
+            let cell = layout.add_div(false, 'tablecell basic-border', head);
             cell.innerHTML = "Player " + (i+1);
         }
     },
@@ -23,11 +47,12 @@ let layout = {
         return element;
     },
     add_div: function(name, type, parent) {
-        return draft.add_element({'etype':'div','eclass':type,'eid':name}, parent);
+        return layout.add_element({'etype':'div','eclass':type,'eid':name}, parent);
     },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.js (1) loaded');
     layout.set_board(document.querySelector("#board"));
+    layout.display_options();
 });
