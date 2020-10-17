@@ -45,14 +45,14 @@ var layout = {
         <text id="nop_div">
             <label>Number of players: </label>
             <select id="no_of_players">
-                <option>2</option>
+                <option selected>2</option>
                 <option>3</option>
                 <option>4</option>
             </select>
         </text>
         <text id="remote_div">
             <select id="remote_or_local">
-                <option>remote</option>
+                <option selected>remote</option>
                 <option>local</option>
             </select>
         </text>
