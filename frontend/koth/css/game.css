@@ -17,6 +17,7 @@
 }
 #flash_message {
     text-align: center;
+    font-size: 2rem;
     position: fixed; /* Sit on top of the page content */
     z-index: 2;
     display: none;

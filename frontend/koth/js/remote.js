@@ -21,6 +21,9 @@ var remote = {
             if (response.player < 0) {
                 layout.flashMessage('The game is already full', 999);
             } else {
+                if (!remote.settings.local) {
+                    layout.flashMessage('You are: ' + game.settings.piece_colors[response.player], 3000);
+                }
                 game.settings.game_id = response.game_id;
                 game.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
