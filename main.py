@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from modules.koth import Kingonthehill, Request, Response
 from modules.pkd import Pokedraft, pkdRequest, pkdResponse
 
-debug = True
+debug = False
 
 app = FastAPI()
 

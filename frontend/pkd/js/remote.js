@@ -68,7 +68,7 @@ var remote = {
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
     send_request: function(request) {
-        console.debug(request);
+        // console.debug(request);
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
