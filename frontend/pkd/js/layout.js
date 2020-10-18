@@ -67,8 +67,12 @@ let layout = {
              }
          }
     },
-    start_draft: function(pid) {
+    create_draft: function(pid) {
         layout.display_picks(pid);
+        layout.create_start_button();
+        if (document.querySelector("#start_draft_button")) {
+            // addEventListener
+        }
     },
     draft_board_head: function() {
         let html = `<div id="display_boss" class="table">
@@ -108,6 +112,10 @@ let layout = {
         let selector = layout.add_div('pick_selector', 'center-div', layout.board);
         selector.innerHTML = 'Pick: <input type="text"> *';
     },
+    create_start_button: function() {
+        timer.display_timer('timer');
+        layout.add_element({'etype':'button', 'eid':'start_draft_button', 'text':'start draft'}, document.querySelector('#timer'));
+    },
     add_element: function(obj, parent) {
         let element = document.createElement(obj.etype);
         if (obj.eclass) {
@@ -115,6 +123,9 @@ let layout = {
         }
         if (obj.eid) {
             element.setAttribute("id", obj.eid);
+        }
+        if (obj.text) {
+            element.textContent = obj.text;
         }
         parent.appendChild(element);
         return element;

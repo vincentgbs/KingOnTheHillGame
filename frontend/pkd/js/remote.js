@@ -24,7 +24,7 @@ var remote = {
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
                 draft.settings.bosses = JSON.parse(response.bosses);
-                layout.start_draft(response.player);
+                layout.create_draft(response.player);
             }
         } catch(err) {
             console.debug(err);
