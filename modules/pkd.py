@@ -100,12 +100,12 @@ class Pokedraft:
         if (self.debug):
             print('join_draft called')
             print(post)
-        check = self.cur.execute('''SELECT `nop`, player`, `bosses`
+        check = self.cur.execute('''SELECT `nop`, `player`, `bosses`
         FROM `draft` WHERE `draft_id`=? AND `user_id`=?;''',
         (post.draft_id,post.user_id)).fetchone()
         if (check is None):
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`), `bosses`
-            FROM `games` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
+            FROM `draft` WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()
             post.nop = game[0]
             post.player = game[1] # next_available_spot
             if (post.player < post.nop): # add to draft
@@ -116,6 +116,8 @@ class Pokedraft:
                 post.nop = -1
                 post.player = -1
         else: # rejoin game
+            if (self.debug):
+                print('rejoin_draft')
             post.nop = check[0]
             post.player = check[1]
             post.bosses = check[2]
@@ -127,7 +129,7 @@ class Pokedraft:
             print('start_draft called')
             print(post)
         game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
-        FROM `games` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
+        FROM `draft` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
         if (game[0] == game[1]):
             print(game)
         else:

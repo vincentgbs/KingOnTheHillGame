@@ -32,7 +32,7 @@ var remote = {
         }
     },
     new_draft: function() {
-        if (draft.start_draft()) {
+        if (draft.settings.bosses.length > 0) {
             let request = remote.create_request('new_draft');
             request.nop = draft.settings.no_of_players;
             request.bosses = JSON.stringify(draft.settings.bosses);
@@ -46,22 +46,22 @@ var remote = {
                 console.debug(err);
                 layout.flashMessage('Error connecting to server', 9999);
             }
+        } else {
+            layout.flashMessage('Add bosses before creating draft', 999);
         }
     },
     join_draft: function() {
-        if (draft.start_draft()) {
-            let request = remote.create_request('join_draft');
-            request.draft_id = remote.get_did();
-            remote.xhr.open('POST', remote.settings.url);
-            remote.xhr.onload = function () {
-                remote.start_draft(remote.xhr.response);
-            };
-            try {
-                remote.send_request(request);
-            } catch (err) {
-                console.debug(err);
-                layout.flashMessage('Error connecting to server', 9999);
-            }
+        let request = remote.create_request('join_draft');
+        request.draft_id = remote.get_did();
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            remote.start_draft(remote.xhr.response);
+        };
+        try {
+            remote.send_request(request);
+        } catch (err) {
+            console.debug(err);
+            layout.flashMessage('Error connecting to server', 9999);
         }
     },
     get_options: function() {

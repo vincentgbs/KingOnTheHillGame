@@ -66,15 +66,10 @@ let draft = {
         }
     },
     start_draft: function() {
-        if (draft.settings.bosses.length > 0) {
-            for (let i = 0; i < draft.settings.no_of_players; i++) {
-                draft.players.push(draft.create_player(i));
-            }
-            return (draft.settings.started = true); // true
-        } else {
-            layout.flashMessage('Add bosses before creating draft', 999);
-            return false;
+        for (let i = 0; i < draft.settings.no_of_players; i++) {
+            draft.players.push(draft.create_player(i));
         }
+        draft.settings.started = true;
     },
 }
 
