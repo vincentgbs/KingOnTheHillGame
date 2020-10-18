@@ -133,10 +133,12 @@ var layout = {
         layout.context.arc(
             piece.location.col*layout.settings.square_size + (layout.settings.square_size/2),
             piece.location.row*layout.settings.square_size + (layout.settings.square_size/2),
-            (layout.settings.square_size/5), 0, 2 * Math.PI);
+            (layout.settings.square_size/5), 0, 2 * Math.PI, false);
+        layout.context.fillStyle = game.settings.piece_colors[piece.player];
+        layout.context.fill();
         layout.context.stroke();
         layout.context.font = layout.settings.piece_symbol_size;
-        layout.context.fillStyle = game.settings.piece_colors[piece.player];
+        layout.context.fillStyle = 'ghostwhite';
         layout.context.textAlign = "center";
         let symbol = {'king': 'K', 'pawn': 'P'}[piece.type]
         layout.context.fillText(symbol, piece.location.col*layout.settings.square_size

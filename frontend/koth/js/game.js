@@ -6,7 +6,7 @@ var game = {
         horizontal: 7, // static
         level: 4, // static
         piece_types: ['pawn', 'king', 'pawn'], // static
-        piece_colors: ['blue', 'orange', 'green', 'red', 'purple', 'yellow'], // static
+        piece_colors: ['royalblue', 'darkorange', 'forestgreen', 'darkred', 'purple', 'yellow'], // static
         starting_positions: [
             [{v:0,h:(((7-1)/2)-1)}, {v:0,h:((7-1)/2)}, {v:0,h:(((7-1)/2)+1)}],
             [{v:(7-1),h:(((7-1)/2)-1)}, {v:(7-1),h:((7-1)/2)}, {v:(7-1),h:(((7-1)/2)+1)}],
