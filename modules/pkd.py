@@ -29,6 +29,7 @@ class Pokedraft:
             `pokemon` varchar(255),
             `type1` varchar(31) DEFAULT NULL,
             `type2` varchar(31) DEFAULT NULL,
+            `category` varchar(31) DEFAULT NULL,
             `attack` int(11) DEFAULT NULL,
             `defence` int(11) DEFAULT NULL,
             `stamina` int(11) DEFAULT NULL);''')

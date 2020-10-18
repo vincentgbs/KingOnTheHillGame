@@ -14,7 +14,11 @@ let layout = {
                     <option>5</option>
                     <option>6</option>
                 </select>
-                <button id="start_draft_button">Start draft</button>
+                <button id="new_draft">Start draft</button>
+            </div>
+            <div id="join_draft">
+                Draft id: <input type="text" id="join_draft_id">
+                <button id="join_draft">Join draft</button>
             </div>
             <div id="add_bosses_div">
                 <div id="display_boss" class="table">
@@ -23,9 +27,19 @@ let layout = {
                 <label>Add bosses: </label><input type="text" id="add_boss_input"/>
                 <button id="add_boss_button">Add</button>
             </div>
+            <!-- <div id="limitations">
+                exclude: types (flying, fire, grass, water...), mythicals, legendaries
+                include only: types (flying, fire, grass, water...)
+            </div> -->
         </div>`;
         if (document.querySelector("#no_of_players")) {
             document.querySelector("#no_of_players").onchange = controls.get_nop;
+        }
+        if (document.querySelector("#new_draft")) {
+            document.querySelector("#new_draft").onclick = controls.start_draft;
+        }
+        if (document.querySelector("#join_draft")) {
+            document.querySelector("#join_draft").onclick = controls.join_draft;
         }
     },
     add_boss: function() {
@@ -37,12 +51,27 @@ let layout = {
              draft.add_boss(new_boss);
          }
     },
+    all_bosses: function() {
+        let html = `<div id="display_boss" class="table">
+            <div class="tablebody"><div class="tablecell basic-border">Bosses: </div>`;
+        for(let i = 0; i < draft.settings.bosses.length; i++) {
+            html += '<div class="tablecell basic-border">' + draft.settings.bosses[i] + '</div>';
+        }
+        html += '</div></div>'; // </div class="tablebody"></div class="table">
+        return html;
+    },
+    start_draft: function() {
+        if (draft.start_draft()) {
+            layout.display_picks();
+        }
+    },
     display_picks: function() {
+        layout.board.innerHTML = layout.all_bosses();
         let table = layout.add_div('draft_table', 'table center-div', layout.board);
         let head = layout.add_div('draft_head', 'tableheading', table);
-        for (let i = 0; i < draft.settings.no_of_players; i++) {
+        for (let i = 0; i < draft.players.length; i++) {
             let cell = layout.add_div(false, 'tablecell basic-border', head);
-            cell.innerHTML = draft.players[i].username;
+            cell.innerHTML = draft.players[i].display_player();
         }
     },
     add_element: function(obj, parent) {

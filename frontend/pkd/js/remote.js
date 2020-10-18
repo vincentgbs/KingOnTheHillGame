@@ -23,8 +23,7 @@ var remote = {
                 draft.settings.draft_id = response.draft_id;
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
-                // draft.start_draft();
-                // layout.start_draft();
+                remote.get_options(response.draft_id);
             }
         } catch(err) {
             console.debug(err);
@@ -44,6 +43,12 @@ var remote = {
             console.debug(err);
             layout.flashMessage('Error connecting to server', 9999);
         }
+    },
+    join_draft: function() {
+        //
+    },
+    get_options: function() {
+        //
     },
     send_request: function(request) {
         if (remote.settings.local) { return false; }

@@ -7,7 +7,6 @@ let draft = {
         started: false,
     },
     players: [],
-    rounds: [],
     options: [],
     turn: 0,
     get_current_player: function() {
@@ -23,14 +22,19 @@ let draft = {
             status: 'available',
         };
     },
+    create_options: function(options) {
+        for (let i = 0; i < options; i++) {
+            draft.options.push(draft.create_option(i, options[i]));
+        }
+    },
     create_player: function(pid) {
         return {
             pid: pid,
             picks: [],
-            username: '',
+            username: false,
             select: function(pick) {
-                if (draft.get_current_turn()==this.pid) {
-                    let player = this;
+                let player = this;
+                if (draft.get_current_turn()==player.pid) {
                     if (pick.status == 'available') {
                         player.options[pick.index].status = 'selected';
                         player.picks.push(pick);
@@ -42,7 +46,10 @@ let draft = {
                     console.log('Not your turn');
                 }
             },
-            display_player_no: function() {
+            display_player: function() {
+                if (this.username) {
+                    return this.username;
+                } // else
                 return 'Player ' + (this.pid+1);
             },
         };
@@ -54,18 +61,15 @@ let draft = {
             draft.settings.bosses.push(boss);
         }
     },
-    start_draft: function(options) {
+    start_draft: function() {
         if (draft.settings.bosses.length > 0) {
             for (let i = 0; i < draft.settings.no_of_players; i++) {
                 draft.players.push(draft.create_player(i));
             }
-            for (let i = 0; i < options; i++) {
-                draft.create_option(i, options[i]);
-            }
-            draft.settings.started = true;
-            remote.new_game();
+            return (draft.settings.started = true);
         } else {
             console.log('You should add bosses before starting to draft');
+            return false;
         }
     },
 }
