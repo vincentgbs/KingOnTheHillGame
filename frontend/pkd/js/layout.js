@@ -20,8 +20,7 @@ let layout = {
                 <div id="display_boss" class="table">
                     <div class="tablebody"><div class="tablecell basic-border">Bosses: </div></div>
                 </div>
-                <label>Add bosses: </label><input type="text" id="add_boss_input" list="add_boss_input_datalist"/>
-                <datalist id="add_boss_input_datalist"></datalist>
+                <label>Add bosses: </label><input type="text" id="add_boss_input" list="add_boss_datalist"/><datalist id="add_boss_datalist"></datalist>
                 <button id="add_boss_button">Add</button>
             </div>
         </div>`;

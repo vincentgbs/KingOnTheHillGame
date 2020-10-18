@@ -1,14 +1,29 @@
 var autocomplete = {
-	source: ['example'],
+	source: {},
 	min_characters: 1,
+	create: function(input_id, type, source) {
+		let input = document.querySelector('#'+input_id);
+		input.setAttribute('type', type);
+		if (type == 'static') {
+			autocomplete.source[input_id] = source;
+		} else {
+			input.setAttribute('source', source);
+		}
+		input.addEventListener("keyup", function(event){
+			autocomplete.keyup(event);
+		});
+	},
     keyup: function(event) {
 		let input = event.target;
-		console.debug(input);
 		let list = document.querySelector('#'+input.getAttribute('list'));
 		if (!isNaN(input.value) || input.value.length < autocomplete.min_characters ) {
 			return false;
 		} else {
-			autocomplete.display_list(list, autocomplete.source);
+			if (input.getAttribute('type') == 'static') {
+				autocomplete.display_list(list, autocomplete.source[input.getAttribute('id')]);
+			} else {
+				//autocomplete.get_remote_source();
+			}
 		}
 	},
 	display_list: function(list, source) {
@@ -20,21 +35,19 @@ var autocomplete = {
 		});
 	},
 	xhr: new XMLHttpRequest(),
-	// get_remote_source: function(list) {
-	// 	autocomplete.xhr.abort(); // clear previous request
-	// 	autocomplete.xhr.onreadystatechange = function() {
-	// 		if (this.readyState == 4 && this.status == 200) {
-	// 			var response = JSON.parse(this.responseText);
-	// 			autocomplete.display_list(list, response);
-	// 		}
-	// 	};
-	// },
+	get_remote_source: function(list) {
+		autocomplete.xhr.abort(); // clear previous request
+		autocomplete.xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				autocomplete.display_list(list, response);
+			}
+		};
+	},
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	setTimeout(function() {
-		document.querySelector('#add_boss_input').addEventListener("keyup", function(event){
-			autocomplete.keyup(event);
-		});
+		autocomplete.create('add_boss_input', 'static', ['example', 'test']);
 	}, 999);
 });
