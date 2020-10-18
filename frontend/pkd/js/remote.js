@@ -39,7 +39,7 @@ var remote = {
                 remote.start_draft(remote.xhr.response);
             };
             try {
-                remote.xhr.send(JSON.stringify(request));
+                remote.send_request(request);
             } catch (err) {
                 console.debug(err);
                 layout.flashMessage('Error connecting to server', 9999);
@@ -55,7 +55,7 @@ var remote = {
                 remote.start_draft(remote.xhr.response);
             };
             try {
-                remote.xhr.send(JSON.stringify(request));
+                remote.send_request(request);
             } catch (err) {
                 console.debug(err);
                 layout.flashMessage('Error connecting to server', 9999);

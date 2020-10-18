@@ -4,13 +4,16 @@ from typing import Optional
 from pydantic import BaseModel
 import sqlite3
 
-class Request(BaseModel):
+class pkdRequest(BaseModel):
     user_id: str
     action: str
-    game_id: str
+    draft_id: str
     player: int
     nop: Optional[int] = None
     pick: Optional[str] = None
+
+class pkdResponse(BaseModel):
+    user_id: Optional[str] = None
 
 class Pokedraft:
     def __init__(self, debug=False, db='db.sqlite3'):
@@ -37,13 +40,13 @@ class Pokedraft:
             `draft_id` varchar(255),
             `user_id` varchar(255),
             `username` varchar(255) DEFAULT NULL,
-            `player` int(2)
+            `player` int(2),
             `nop` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `picks` (
             `draft_id` varchar(255),
             `player` int(2),
             `pokemon_number` int(11),
-            `pokemon` var(255) DEFAULT NULL;''')
+            `pokemon` varchar(255) DEFAULT NULL);''')
         self.conn.commit()
         self.conn.close()
         return {"Migration": "Complete"}
@@ -60,9 +63,9 @@ class Pokedraft:
         return check
 
     def find_draft_id(self, gid):
-        game = self.cur.execute('''SELECT `game_id`
-        FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
-        return ((not game is None))
+        draft = self.cur.execute('''SELECT `draft_id`
+        FROM `draft` WHERE `draft_id`=?;''', (gid,)).fetchone();
+        return ((not draft is None))
 
     def return_post(self, post):
         self.conn.close()
@@ -73,7 +76,7 @@ class Pokedraft:
         if (self.debug):
             print('new_draft called')
             print(post)
-        post.game_id = self.create_unique_draft_id()
+        post.draft_id = self.create_unique_draft_id()
         self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `player`, `nop`)
         VALUES (?, ?, ?, ?);''', (post.draft_id, post.user_id, post.player, post.nop))
         self.conn.commit()
