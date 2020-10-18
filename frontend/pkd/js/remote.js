@@ -23,7 +23,7 @@ var remote = {
                 draft.settings.draft_id = response.draft_id;
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
-                remote.get_options(response.draft_id);
+                layout.start_draft();
             }
         } catch(err) {
             console.debug(err);
@@ -45,11 +45,24 @@ var remote = {
         }
     },
     join_draft: function() {
-        //
+        let request = remote.create_request('join_draft');
+        request.draft_id = remote.get_did();
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            remote.start_draft(remote.xhr.response);
+        };
+        try {
+            remote.xhr.send(JSON.stringify(request));
+        } catch (err) {
+            console.debug(err);
+            layout.flashMessage('Error connecting to server', 9999);
+        }
     },
     get_options: function() {
         //
     },
+    xhr: new XMLHttpRequest(),
+    timeout: null, // ping timeout
     send_request: function(request) {
         if (remote.settings.local) { return false; }
         try {
@@ -62,6 +75,16 @@ var remote = {
             console.debug(err);
             console.debug(request);
         }
+    },
+    get_did: function() {
+        let did;
+        if (document.querySelector("#join_draft_id")) {
+            did = document.querySelector("#join_draft_id").value;
+        } else {
+            did = document.querySelector("#draft_id").innerText;
+        }
+        if (did != "") { draft.settings.draft_id = did; }
+        return did;
     },
     slow_ping_rate: function() {
         if (remote.settings.ping_rate < 3600000) { // max 1 hour

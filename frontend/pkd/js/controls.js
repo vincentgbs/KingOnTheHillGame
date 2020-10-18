@@ -2,11 +2,14 @@ let controls = {
     get_nop: function() {
         draft.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
+    get_nor: function() {
+        draft.settings.no_of_rounds = document.querySelector("#no_of_rounds").value;
+    },
     start_draft: function() {
         layout.start_draft();
     },
     join_draft: function() {
-        console.debug('join draft');
+        remote.join_draft();
     }
 }
 

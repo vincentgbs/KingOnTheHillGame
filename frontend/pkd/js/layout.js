@@ -30,7 +30,7 @@ let layout = {
             </div>
             <div id="join_draft">
                 Draft id: <input type="text" id="join_draft_id">
-                <button id="join_draft">Join draft</button>
+                <button id="join_draft_button">Join draft</button>
             </div>
             <div id="add_bosses_div">
                 <div id="display_boss" class="table">
@@ -47,11 +47,14 @@ let layout = {
         if (document.querySelector("#no_of_players")) {
             document.querySelector("#no_of_players").onchange = controls.get_nop;
         }
+        if (document.querySelector("#no_of_rounds")) {
+            document.querySelector("#no_of_rounds").onchange = controls.get_nor;
+        }
         if (document.querySelector("#new_draft")) {
             document.querySelector("#new_draft").onclick = controls.start_draft;
         }
-        if (document.querySelector("#join_draft")) {
-            document.querySelector("#join_draft").onclick = controls.join_draft;
+        if (document.querySelector("#join_draft_button")) {
+            document.querySelector("#join_draft_button").onclick = controls.join_draft;
         }
     },
     add_boss: function() {
