@@ -7,6 +7,7 @@ let draft = {
         started: false,
     },
     players: [],
+    rounds: [],
     options: [],
     turn: 0,
     get_current_player: function() {
@@ -62,7 +63,7 @@ let draft = {
                 draft.create_option(i, options[i]);
             }
             draft.settings.started = true;
-            // send: draft.settings.bosses
+            remote.new_game();
         } else {
             console.log('You should add bosses before starting to draft');
         }

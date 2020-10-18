@@ -24,6 +24,9 @@ let layout = {
                 <button id="add_boss_button">Add</button>
             </div>
         </div>`;
+        if (document.querySelector("#no_of_players")) {
+            document.querySelector("#no_of_players").onchange = controls.get_nop;
+        }
     },
     add_boss: function() {
         let boss = layout.add_div(false, "tablecell basic-border",
@@ -31,14 +34,15 @@ let layout = {
          let new_boss = document.querySelector("#add_boss_input").value;
          if (new_boss != '') {
              boss.innerHTML = new_boss;
+             draft.add_boss(new_boss);
          }
     },
-    display_table: function() {
+    display_picks: function() {
         let table = layout.add_div('draft_table', 'table center-div', layout.board);
         let head = layout.add_div('draft_head', 'tableheading', table);
         for (let i = 0; i < draft.settings.no_of_players; i++) {
             let cell = layout.add_div(false, 'tablecell basic-border', head);
-            cell.innerHTML = "Player " + (i+1);
+            cell.innerHTML = draft.players[i].username;
         }
     },
     add_element: function(obj, parent) {

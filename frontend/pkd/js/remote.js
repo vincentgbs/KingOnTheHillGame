@@ -6,6 +6,52 @@ var remote = {
         ping_rate: 2500,
         timeout_x: 50,
     },
+    create_request: function(action) {
+        return {
+            draft_id: draft.settings.draft_id,
+            user_id: remote.settings.user_id,
+            player: remote.settings.player,
+            action: action,
+        };
+    },
+    new_game: function() {
+        let request = remote.create_request('new_game');
+        request.nop = draft.settings.no_of_players;
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            remote.start_game(remote.xhr.response);
+        };
+        try {
+            remote.xhr.send(JSON.stringify(request));
+        } catch (err) {
+            console.debug(err);
+            layout.flashMessage('Error connecting to server', 9999);
+        }
+    },
+    send_request: function(request) {
+        if (remote.settings.local) { return false; }
+        try {
+            remote.xhr.onerror = function() {
+                layout.flashMessage('Error connecting to server', 9999);
+                remote.slow_ping_rate();
+            }
+            remote.xhr.send(JSON.stringify(request));
+        } catch (err) {
+            console.debug(err);
+            console.debug(request);
+        }
+    },
+    slow_ping_rate: function() {
+        if (remote.settings.ping_rate < 3600000) { // max 1 hour
+            remote.settings.ping_rate *= 2; // slow ping rate
+            if (remote.settings.ping_rate < 600000) { // 10 min
+                remote.settings.ping_rate *= 2; // slow ping rate more
+            }
+            if (remote.settings.ping_rate > 3600000) { // max 1 hour
+                remote.settings.ping_rate = 3600000; // 1 hour
+            }
+        }
+    },
     set_user_id: function() {
         const letters = 'abcdefghijklmnopqrstuvwxyz';
         remote.settings.user_id = '';
