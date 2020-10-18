@@ -5,16 +5,28 @@ let layout = {
     },
     display_options: function() {
         layout.board.innerHTML = `<div id="options">
-            <div id="nop_div">
-                <label>Number of players: </label>
-                <select id="no_of_players">
-                    <option>2</option>
-                    <option>3</option>
-                    <option selected>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                </select>
-                <button id="new_draft">Start draft</button>
+            <div id="options_div">
+                <text id="nop_div">
+                    <label>Number of players: </label>
+                    <select id="no_of_players">
+                        <option>2</option>
+                        <option>3</option>
+                        <option selected>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                    </select>
+                </text>
+                <text id="nor_div">
+                    <label> Number of rounds: </label>
+                    <select id="no_of_rounds">
+                        <option selected>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>18</option>
+                    </select>
+                </text>
+            <button id="new_draft">Start draft</button>
             </div>
             <div id="join_draft">
                 Draft id: <input type="text" id="join_draft_id">
@@ -70,9 +82,20 @@ let layout = {
         layout.board.innerHTML = layout.all_bosses();
         let table = layout.add_div('draft_table', 'table center-div', layout.board);
         let head = layout.add_div('draft_head', 'tableheading', table);
-        for (let i = 0; i < draft.players.length; i++) {
+        let cell = layout.add_div(false, 'tablecell basic-border', head);
+        cell.innerHTML = 'Players';
+        for (let i = 1; i <= draft.settings.no_of_rounds; i++) {
             let cell = layout.add_div(false, 'tablecell basic-border', head);
+            cell.innerHTML = 'Round ' + i;
+        }
+        for (let i = 0; i < draft.players.length; i++) {
+            let row = layout.add_div(false, 'tablebody', table);
+            let cell = layout.add_div(false, 'tablecell basic-border', row);
             cell.innerHTML = draft.players[i].display_player();
+            for (let j = 0; j < draft.settings.no_of_rounds; j++) {
+                let cell = layout.add_div(false, 'tablecell basic-border', row);
+                cell.innerHTML = 'NONE';
+            }
         }
     },
     add_element: function(obj, parent) {
@@ -92,7 +115,7 @@ let layout = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('layout.js (1) loaded');
+    console.log('layout.js (2) loaded');
     layout.set_board(document.querySelector("#board"));
     layout.display_options();
 

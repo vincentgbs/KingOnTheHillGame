@@ -3,7 +3,7 @@ let controls = {
         draft.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
     start_draft: function() {
-        console.debug('start draft');
+        layout.start_draft();
     },
     join_draft: function() {
         console.debug('join draft');

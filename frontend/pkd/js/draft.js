@@ -2,6 +2,7 @@ let draft = {
     settings: {
         draft_id: false,
         no_of_players: 4,
+        no_of_rounds: 6,
         bosses: [],
         max_time: false,
         started: false,

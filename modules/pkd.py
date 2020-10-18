@@ -36,6 +36,7 @@ class Pokedraft:
         self.cur.execute('''CREATE TABLE `draft` (
             `draft_id` varchar(255),
             `user_id` varchar(255),
+            `username` varchar(255) DEFAULT NULL,
             `player` int(2)
             `nop` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `picks` (
@@ -103,7 +104,12 @@ class Pokedraft:
         return self.return_post(post)
 
     def get_options(self, post):
-        False
+        if (self.debug):
+            print('get_options called')
+            print(post)
+        options = self.cur.execute('''SELECT * FROM `pokemon`;''').fetchall()
+        for option in options:
+            print(option)
 
     def send_pick(self, post):
         False
