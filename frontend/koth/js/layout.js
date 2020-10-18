@@ -140,7 +140,7 @@ var layout = {
         layout.context.font = layout.settings.piece_symbol_size;
         layout.context.fillStyle = 'ghostwhite';
         layout.context.textAlign = "center";
-        let symbol = {'king': 'K', 'pawn': 'P'}[piece.type]
+        let symbol = {'king': '♚', 'pawn': ''}[piece.type]
         layout.context.fillText(symbol, piece.location.col*layout.settings.square_size
         + (layout.settings.square_size/2), piece.location.row*layout.settings.square_size
         + (layout.settings.square_size*(3/5)));
