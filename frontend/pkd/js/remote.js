@@ -23,7 +23,7 @@ var remote = {
                 draft.settings.draft_id = response.draft_id;
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
-                layout.start_draft();
+                layout.start_draft(response.player);
             }
         } catch(err) {
             console.debug(err);

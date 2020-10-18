@@ -67,20 +67,21 @@ let layout = {
              }
          }
     },
+    start_draft: function(pid) {
+        layout.display_picks(pid);
+    },
     draft_board_head: function() {
         let html = `<div id="display_boss" class="table">
             <div class="tablebody"><div class="tablecell basic-border">Bosses: </div>`;
         for(let i = 0; i < draft.settings.bosses.length; i++) {
             html += '<div class="tablecell basic-border">' + draft.settings.bosses[i] + '</div>';
         }
-        // </div class="tablebody"></div class="table">
-        html += '</div></div><div>Draft Id: <text id="draft_id">'+draft.settings.draft_id+'</text></div>';
+        html += `</div></div>
+        <div>Draft Id: <text id="draft_id">`+
+        draft.settings.draft_id+'</text></div>';
         return html;
     },
-    start_draft: function() {
-        layout.display_picks();
-    },
-    display_picks: function() {
+    display_picks: function(active_player) {
         layout.board.innerHTML = layout.draft_board_head();
         let table = layout.add_div('draft_table', 'table center-div', layout.board);
         let head = layout.add_div('draft_head', 'tableheading', table);
@@ -91,14 +92,21 @@ let layout = {
             cell.innerHTML = 'Round ' + i;
         }
         for (let i = 0; i < draft.players.length; i++) {
-            let row = layout.add_div(false, 'tablebody', table);
+            let row;
+            if (i == active_player) {
+                row = layout.add_div(false, 'tablebody highlight', table);
+            } else {
+                row = layout.add_div(false, 'tablebody', table);
+            }
             let cell = layout.add_div(false, 'tablecell basic-border', row);
             cell.innerHTML = draft.players[i].display_player();
             for (let j = 0; j < draft.settings.no_of_rounds; j++) {
                 let cell = layout.add_div(false, 'tablecell basic-border', row);
-                cell.innerHTML = '<input type="text" />';
+                cell.innerHTML = '.';
             }
         }
+        let selector = layout.add_div('pick_selector', 'center-div', layout.board);
+        selector.innerHTML = 'Pick: <input type="text"> *';
     },
     add_element: function(obj, parent) {
         let element = document.createElement(obj.etype);

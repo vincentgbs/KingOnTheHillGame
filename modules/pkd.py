@@ -106,10 +106,9 @@ class Pokedraft:
         self.conn.commit()
         return self.return_post(post)
 
-    def get_options(self, post):
+    def get_options(self):
         if (self.debug):
             print('get_options called')
-            print(post)
         options = self.cur.execute('''SELECT * FROM `pokemon`;''').fetchall()
         for option in options:
             print(option)

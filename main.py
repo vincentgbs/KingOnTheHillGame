@@ -55,8 +55,10 @@ def create_game(post: pkdRequest):
     p = Pokedraft(debug)
     if (post.action == 'new_draft'):
         return p.new_draft(post)
-    if (post.action == 'join_draft'):
+    elif (post.action == 'join_draft'):
         return p.join_draft(post)
+    elif (post.action == 'get_options'):
+        return p.get_options();
     elif (post.action == 'send_pick'):
         return p.send_pick(post)
     elif (post.action == 'get_picks'):
