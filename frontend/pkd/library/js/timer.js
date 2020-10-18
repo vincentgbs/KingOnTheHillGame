@@ -104,3 +104,7 @@ let timer = {
         .setAttribute("stroke-dasharray", circleDasharray);
     },
 }
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    console.log('timer.js loaded');
+});

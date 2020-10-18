@@ -58,3 +58,7 @@ var autocomplete = {
 	},
 	xhr: new XMLHttpRequest(),
 };
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    console.log('autocomplete.js loaded');
+});

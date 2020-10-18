@@ -62,6 +62,7 @@ let draft = {
                 draft.create_option(i, options[i]);
             }
             draft.settings.started = true;
+            // send: draft.settings.bosses
         } else {
             console.log('You should add bosses before starting to draft');
         }
