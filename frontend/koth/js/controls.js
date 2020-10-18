@@ -140,7 +140,7 @@ var controls = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('controls.js (2) loaded');
+    console.log('controls.js (3) loaded');
     const canvas = document.querySelector("#board");
     canvas.addEventListener('mousedown', function(e) {
         controls.on_click(canvas, e);

@@ -180,7 +180,7 @@ var remote = {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    console.log('remote.js (1) loaded');
+    console.log('remote.js (2) loaded');
     if (window.localStorage.getItem('remote_user_id') === null) {
         window.localStorage.setItem("remote_user_id", remote.set_user_id());
     } else { // persistence
