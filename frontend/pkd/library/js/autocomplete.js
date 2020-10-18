@@ -3,6 +3,7 @@ var autocomplete = {
 	min_characters: 1,
     keyup: function(event) {
 		let input = event.target;
+		console.debug(input);
 		let list = document.querySelector('#'+input.getAttribute('list'));
 		if (!isNaN(input.value) || input.value.length < autocomplete.min_characters ) {
 			return false;
@@ -31,7 +32,9 @@ var autocomplete = {
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	document.querySelector('#name_input').addEventListener("keyup", function(event){
-		autocomplete.keyup(event);
-	});
+	setTimeout(function() {
+		document.querySelector('#add_boss_input').addEventListener("keyup", function(event){
+			autocomplete.keyup(event);
+		});
+	}, 999);
 });
