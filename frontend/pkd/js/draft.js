@@ -72,7 +72,8 @@ let draft = {
             }
             return (draft.settings.started = true); // true
         } else {
-            return console.log('You should add bosses before starting to draft'); // null
+            layout.flashMessage('Add bosses before creating draft', 999);
+            return false;
         }
     },
 }

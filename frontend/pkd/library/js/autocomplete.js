@@ -4,8 +4,8 @@ var autocomplete = {
 	create_simple: function(input_id, source) {
 		let input = document.querySelector('#'+input_id);
 		autocomplete.source[input_id] = source;
-		input.setAttribute('list', input_id+'_list');
 		input_list = document.createElement('datalist');
+		input.setAttribute('list', input_id+'_list');
 		input_list.setAttribute('id', input_id+'_list');
 		input.after(input_list);
 		input.addEventListener("keyup", function(event){

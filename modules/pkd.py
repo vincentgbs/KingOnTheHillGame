@@ -10,10 +10,24 @@ class pkdRequest(BaseModel):
     draft_id: str
     player: int
     nop: Optional[int] = None
+    bosses: Optional[str] = None
     pick: Optional[str] = None
 
 class pkdResponse(BaseModel):
+    def __init__(self, dictionary):
+        BaseModel.__init__(self)
+        if("user_id" in dictionary.keys()):
+            self.user_id = dictionary["user_id"]
+        if("player" in dictionary.keys()):
+            self.player = dictionary["player"]
+        if("bosses" in dictionary.keys()):
+            self.bosses = dictionary["bosses"]
+        if("options" in dictionary.keys()):
+            self.options = dictionary["options"]
     user_id: Optional[str] = None
+    player: Optional[int] = None
+    bosses: Optional[str] = None
+    options: Optional[str] = None
 
 class Pokedraft:
     def __init__(self, debug=False, db='db.sqlite3'):
@@ -39,7 +53,7 @@ class Pokedraft:
         self.cur.execute('''CREATE TABLE `draft` (
             `draft_id` varchar(255),
             `user_id` varchar(255),
-            `username` varchar(255) DEFAULT NULL,
+            `bosses` varchar(999),
             `player` int(2),
             `nop` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `picks` (
@@ -77,8 +91,8 @@ class Pokedraft:
             print('new_draft called')
             print(post)
         post.draft_id = self.create_unique_draft_id()
-        self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `player`, `nop`)
-        VALUES (?, ?, ?, ?);''', (post.draft_id, post.user_id, post.player, post.nop))
+        self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `bosses`, `player`, `nop`)
+        VALUES (?, ?, ?, ?, ?);''', (post.draft_id, post.user_id, post.bosses, post.player, post.nop))
         self.conn.commit()
         return self.return_post(post)
 
@@ -86,15 +100,16 @@ class Pokedraft:
         if (self.debug):
             print('join_draft called')
             print(post)
-        check = self.cur.execute('''SELECT `nop`, `player`
+        check = self.cur.execute('''SELECT `nop`, player`, `bosses`
         FROM `draft` WHERE `draft_id`=? AND `user_id`=?;''',
         (post.draft_id,post.user_id)).fetchone()
         if (check is None):
-            game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+            game = self.cur.execute('''SELECT `nop`, COUNT(`player`), `bosses`
             FROM `games` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
             post.nop = game[0]
             post.player = game[1] # next_available_spot
             if (post.player < post.nop): # add to draft
+                post.bosses = game[2]
                 self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `player`, `nop`)
                 VALUES (?, ?, ?, ?);''', (post.draft_id, post.user_id, post.player, post.nop))
             else: # draft is full
@@ -103,8 +118,21 @@ class Pokedraft:
         else: # rejoin game
             post.nop = check[0]
             post.player = check[1]
+            post.bosses = check[2]
         self.conn.commit()
         return self.return_post(post)
+
+    def start_draft(self, post):
+        if (self.debug):
+            print('start_draft called')
+            print(post)
+        game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+        FROM `games` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
+        if (game[0] == game[1]):
+            print(game)
+        else:
+            return False
+
 
     def get_options(self):
         if (self.debug):

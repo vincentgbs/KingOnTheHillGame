@@ -23,6 +23,7 @@ var remote = {
                 draft.settings.draft_id = response.draft_id;
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
+                draft.settings.bosses = JSON.parse(response.bosses);
                 layout.start_draft(response.player);
             }
         } catch(err) {
@@ -34,6 +35,7 @@ var remote = {
         if (draft.start_draft()) {
             let request = remote.create_request('new_draft');
             request.nop = draft.settings.no_of_players;
+            request.bosses = JSON.stringify(draft.settings.bosses);
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
                 remote.start_draft(remote.xhr.response);
