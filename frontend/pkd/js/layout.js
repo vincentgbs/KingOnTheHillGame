@@ -43,12 +43,13 @@ let layout = {
         }
     },
     add_boss: function() {
-        let boss = layout.add_div(false, "tablecell basic-border",
-            document.querySelector("#display_boss").firstElementChild);
-         let new_boss = document.querySelector("#add_boss_input").value;
+        let new_boss = document.querySelector("#add_boss_input").value;
          if (new_boss != '') {
-             boss.innerHTML = new_boss;
-             draft.add_boss(new_boss);
+             if (draft.add_boss(new_boss)) {
+                 let boss = layout.add_div(false, "tablecell basic-border",
+                     document.querySelector("#display_boss").firstElementChild);
+                 boss.innerHTML = new_boss;
+             }
          }
     },
     all_bosses: function() {

@@ -56,9 +56,12 @@ let draft = {
     },
     add_boss: function(boss) {
         if (draft.settings.started) {
-            console.log('Draft has already started');
+            return console.log('Draft has already started'); // null
+        } else if (draft.settings.bosses.includes(boss)) {
+            return console.log('Boss already added'); // null
         } else {
             draft.settings.bosses.push(boss);
+            return true;
         }
     },
     start_draft: function() {
@@ -66,10 +69,9 @@ let draft = {
             for (let i = 0; i < draft.settings.no_of_players; i++) {
                 draft.players.push(draft.create_player(i));
             }
-            return (draft.settings.started = true);
+            return (draft.settings.started = true); // true
         } else {
-            console.log('You should add bosses before starting to draft');
-            return false;
+            return console.log('You should add bosses before starting to draft'); // null
         }
     },
 }
