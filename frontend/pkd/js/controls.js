@@ -6,7 +6,7 @@ let controls = {
         draft.settings.no_of_rounds = document.querySelector("#no_of_rounds").value;
     },
     start_draft: function() {
-        layout.start_draft();
+        remote.new_draft();
     },
     join_draft: function() {
         remote.join_draft();

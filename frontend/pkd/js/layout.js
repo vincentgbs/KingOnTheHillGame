@@ -77,9 +77,7 @@ let layout = {
         return html;
     },
     start_draft: function() {
-        if (draft.start_draft()) {
-            layout.display_picks();
-        }
+        layout.display_picks();
     },
     display_picks: function() {
         layout.board.innerHTML = layout.all_bosses();

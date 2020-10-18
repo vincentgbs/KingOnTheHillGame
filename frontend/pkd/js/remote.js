@@ -31,31 +31,35 @@ var remote = {
         }
     },
     new_draft: function() {
-        let request = remote.create_request('new_draft');
-        request.nop = draft.settings.no_of_players;
-        remote.xhr.open('POST', remote.settings.url);
-        remote.xhr.onload = function () {
-            remote.start_draft(remote.xhr.response);
-        };
-        try {
-            remote.xhr.send(JSON.stringify(request));
-        } catch (err) {
-            console.debug(err);
-            layout.flashMessage('Error connecting to server', 9999);
+        if (draft.start_draft()) {
+            let request = remote.create_request('new_draft');
+            request.nop = draft.settings.no_of_players;
+            remote.xhr.open('POST', remote.settings.url);
+            remote.xhr.onload = function () {
+                remote.start_draft(remote.xhr.response);
+            };
+            try {
+                remote.xhr.send(JSON.stringify(request));
+            } catch (err) {
+                console.debug(err);
+                layout.flashMessage('Error connecting to server', 9999);
+            }
         }
     },
     join_draft: function() {
-        let request = remote.create_request('join_draft');
-        request.draft_id = remote.get_did();
-        remote.xhr.open('POST', remote.settings.url);
-        remote.xhr.onload = function () {
-            remote.start_draft(remote.xhr.response);
-        };
-        try {
-            remote.xhr.send(JSON.stringify(request));
-        } catch (err) {
-            console.debug(err);
-            layout.flashMessage('Error connecting to server', 9999);
+        if (draft.start_draft()) {
+            let request = remote.create_request('join_draft');
+            request.draft_id = remote.get_did();
+            remote.xhr.open('POST', remote.settings.url);
+            remote.xhr.onload = function () {
+                remote.start_draft(remote.xhr.response);
+            };
+            try {
+                remote.xhr.send(JSON.stringify(request));
+            } catch (err) {
+                console.debug(err);
+                layout.flashMessage('Error connecting to server', 9999);
+            }
         }
     },
     get_options: function() {
@@ -64,7 +68,7 @@ var remote = {
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
     send_request: function(request) {
-        if (remote.settings.local) { return false; }
+        console.debug(request);
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
