@@ -14,12 +14,29 @@ var remote = {
             action: action,
         };
     },
-    new_game: function() {
-        let request = remote.create_request('new_game');
+    start_draft: function(response) {
+        try {
+            response = JSON.parse(response);
+            if (response.player < 0) {
+                layout.flashMessage('The draft is already full', 999);
+            } else {
+                draft.settings.draft_id = response.draft_id;
+                draft.settings.no_of_players = response.nop;
+                remote.settings.player = response.player;
+                // draft.start_draft();
+                // layout.start_draft();
+            }
+        } catch(err) {
+            console.debug(err);
+            console.debug(response);
+        }
+    },
+    new_draft: function() {
+        let request = remote.create_request('new_draft');
         request.nop = draft.settings.no_of_players;
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
-            remote.start_game(remote.xhr.response);
+            remote.start_draft(remote.xhr.response);
         };
         try {
             remote.xhr.send(JSON.stringify(request));
