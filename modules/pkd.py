@@ -24,10 +24,13 @@ class pkdResponse(BaseModel):
             self.bosses = dictionary["bosses"]
         if("options" in dictionary.keys()):
             self.options = dictionary["options"]
+        if("accepted" in dictionary.keys()):
+            self.accepted = dictionary["accepted"]
     user_id: Optional[str] = None
     player: Optional[int] = None
     bosses: Optional[str] = None
     options: Optional[str] = None
+    accepted: Optional[str] = None
 
 class Pokedraft:
     def __init__(self, debug=False, db='db.sqlite3'):
@@ -55,6 +58,7 @@ class Pokedraft:
             `user_id` varchar(255),
             `bosses` varchar(999),
             `player` int(2),
+            `started` int(1) DEFAULT 0,
             `nop` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `picks` (
             `draft_id` varchar(255),
@@ -82,6 +86,9 @@ class Pokedraft:
         return ((not draft is None))
 
     def return_post(self, post):
+        if (self.debug):
+            print('return_post called')
+            print(post)
         self.conn.close()
         post.user_id = None # never return user_id
         return post
@@ -108,10 +115,10 @@ class Pokedraft:
             FROM `draft` WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()
             post.nop = game[0]
             post.player = game[1] # next_available_spot
+            post.bosses = game[2]
             if (post.player < post.nop): # add to draft
-                post.bosses = game[2]
-                self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `player`, `nop`)
-                VALUES (?, ?, ?, ?);''', (post.draft_id, post.user_id, post.player, post.nop))
+                self.cur.execute('''INSERT INTO `draft` (`draft_id`, `user_id`, `bosses`, `player`, `nop`)
+                VALUES (?, ?, ?, ?, ?);''', (post.draft_id, post.user_id, post.bosses, post.player, post.nop))
             else: # draft is full
                 post.nop = -1
                 post.player = -1
@@ -124,17 +131,32 @@ class Pokedraft:
         self.conn.commit()
         return self.return_post(post)
 
+    def check_user_and_draft(self, post):
+        draft = self.cur.execute('''SELECT `user_id`
+        FROM `draft` WHERE `draft_id`=? AND `user_id`=? AND `player`=?;''',
+        (post.draft_id, post.user_id, post.player)).fetchone();
+        if (not draft is None): # draft != null
+            if (draft[0] == post.user_id):
+                return True
+        return False # else
+
     def start_draft(self, post):
         if (self.debug):
             print('start_draft called')
             print(post)
-        game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
-        FROM `draft` WHERE `game_id`=?;''', (post.draft_id,)).fetchone()
-        if (game[0] == game[1]):
-            print(game)
+        if (self.check_user_and_draft(post)):
+            game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+            FROM `draft` WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()
+            if (game[0] == game[1]):
+                self.cur.execute('''UPDATE `draft` SET `started`=1 WHERE `draft_id`=?;''',
+                (post.draft_id))
+                response = Response({"accepted":"true"})
+            else:
+                response = Response({"accepted":"false"})
         else:
-            return False
-
+            response = post
+        self.conn.commit()
+        return self.return_post(response)
 
     def get_options(self):
         if (self.debug):

@@ -65,11 +65,12 @@ let draft = {
             return true;
         }
     },
-    start_draft: function() {
+    create_draft: function(bosses) {
+        draft.settings.bosses = bosses;
         for (let i = 0; i < draft.settings.no_of_players; i++) {
             draft.players.push(draft.create_player(i));
         }
-        draft.settings.started = true;
+        return (draft.settings.started = true); // true
     },
 }
 

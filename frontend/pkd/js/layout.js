@@ -69,10 +69,7 @@ let layout = {
     },
     create_draft: function(pid) {
         layout.display_picks(pid);
-        layout.create_start_button();
-        if (document.querySelector("#start_draft_button")) {
-            // addEventListener
-        }
+        timer.display_timer('timer');
     },
     draft_board_head: function() {
         let html = `<div id="display_boss" class="table">
@@ -113,8 +110,14 @@ let layout = {
         selector.innerHTML = 'Pick: <input type="text"> *';
     },
     create_start_button: function() {
-        timer.display_timer('timer');
-        layout.add_element({'etype':'button', 'eid':'start_draft_button', 'text':'start draft'}, document.querySelector('#timer'));
+        layout.add_element(
+            {'etype':'button', 'eid':'start_draft_button', 'text':'start draft'},
+            document.querySelector('#timer'));
+        if (document.querySelector("#start_draft_button")) {
+            document.querySelector("#start_draft_button").onclick = function() {
+                console.debug('start_draft');
+            }
+        }
     },
     add_element: function(obj, parent) {
         let element = document.createElement(obj.etype);
