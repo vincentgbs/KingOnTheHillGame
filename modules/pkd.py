@@ -132,7 +132,7 @@ class Pokedraft:
         return self.return_post(post)
 
     def check_user_and_draft(self, post):
-        draft = self.cur.execute('''SELECT `user_id`
+        draft = self.cur.execute('''SELECT `user_id`, `started`
         FROM `draft` WHERE `draft_id`=? AND `user_id`=? AND `player`=?;''',
         (post.draft_id, post.user_id, post.player)).fetchone();
         if (not draft is None): # draft != null
@@ -158,12 +158,18 @@ class Pokedraft:
         self.conn.commit()
         return self.return_post(response)
 
-    def get_options(self):
+    def get_options(self, post):
         if (self.debug):
             print('get_options called')
-        options = self.cur.execute('''SELECT * FROM `pokemon`;''').fetchall()
-        for option in options:
-            print(option)
+            print(post)
+        if (self.check_user_and_draft(post)):
+            options = self.cur.execute('''SELECT * FROM `pokemon` WHERE `pokemon` LIKE '?%' LIMIT 25;''').fetchall()
+            for option in options:
+                print(option)
+        else:
+            response = post
+        self.conn.commit()
+        return self.return_post(response)
 
     def send_pick(self, post):
         False
