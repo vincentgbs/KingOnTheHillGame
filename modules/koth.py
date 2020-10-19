@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseModel
 import sqlite3
 
-class Request(BaseModel):
+class kothRequest(BaseModel):
     user_id: str
     action: str
     game_id: str
@@ -13,7 +13,7 @@ class Request(BaseModel):
     current: Optional[int] = None
     turn: Optional[str] = None
 
-class Response(BaseModel):
+class kothResponse(BaseModel):
     def __init__(self, dictionary):
         BaseModel.__init__(self)
         if("user_id" in dictionary.keys()):
@@ -37,15 +37,15 @@ class Kingonthehill:
 
     def migrate(self):
         if (self.debug):
-            print('DROPPING and CREATING `games` and `turns`;')
-        self.cur.execute('DROP TABLE IF EXISTS `games`');
-        self.cur.execute('DROP TABLE IF EXISTS `turns`');
-        self.cur.execute('''CREATE TABLE `games` (
+            print('DROPPING and CREATING `kothgame` and `kothturns`;')
+        self.cur.execute('DROP TABLE IF EXISTS `kothgame`');
+        self.cur.execute('DROP TABLE IF EXISTS `kothturns`');
+        self.cur.execute('''CREATE TABLE `kothgame` (
             `game_id` varchar(255),
             `user_id` varchar(255),
             `player` int(2) DEFAULT NULL,
             `nop` int(2) DEFAULT NULL);''')
-        self.cur.execute('''CREATE TABLE `turns` (
+        self.cur.execute('''CREATE TABLE `kothturns` (
             `game_id` varchar(255),
             `current` int(4),
             `player` int(2) DEFAULT NULL,
@@ -67,7 +67,7 @@ class Kingonthehill:
 
     def find_game_id(self, gid):
         game = self.cur.execute('''SELECT `game_id`
-        FROM `games` WHERE `game_id`=?;''', (gid,)).fetchone();
+        FROM `kothgame` WHERE `game_id`=?;''', (gid,)).fetchone();
         return ((not game is None))
 
     def return_post(self, post):
@@ -80,7 +80,7 @@ class Kingonthehill:
             print('new_game called')
             print(post)
         post.game_id = self.create_unique_game_id()
-        self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
+        self.cur.execute('''INSERT INTO `kothgame` (`game_id`, `user_id`, `player`, `nop`)
         VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
         self.conn.commit()
         return self.return_post(post)
@@ -90,16 +90,16 @@ class Kingonthehill:
             print('join_game called')
             print(post)
         check = self.cur.execute('''SELECT `nop`, `player`
-        FROM `games` WHERE `game_id`=? AND `user_id`=?;''',
+        FROM `kothgame` WHERE `game_id`=? AND `user_id`=?;''',
         (post.game_id,post.user_id)).fetchone()
         post.current = -1
         if (check is None):
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
-            FROM `games` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+            FROM `kothgame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             post.nop = game[0]
             post.player = game[1] # next_available_spot
             if (post.player < post.nop): # add to game
-                self.cur.execute('''INSERT INTO `games` (`game_id`, `user_id`, `player`, `nop`)
+                self.cur.execute('''INSERT INTO `kothgame` (`game_id`, `user_id`, `player`, `nop`)
                 VALUES (?, ?, ?, ?);''', (post.game_id, post.user_id, post.player, post.nop))
             else: # game is full
                 post.nop = -1
@@ -115,7 +115,7 @@ class Kingonthehill:
         if (self.debug):
             print('rejoin_game called')
             print(post)
-        last_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+        last_turn = self.cur.execute('''SELECT `current`, `json` FROM `kothturns`
         WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
         if (not last_turn is None): # game already started
             post.current = last_turn[0]
@@ -123,7 +123,7 @@ class Kingonthehill:
 
     def check_user_and_game(self, post):
         game = self.cur.execute('''SELECT `user_id`
-        FROM `games` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
+        FROM `kothgame` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
         (post.game_id, post.user_id, post.player)).fetchone();
         if (not game is None): # game != null
             if (game[0] == post.user_id):
@@ -135,14 +135,14 @@ class Kingonthehill:
             print('send_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            last_turn = self.cur.execute('''SELECT `current`, `player`, `json` FROM `turns`
+            last_turn = self.cur.execute('''SELECT `current`, `player`, `json` FROM `kothturns`
             WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
             if (not last_turn is None):
                 if((last_turn[0]+1 != post.current) or (last_turn[1]+1 != post.player)):
-                    return Response({"accepted":"false"})
-            self.cur.execute('''INSERT INTO `turns` (`game_id`, `current`, `player`, `json`)
+                    return kothResponse({"accepted":"false"})
+            self.cur.execute('''INSERT INTO `kothturns` (`game_id`, `current`, `player`, `json`)
             VALUES (?, ?, ?, ?);''', (post.game_id, post.current, post.player, post.turn))
-            response = Response({"accepted":"true"})
+            response = kothResponse({"accepted":"true"})
         else:
             response = post
         self.conn.commit()
@@ -153,13 +153,13 @@ class Kingonthehill:
             print('get_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            next_turn = self.cur.execute('''SELECT `current`, `json` FROM `turns`
+            next_turn = self.cur.execute('''SELECT `current`, `json` FROM `kothturns`
             WHERE `game_id`=? AND `current`>=? ORDER BY `current` ASC;''', (post.game_id, post.current)).fetchone();
             if (next_turn is None):
-                response = Response({"waiting":"true"})
+                response = kothResponse({"waiting":"true"})
             else:
-                response = Response({"turn":next_turn[1]})
+                response = kothResponse({"turn":next_turn[1]})
         else: # invalid game_id + user_id + player
-            response = Response({"accepted":"false"})
+            response = kothResponse({"accepted":"false"})
         self.conn.commit()
         return self.return_post(response)

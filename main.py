@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 # from fastapi.middleware.cors import CORSMiddleware
-from modules.koth import Kingonthehill, Request, Response
-from modules.pkd import Pokedraft, pkdRequest, pkdResponse
+from modules.koth import Kingonthehill, kothRequest
+from modules.pkd import Pokedraft, pkdRequest
 
 debug = True
 
@@ -28,11 +28,12 @@ def read_root():
 
 @app.get("/koth-migrate")
 def read_root():
-    k = Kingonthehill()
-    return k.migrate()
+    if (debug):
+        k = Kingonthehill()
+        return k.migrate()
 
 @app.post("/koth-actions")
-def create_game(post: Request):
+def create_game(post: kothRequest):
     k = Kingonthehill(debug)
     if (post.action == 'new_game'):
         return k.new_game(post)
@@ -47,8 +48,9 @@ def create_game(post: Request):
 
 @app.get("/pkd-migrate")
 def read_root():
-    p = Pokedraft()
-    return p.migrate()
+    if (debug):
+        p = Pokedraft()
+        return p.migrate()
 
 @app.post("/pkd-actions")
 def create_game(post: pkdRequest):
