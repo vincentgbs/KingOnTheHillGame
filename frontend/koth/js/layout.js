@@ -102,12 +102,17 @@ var layout = {
     },
     draw_level: function(location, level) {
         layout.context.fillStyle = layout.settings.level_colors[level];
-        layout.context.fillRect(
+        layout.context.strokeStyle = 'black';
+        layout.context.lineWidth = "3px";
+        layout.context.beginPath();
+        layout.context.rect(
             location.col*layout.settings.square_size + ((layout.settings.square_size/10)*level),
             location.row*layout.settings.square_size + ((layout.settings.square_size/10)*level),
             (layout.settings.square_size-1) - ((layout.settings.square_size/5)*level),
             (layout.settings.square_size-1) - ((layout.settings.square_size/5)*level)
         );
+        layout.context.fill();
+        layout.context.stroke();
     },
     draw_levels: function(location, level) {
         for(let i = 0; i < level; i++) {
