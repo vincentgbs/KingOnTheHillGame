@@ -14,7 +14,7 @@ var remote = {
             action: action,
         };
     },
-    start_draft: function(response) {
+    create_draft: function(response) {
         try {
             response = JSON.parse(response);
             if (response.player < 0) {
@@ -39,8 +39,8 @@ var remote = {
             request.bosses = JSON.stringify(draft.settings.bosses);
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
-                remote.start_draft(remote.xhr.response);
-                layout.create_start_button();
+                remote.create_draft(remote.xhr.response);
+                layout.create_start_button(); // start_draft_button
             };
             try {
                 remote.send_request(request);
@@ -57,7 +57,25 @@ var remote = {
         request.draft_id = remote.get_did();
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
-            remote.start_draft(remote.xhr.response);
+            remote.create_draft(remote.xhr.response);
+        };
+        try {
+            remote.send_request(request);
+        } catch (err) {
+            console.debug(err);
+            layout.flashMessage('Error connecting to server', 9999);
+        }
+    },
+    start_draft: function() {
+        let request = remote.create_request('start_draft');
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            let response = JSON.parse(remote.xhr.response);
+            if (response.accepted == 'true') {
+                // start_draft successful
+            } else {
+                layout.flashMessage('Waiting on players', 999);
+            }
         };
         try {
             remote.send_request(request);
@@ -72,7 +90,6 @@ var remote = {
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
     send_request: function(request) {
-        // console.debug(request);
         try {
             remote.xhr.onerror = function() {
                 layout.flashMessage('Error connecting to server', 9999);
