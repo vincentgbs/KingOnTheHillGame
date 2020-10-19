@@ -26,3 +26,5 @@ systemctl restart apache2
 # local https only for development and debugging
 # openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./local.key -out ./local.pem  -subj "/C=US/ST=NY/L=NYC/O=DN Now Organization/OU=IT Department/CN=192.168.33.10"
 # uvicorn main:app --reload --host 0.0.0.0 --ssl-keyfile local.key --ssl-certfile local.pem
+# ProxyPass / https://localhost:8000/
+# ProxyPassReverse / https://localhost:8000/
