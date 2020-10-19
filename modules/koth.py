@@ -135,10 +135,12 @@ class Kingonthehill:
             print('send_turn called')
             print(post)
         if (self.check_user_and_game(post)):
-            last_turn = self.cur.execute('''SELECT `current`, `player`, `json` FROM `kothturns`
-            WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
+            last_turn = self.cur.execute('''SELECT `current`, `json` FROM `kothturns`
+            WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone()
             if (not last_turn is None):
-                if((last_turn[0]+1 != post.current) or (last_turn[1]+1 != post.player)):
+                nop = self.cur.execute('''SELECT `nop` FROM `kothgame`
+                WHERE `game_id`=?;''', (post.game_id,)).fetchone()[0]
+                if((last_turn[0]+1 != post.current) or ((last_turn[0]+1)%nop != post.player)):
                     return kothResponse({"accepted":"false"})
             self.cur.execute('''INSERT INTO `kothturns` (`game_id`, `current`, `player`, `json`)
             VALUES (?, ?, ?, ?);''', (post.game_id, post.current, post.player, post.turn))
