@@ -22,3 +22,7 @@ cp ./000-default.conf /etc/apache2/sites-enabled/000-default.conf
 a2enmod proxy
 a2enmod proxy_http
 systemctl restart apache2
+
+# local https only for development and debugging
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./local.key -out ./local.pem  -subj "/C=US/ST=NY/L=NYC/O=DN Now Organization/OU=IT Department/CN=192.168.33.10"
+# uvicorn main:app --reload --host 0.0.0.0 --ssl-keyfile local.key --ssl-certfile local.pem
