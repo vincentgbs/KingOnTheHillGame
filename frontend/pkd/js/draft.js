@@ -8,7 +8,7 @@ let draft = {
         started: false,
     },
     players: [],
-    options: [],
+    options: [{index:0, name:null, status: false}], // index 0
     turn: 0,
     get_current_player: function() {
         return draft.players[draft.get_current_turn()];

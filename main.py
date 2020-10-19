@@ -58,7 +58,7 @@ def create_game(post: pkdRequest):
     elif (post.action == 'join_draft'):
         return p.join_draft(post)
     elif (post.action == 'get_options'):
-        return p.get_options();
+        return p.get_options(post);
     elif (post.action == 'send_pick'):
         return p.send_pick(post)
     elif (post.action == 'get_picks'):

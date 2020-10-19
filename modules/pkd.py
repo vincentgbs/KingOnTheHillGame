@@ -1,5 +1,6 @@
 import random
 import string
+import json
 from typing import Optional
 from pydantic import BaseModel
 import sqlite3
@@ -53,6 +54,9 @@ class Pokedraft:
             `attack` int(11) DEFAULT NULL,
             `defence` int(11) DEFAULT NULL,
             `stamina` int(11) DEFAULT NULL);''')
+        self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (1, "bulbasaur");')
+        self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (2, "ivysaur");')
+        self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (3, "venusar");')
         self.cur.execute('''CREATE TABLE `draft` (
             `draft_id` varchar(255),
             `user_id` varchar(255),
@@ -162,14 +166,11 @@ class Pokedraft:
         if (self.debug):
             print('get_options called')
             print(post)
-        if (self.check_user_and_draft(post)):
-            options = self.cur.execute('''SELECT * FROM `pokemon` WHERE `pokemon` LIKE '?%' LIMIT 25;''').fetchall()
-            for option in options:
-                print(option)
-        else:
-            response = post
-        self.conn.commit()
-        return self.return_post(response)
+        options = self.cur.execute('''SELECT * FROM `pokemon`;''').fetchall()
+        if (self.debug):
+            print(options)
+        # return json.dumps(options)
+        return options
 
     def send_pick(self, post):
         False

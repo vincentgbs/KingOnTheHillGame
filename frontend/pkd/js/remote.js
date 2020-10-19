@@ -85,7 +85,18 @@ var remote = {
         }
     },
     get_options: function() {
-        //
+        let request = remote.create_request('get_options');
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            console.debug(remote.xhr.response);
+            let response = JSON.parse(remote.xhr.response);
+            console.debug(response);
+            for (let i = 0; i < response.length; i++) {
+                let opt = response[i];
+                draft.options.push(draft.create_option(opt[0], opt[1]));
+            }
+        }
+        remote.send_request(request);
     },
     xhr: new XMLHttpRequest(),
     timeout: null, // ping timeout
