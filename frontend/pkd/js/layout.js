@@ -107,7 +107,21 @@ let layout = {
             }
         }
         let selector = layout.add_div('pick_selector', 'center-div', layout.board);
-        selector.innerHTML = 'Pick: <input type="text"> *';
+        selector.textContent = 'Pick: ';
+        layout.add_element(
+            {'etype':'input', 'eid':'make_pick'}, selector);
+        layout.add_element(
+            {'etype':'button', 'eid':'make_pick_button', 'text':'pick'}, selector);
+        if (document.querySelector("#make_pick")) {
+            // need to update autocomplete source after draft.options is updated
+            autocomplete.create_nameid('make_pick', draft.options);
+        }
+        if (document.querySelector("#make_pick_button")) {
+            document.querySelector("#make_pick_button").onclick = function() {
+                let x = document.querySelector("#make_pick").value;
+                console.debug(x);
+            }
+        }
     },
     create_start_button: function() {
         layout.add_element(

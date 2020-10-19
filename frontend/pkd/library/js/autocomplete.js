@@ -56,6 +56,36 @@ var autocomplete = {
 		// };
 		// autocomplete.xhr.send(request);
 	},
+	create_nameid: function(input_id, source) {
+		let input = document.querySelector('#'+input_id);
+		autocomplete.source[input_id] = source;
+		input_list = document.createElement('datalist');
+		input.setAttribute('list', input_id+'_list');
+		input_list.setAttribute('id', input_id+'_list');
+		input.after(input_list);
+		input.addEventListener("keyup", function(event){
+			autocomplete.nameid_keyup(event);
+		});
+	},
+	nameid_keyup: function(event) {
+		let input = event.target;
+		let list = document.querySelector('#'+input.getAttribute('list'));
+		if (!isNaN(input.value) || input.value.length < autocomplete.min_characters ) {
+			return false;
+		} else {
+			console.debug(autocomplete.source[input.getAttribute('id')]);
+			autocomplete.nameid_display(list, autocomplete.source[input.getAttribute('id')]);
+		}
+	},
+	nameid_display: function(list, source) {
+		list.innerHTML = '';
+		source.forEach(function(item) {
+			console.debug(item);
+			var option = document.createElement('option');
+			option.value = item.name;
+			list.appendChild(option);
+		});
+	},
 	xhr: new XMLHttpRequest(),
 };
 
