@@ -172,7 +172,8 @@ var game = {
                     } else {
                         return false;
                     }
-                } else if (game.board.locations[location.row][location.col].level ==
+                } else if ((piece.type == 'king') &&
+                game.board.locations[location.row][location.col].level ==
                 game.settings.level-1) {
                     return game.winning_move(piece, location);
                 }
