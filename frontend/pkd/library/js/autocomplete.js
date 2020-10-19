@@ -46,15 +46,16 @@ var autocomplete = {
 		}
 	},
 	remote_display: function(list, source) {
-		// autocomplete.xhr.abort(); // clear previous request
-		// autocomplete.xhr.open('POST', source);
-		// autocomplete.xhr.onreadystatechange = function() {
-		// 	if (this.readyState == 4 && this.status == 200) {
-		// 		var response = JSON.parse(this.responseText);
-		// 		autocomplete.simple_display(list, response);
-		// 	}
-		// };
-		// autocomplete.xhr.send(request);
+		// concept function, untested
+		autocomplete.xhr.abort(); // clear previous request
+		autocomplete.xhr.open('POST', source);
+		autocomplete.xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+				autocomplete.simple_display(list, response);
+			}
+		};
+		autocomplete.xhr.send(request);
 	},
 	create_nameid: function(input_id, source) {
 		let input = document.querySelector('#'+input_id);
