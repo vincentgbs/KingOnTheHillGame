@@ -14,7 +14,15 @@ let draft = {
         return draft.players[draft.get_current_turn()];
     },
     get_current_turn: function() {
-        return (draft.turn % draft.settings.no_of_players);
+        let round = Math.floor((draft.turn)/draft.settings.no_of_players);
+        if (round > draft.settings.no_of_rounds) {
+            return false; // draft is over
+        } // else
+        if ((round%2)==1) { // odd
+            return (draft.settings.no_of_players - ((draft.turn%draft.settings.no_of_players)+1));
+        } else { // even
+            return (draft.turn % draft.settings.no_of_players);
+        }
     },
     create_option: function(i, name) {
         return {

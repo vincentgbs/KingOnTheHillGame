@@ -171,6 +171,7 @@ class Pokedraft:
         return options
 
     def send_pick(self, post):
+        # snake draft
         False
 
     def get_picks(self, post):
