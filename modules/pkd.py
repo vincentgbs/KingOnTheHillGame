@@ -1,6 +1,5 @@
 import random
 import string
-import json
 from typing import Optional
 from pydantic import BaseModel
 import sqlite3
@@ -169,7 +168,6 @@ class Pokedraft:
         options = self.cur.execute('''SELECT * FROM `pokemon`;''').fetchall()
         if (self.debug):
             print(options)
-        # return json.dumps(options)
         return options
 
     def send_pick(self, post):
