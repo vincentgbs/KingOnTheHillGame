@@ -191,14 +191,14 @@ class Pokedraft:
         if (check['valid'] and check['started']):
             last_pick = self.cur.execute('''SELECT `pick_number`
             FROM `picks` WHERE `draft_id`=? ORDER BY `pick_number` DESC;''', (post.draft_id,)).fetchone()
-            if (not last_pick is None):
+            if (not last_pick is None): # !(last_pick==null)
+                # last_pick = {0: -1} # first turn
                 nop = self.cur.execute('''SELECT `nop` FROM `draft`
                 WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()[0]
-                # check for snake draft order (player)
-                if((last_turn[0]+1 != post.pick_number) or (self.snake_order() != post.player)):
+                if((last_turn[0]+1 != post.pick_number) or (self.snake_order(post.pick_number, nop) != post.player)):
                     return pkdResponse({"accepted":"false"})
                 self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pick_number`, `pokemon`) VALUES (?, ?, ?, ?);''', (post.draft_id, post.player, post.pick_number, post.pick))
-            response = pkdResponse({"accepted":"true"})
+                response = pkdResponse({"accepted":"true"})
         else:
             response = post
         self.conn.commit()
@@ -212,6 +212,7 @@ class Pokedraft:
         if (check['valid'] and check['started']):
             picks = self.cur.execute('''SELECT `pick_number`, `player`, `pokemon`
             FROM `picks` WHERE `draft_id`=? ORDER BY `pick_number` ASC;''', (post.draft_id,)).fetchall()
+            print(picks)
             response = pkdResponse({"picks":picks})
         else:
             response = post

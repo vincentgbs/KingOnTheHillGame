@@ -124,13 +124,19 @@ var remote = {
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
-            for (let i = 0; i < response.picks.length; i++) {
-                let pick = response.picks[i];
-                let player = draft.players[pick[1]];
-                let pokemon = pick[3];
-                console.debug(pick, player, pokemon);
-                player.picks.push(draft.create_option(0, pokemon));
-                layout.display_picks();
+            if (response.action != 'get_picks') {
+                console.debug(response);
+                let picks = JSON.parse(response.picks);
+                for (let i = 0; i < picks.length; i++) {
+                    let pick = picks[i];
+                    let player = draft.players[pick[1]];
+                    let pokemon = pick[3];
+                    console.debug(pick, player, pokemon);
+                    player.picks.push(draft.create_option(0, pokemon));
+                    layout.display_picks();
+                }
+            } else {
+                console.log('No picks to get');
             }
         }
         remote.send_request(request);
