@@ -6,7 +6,7 @@ let controls = {
         draft.settings.no_of_rounds = document.querySelector("#no_of_rounds").value;
     },
     make_pick: function() {
-        if (remote.settings.player == draft.get_current_turn()) {
+        if (remote.settings.player == draft.get_player_from_turn(draft.turn)) {
             let pick = document.querySelector("#make_pick").value;
             remote.send_pick(pick);
         } else {

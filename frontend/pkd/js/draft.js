@@ -10,18 +10,15 @@ let draft = {
     players: [],
     options: [{index:0, name:'', status: false}], // index 0
     turn: 0,
-    get_current_player: function() {
-        return draft.players[draft.get_current_turn()];
-    },
-    get_current_turn: function() {
-        let round = Math.floor((draft.turn)/draft.settings.no_of_players);
+    get_player_from_turn: function(turn) {
+        let round = Math.floor((turn)/draft.settings.no_of_players);
         if (round > draft.settings.no_of_rounds) {
             return false; // draft is over
         } // else
         if ((round%2)==1) { // odd
-            return (draft.settings.no_of_players - ((draft.turn%draft.settings.no_of_players)+1));
+            return (draft.settings.no_of_players - ((turn%draft.settings.no_of_players)+1));
         } else { // even
-            return (draft.turn % draft.settings.no_of_players);
+            return (turn % draft.settings.no_of_players);
         }
     },
     create_option: function(i, name) {
@@ -43,9 +40,9 @@ let draft = {
             username: false,
             select: function(pick) {
                 let player = this;
-                if (draft.get_current_turn()==player.pid) {
+                if (draft.get_player_from_turn(draft.turn)==player.pid) {
                     if (pick.status == 'available') {
-                        player.options[pick.index].status = 'selected';
+                        draft.options[pick.index].status = 'selected';
                         player.picks.push(pick);
                         draft.turn++;
                     } else {
@@ -69,7 +66,7 @@ let draft = {
                 return draft.options[i];
             }
         } // else
-        return {name:''};
+        return false;
     },
     add_boss: function(boss) {
         if (draft.settings.started) {

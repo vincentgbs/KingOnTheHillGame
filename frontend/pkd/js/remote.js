@@ -74,6 +74,9 @@ var remote = {
             let response = JSON.parse(remote.xhr.response);
             if (response.accepted == 'true') {
                 timer.startTimer();
+                if (document.querySelector("#start_draft_button")) {
+                    document.querySelector("#start_draft_button").setAttribute('style', 'display:none')
+                }
             } else {
                 layout.flashMessage('Waiting on players to join draft', 999);
             }
@@ -104,8 +107,12 @@ var remote = {
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
+            console.debug(request, response);
             if (response.accepted) {
-                console.debug('response accepted');
+                let player = draft.players[draft.get_player_from_turn(draft.turn)];
+                let pick = draft.get_option_from_name(request.pick);
+                console.debug(pick);
+                player.select(pick);
             } else {
                 layout.flashMessage('Draft has not started', 999);
             }
@@ -119,11 +126,11 @@ var remote = {
             let response = JSON.parse(remote.xhr.response);
             for (let i = 0; i < response.picks.length; i++) {
                 let pick = response.picks[i];
-                pick[0]; // pick_number
-                pick[1]; // player
-                pick[3]; // pokemon
-                console.debug(pick);
-                // Need to sort and add to players
+                let player = draft.players[pick[1]];
+                let pokemon = pick[3];
+                console.debug(pick, player, pokemon);
+                player.picks.push(draft.create_option(0, pokemon));
+                layout.display_picks();
             }
         }
         remote.send_request(request);
