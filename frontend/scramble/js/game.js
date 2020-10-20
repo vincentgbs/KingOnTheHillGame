@@ -6,6 +6,7 @@ var game = {
         horizontal: 9, // static
         piece_colors: ['royalblue', 'darkorange', 'forestgreen', 'darkred'], // static
         egg_timer: 2500,
+        splash_zone: 3,
     },
     players: [],
     eggs: [],
@@ -59,8 +60,21 @@ var game = {
     },
     eggsplosion: function(index, location) {
         game.eggs[index].show = false;
+        layout.eggsplosion(location);
         for(let i = 0; i < game.players.length; i++) {
-            //
+            let check = game.players[i].location;
+            if (check.row == location.row) {
+                if (check.col > (location.col-game.settings.splash_zone) &&
+                check.col < (location.col+game.settings.splash_zone) ) {
+                    console.log(game.players[i].pid + ' eggsploded.');
+                }
+            }
+            if (check.col == location.col) {
+                if (check.row > (location.row-game.settings.splash_zone) &&
+                check.row < (location.row+game.settings.splash_zone) ) {
+                    console.log(game.players[i].pid + ' eggsploded.');
+                }
+            }
         }
     },
 }
