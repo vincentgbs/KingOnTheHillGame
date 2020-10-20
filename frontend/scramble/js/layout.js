@@ -70,7 +70,7 @@ var layout = {
     },
     draw_players: function() {
         for(let i = 0; i < game.players.length; i++) {
-            draw_player(game.players);
+            layout.draw_player(game.players[i]);
         }
     },
     div_overlap: function (a, b) {
@@ -89,6 +89,7 @@ var layout = {
     render: function() {
         layout.draw_lines();
         layout.draw_blocks();
+        layout.draw_players();
     },
 };
 
@@ -96,5 +97,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.js (1) loaded');
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
-    // setInterval(layout.render, layout.framerate);
+    setInterval(layout.render, layout.framerate);
 });
