@@ -1,0 +1,6 @@
+let controls = {
+}
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    console.log('controls.js (3) loaded');
+});
