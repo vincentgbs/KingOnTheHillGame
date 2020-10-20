@@ -1,21 +1,32 @@
 var controls = {
     settings: {
         player: 0,
-        speed: 0.2,
+        speed: 1,
+    },
+    overlap: function(player, location) {
+        if (player.location.row == location.row && player.location.col == location.col) {
+            return true;
+        }
+    },
+    avoid_blocks: function(player) {
+        for (let i = 0; i < game.settings.vertical; i++ ) {
+            for (let j = 0; j < game.settings.horizontal; j++ ) {
+                if (i%2==0 && j%2==0) {
+                    if (controls.overlap(player, game.create_location(i, j))) {
+                        return false;
+                    }
+                }
+            }
+        } // else
+        return true;
     },
     holdArrow: function(direction, e)
     {
-        console.log(direction);
         game.players[controls.settings.player].move(direction);
         return e.preventDefault();
     },
-    releaseArrow: function(direction, e)
-    {
-        console.log(direction);
-        return e.preventDefault();
-    },
     spacebar: function(e) {
-        console.log('spacebar');
+        game.players[controls.settings.player].drop_egg();
         return e.preventDefault();
     },
     addEventListeners: function() {
@@ -28,13 +39,9 @@ var controls = {
         };
         document.onkeyup = function(e) {
             ek = e.keyCode;
-            if (ek==38) {controls.releaseArrow('u', e);}
-            if (ek==40) {controls.releaseArrow('d', e);}
-            if (ek==37) {controls.releaseArrow('l', e);}
-            if (ek==39) {controls.releaseArrow('r', e);}
             if (ek==32) {controls.spacebar(e);}
         };
-    }
+    },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {

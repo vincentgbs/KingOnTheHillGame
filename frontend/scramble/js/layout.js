@@ -3,6 +3,8 @@ var layout = {
         screen_ratio: (2/3),
         square_size: null,
         framerate: 1000,
+        egg_color: 'Khaki',
+        flash_egg_color: 'Beige',
     },
     canvas: null,
     context: null,
@@ -64,7 +66,7 @@ var layout = {
         let y = (location.col * layout.settings.square_size) + (layout.settings.square_size/2);
         layout.context.beginPath();
         layout.context.arc(x, y, (layout.settings.square_size/3), 0, Math.PI*2);
-        layout.context.fillStyle = 'blue';
+        layout.context.fillStyle = color;
         layout.context.fill();
         layout.context.closePath();
     },
@@ -73,23 +75,32 @@ var layout = {
             layout.draw_player(game.players[i]);
         }
     },
-    div_overlap: function (a, b) {
-    	let aPos = a.position();
-    	let bPos = b.position();
-    	let aLeft = aPos.left;
-    	let aRight = aPos.left + a.width();
-    	let aTop = aPos.top;
-    	let aBottom = aPos.top + a.height();
-    	let bLeft = bPos.left;
-    	let bRight = bPos.left + b.width();
-    	let bTop = bPos.top;
-    	let bBottom = bPos.top + b.height();
-    	return !( bLeft > aRight || bRight < aLeft || bTop > aBottom || bBottom < aTop);
+    draw_egg: function(egg) {
+        if (egg.show) {
+            let location = egg.location;
+            let x = (location.row * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y = (location.col * layout.settings.square_size) + (layout.settings.square_size/2);
+            layout.context.beginPath();
+            layout.context.arc(x, y, (layout.settings.square_size/3), 0, Math.PI*2);
+            if (Math.floor(performance.now())%2==0) {
+                layout.context.fillStyle = layout.settings.egg_color;
+            } else {
+                layout.context.fillStyle = layout.settings.flash_egg_color;
+            }
+            layout.context.fill();
+            layout.context.closePath();
+        }
+    },
+    draw_eggs: function() {
+        for(let i = 0; i < game.eggs.length; i++) {
+            layout.draw_egg(game.eggs[i]);
+        }
     },
     render: function() {
         layout.draw_lines();
         layout.draw_blocks();
         layout.draw_players();
+        layout.draw_eggs();
     },
 };
 
