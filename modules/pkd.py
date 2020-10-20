@@ -55,7 +55,7 @@ class Pokedraft:
             `stamina` int(11) DEFAULT NULL);''')
         self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (1, "bulbasaur");')
         self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (2, "ivysaur");')
-        self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (3, "venusar");')
+        self.cur.execute('INSERT INTO `pokemon` (`pokemon_number`, `pokemon`)  VALUES (3, "venusaur");')
         self.cur.execute('''CREATE TABLE `draft` (
             `draft_id` varchar(255),
             `user_id` varchar(255),
@@ -138,24 +138,28 @@ class Pokedraft:
         draft = self.cur.execute('''SELECT `user_id`, `started`
         FROM `draft` WHERE `draft_id`=? AND `user_id`=? AND `player`=?;''',
         (post.draft_id, post.user_id, post.player)).fetchone();
+        check = {'valid': False, 'started': False}
         if (not draft is None): # draft != null
             if (draft[0] == post.user_id):
-                return True
-        return False # else
+                check['valid'] = True
+                if (draft[1] == 1):
+                    check['started'] = True
+        return check # else
 
     def start_draft(self, post):
         if (self.debug):
             print('start_draft called')
             print(post)
-        if (self.check_user_and_draft(post)):
+        check = self.check_user_and_draft(post)
+        if (check['valid'] and not check['started']):
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `draft` WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()
             if (game[0] == game[1]):
                 self.cur.execute('''UPDATE `draft` SET `started`=1 WHERE `draft_id`=?;''',
-                (post.draft_id))
-                response = Response({"accepted":"true"})
+                (post.draft_id,))
+                response = pkdResponse({"accepted":"true"})
             else:
-                response = Response({"accepted":"false"})
+                response = pkdResponse({"accepted":"false"})
         else:
             response = post
         self.conn.commit()
@@ -171,8 +175,18 @@ class Pokedraft:
         return options
 
     def send_pick(self, post):
-        # snake draft
-        False
+        if (self.debug):
+            print('send_pick called')
+            print(post)
+        check = self.check_user_and_draft(post)
+        if (check['valid'] and check['started']):
+            # check for snake draft order
+            self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pokemon`) VALUES (?, ?, ?);''', (post.draft_id, post.player, post.pick))
+            response = pkdResponse({"accepted":"true"})
+        else:
+            response = post
+        self.conn.commit()
+        return self.return_post(response)
 
     def get_picks(self, post):
         False

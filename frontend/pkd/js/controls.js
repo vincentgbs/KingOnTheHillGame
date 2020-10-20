@@ -5,7 +5,14 @@ let controls = {
     get_nor: function() {
         draft.settings.no_of_rounds = document.querySelector("#no_of_rounds").value;
     },
+    make_pick: function() {
+        let pick = document.querySelector("#make_pick").value;
+        remote.send_pick(pick);
+    },
     start_draft: function() {
+        console.log('start_draft');
+    },
+    new_draft: function() {
         remote.new_draft();
     },
     join_draft: function() {

@@ -74,7 +74,6 @@ var autocomplete = {
 		if (!isNaN(input.value) || input.value.length < autocomplete.min_characters ) {
 			return false;
 		} else {
-			console.debug(autocomplete.source[input.getAttribute('id')]);
 			autocomplete.nameid_display(list, autocomplete.source[input.getAttribute('id')]);
 		}
 	},

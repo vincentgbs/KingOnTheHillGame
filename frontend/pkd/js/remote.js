@@ -24,7 +24,9 @@ var remote = {
                 draft.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
                 if (draft.create_draft(JSON.parse(response.bosses))) {
+                    remote.get_options();
                     layout.create_draft(response.player);
+                    layout.create_start_button();
                 }
             }
         } catch(err) {
@@ -40,7 +42,6 @@ var remote = {
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
                 remote.create_draft(remote.xhr.response);
-                layout.create_start_button(); // start_draft_button
             };
             try {
                 remote.send_request(request);
@@ -72,7 +73,7 @@ var remote = {
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
             if (response.accepted == 'true') {
-                // start_draft successful
+                timer.startTimer();
             } else {
                 layout.flashMessage('Waiting on players', 999);
             }
@@ -88,12 +89,22 @@ var remote = {
         let request = remote.create_request('get_options');
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
-            console.debug(remote.xhr.response);
             let response = JSON.parse(remote.xhr.response);
-            console.debug(response);
             for (let i = 0; i < response.length; i++) {
                 let opt = response[i];
                 draft.options.push(draft.create_option(opt[0], opt[1]));
+            }
+        }
+        remote.send_request(request);
+    },
+    send_pick: function(pick) {
+        let request = remote.create_request('send_pick');
+        request.pick = pick;
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            let response = JSON.parse(remote.xhr.response);
+            if (response.accepted) {
+                console.debug('response accepted');
             }
         }
         remote.send_request(request);

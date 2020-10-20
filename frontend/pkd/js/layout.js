@@ -51,7 +51,7 @@ let layout = {
             document.querySelector("#no_of_rounds").onchange = controls.get_nor;
         }
         if (document.querySelector("#new_draft")) {
-            document.querySelector("#new_draft").onclick = controls.start_draft;
+            document.querySelector("#new_draft").onclick = controls.new_draft;
         }
         if (document.querySelector("#join_draft_button")) {
             document.querySelector("#join_draft_button").onclick = controls.join_draft;
@@ -113,14 +113,10 @@ let layout = {
         layout.add_element(
             {'etype':'button', 'eid':'make_pick_button', 'text':'pick'}, selector);
         if (document.querySelector("#make_pick")) {
-            // need to update autocomplete source after draft.options is updated
             autocomplete.create_nameid('make_pick', draft.options);
         }
         if (document.querySelector("#make_pick_button")) {
-            document.querySelector("#make_pick_button").onclick = function() {
-                let x = document.querySelector("#make_pick").value;
-                console.debug(x);
-            }
+            document.querySelector("#make_pick_button").onclick = controls.make_pick
         }
     },
     create_start_button: function() {
@@ -128,9 +124,7 @@ let layout = {
             {'etype':'button', 'eid':'start_draft_button', 'text':'start draft'},
             document.querySelector('#timer'));
         if (document.querySelector("#start_draft_button")) {
-            document.querySelector("#start_draft_button").onclick = function() {
-                console.debug('start_draft');
-            }
+            document.querySelector("#start_draft_button").onclick = controls.start_draft
         }
     },
     add_element: function(obj, parent) {
