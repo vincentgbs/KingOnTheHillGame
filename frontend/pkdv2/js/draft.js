@@ -5,6 +5,7 @@ let draft = {
         no_of_rounds: 6,
         bosses: [],
         max_time: false,
+        created: false,
         started: false,
     },
     players: [],
@@ -44,8 +45,8 @@ let draft = {
         };
     },
     add_boss: function(boss) {
-        if (draft.settings.started) {
-            return console.log('Draft already started'); // null
+        if (draft.settings.created) {
+            return console.log('Draft already created'); // null
         } else if (draft.settings.bosses.includes(boss)) {
             return console.log('Boss already added'); // null
         } else {
@@ -54,13 +55,19 @@ let draft = {
         }
     },
     create_draft: function() {
-        //
+        draft.settings.created = true;
     },
-    join_draft: function() {
-        //
+    join_draft: function(bosses, nop) {
+        draft.settings.created = true;
+        draft.settings.no_of_players = nop;
     },
     start_draft: function() {
-        // needs to have players = nop
+        if (draft.settings.no_of_players == draft.players.length) {
+            // start timer
+            // start get picks ping
+        } else {
+            console.log('Waiting for players to join draft');
+        }
     },
 }
 
