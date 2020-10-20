@@ -75,7 +75,7 @@ var remote = {
             if (response.accepted == 'true') {
                 timer.startTimer();
             } else {
-                layout.flashMessage('Waiting on players', 999);
+                layout.flashMessage('Waiting on players to join draft', 999);
             }
         };
         try {
@@ -100,11 +100,29 @@ var remote = {
     send_pick: function(pick) {
         let request = remote.create_request('send_pick');
         request.pick = pick;
+        request.pick_number = draft.turn;
         remote.xhr.open('POST', remote.settings.url);
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
             if (response.accepted) {
                 console.debug('response accepted');
+            } else {
+                layout.flashMessage('Draft has not started', 999);
+            }
+        }
+        remote.send_request(request);
+    },
+    get_picks: function() {
+        let request = remote.create_request('get_picks');
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            let response = JSON.parse(remote.xhr.response);
+            for (let i = 0; i < response.picks.length; i++) {
+                response.picks[0]; // pick_number
+                response.picks[1]; // player
+                response.picks[3]; // pokemon
+                // Need to sort and add to players
+                console.debug(response);
             }
         }
         remote.send_request(request);

@@ -12,6 +12,7 @@ class pkdRequest(BaseModel):
     nop: Optional[int] = None
     bosses: Optional[str] = None
     pick: Optional[str] = None
+    pick_number: Optional[int] = None
 
 class pkdResponse(BaseModel):
     def __init__(self, dictionary):
@@ -22,14 +23,14 @@ class pkdResponse(BaseModel):
             self.player = dictionary["player"]
         if("bosses" in dictionary.keys()):
             self.bosses = dictionary["bosses"]
-        if("options" in dictionary.keys()):
-            self.options = dictionary["options"]
+        if("picks" in dictionary.keys()):
+            self.picks = dictionary["picks"]
         if("accepted" in dictionary.keys()):
             self.accepted = dictionary["accepted"]
     user_id: Optional[str] = None
     player: Optional[int] = None
     bosses: Optional[str] = None
-    options: Optional[str] = None
+    picks: Optional[str] = None
     accepted: Optional[str] = None
 
 class Pokedraft:
@@ -66,6 +67,7 @@ class Pokedraft:
         self.cur.execute('''CREATE TABLE `picks` (
             `draft_id` varchar(255),
             `player` int(2),
+            `pick_number` int(3),
             `pokemon_number` int(11),
             `pokemon` varchar(255) DEFAULT NULL);''')
         self.conn.commit()
@@ -181,12 +183,24 @@ class Pokedraft:
         check = self.check_user_and_draft(post)
         if (check['valid'] and check['started']):
             # check for snake draft order
-            self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pokemon`) VALUES (?, ?, ?);''', (post.draft_id, post.player, post.pick))
+            self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pick_number`, `pokemon`) VALUES (?, ?, ?, ?);''', (post.draft_id, post.player, post.pick_number, post.pick))
             response = pkdResponse({"accepted":"true"})
         else:
+            print(check)
             response = post
         self.conn.commit()
         return self.return_post(response)
 
     def get_picks(self, post):
-        False
+        if (self.debug):
+            print('get_picks called')
+            print(post)
+        check = self.check_user_and_draft(post)
+        if (check['valid'] and check['started']):
+            picks = self.cur.execute('''SELECT `pick_number`, `player`, `pokemon`
+            FROM `picks` WHERE `draft_id`=?;''', (post.draft_id,)).fetchall()
+            response = pkdResponse({"picks":picks})
+        else:
+            response = post
+        self.conn.commit()
+        return self.return_post(response)

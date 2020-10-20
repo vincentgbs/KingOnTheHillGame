@@ -80,7 +80,6 @@ var autocomplete = {
 	nameid_display: function(list, source) {
 		list.innerHTML = '';
 		source.forEach(function(item) {
-			console.debug(item);
 			var option = document.createElement('option');
 			option.value = item.name;
 			list.appendChild(option);

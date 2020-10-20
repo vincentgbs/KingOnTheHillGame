@@ -6,11 +6,15 @@ let controls = {
         draft.settings.no_of_rounds = document.querySelector("#no_of_rounds").value;
     },
     make_pick: function() {
-        let pick = document.querySelector("#make_pick").value;
-        remote.send_pick(pick);
+        if (remote.settings.player == draft.get_current_turn()) {
+            let pick = document.querySelector("#make_pick").value;
+            remote.send_pick(pick);
+        } else {
+            console.log("It's not your turn");
+        }
     },
     start_draft: function() {
-        console.log('start_draft');
+        remote.start_draft();
     },
     new_draft: function() {
         remote.new_draft();

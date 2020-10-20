@@ -8,7 +8,7 @@ let draft = {
         started: false,
     },
     players: [],
-    options: [{index:0, name:null, status: false}], // index 0
+    options: [{index:0, name:'', status: false}], // index 0
     turn: 0,
     get_current_player: function() {
         return draft.players[draft.get_current_turn()];
@@ -62,6 +62,14 @@ let draft = {
                 return 'Player ' + (this.pid+1);
             },
         };
+    },
+    get_option_from_name: function(name) {
+        for (let i = 0; i < draft.options.length; i++) {
+            if (draft.options[i].name == name) {
+                return draft.options[i];
+            }
+        } // else
+        return {name:''};
     },
     add_boss: function(boss) {
         if (draft.settings.started) {
