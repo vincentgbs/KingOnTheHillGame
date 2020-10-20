@@ -118,11 +118,12 @@ var remote = {
         remote.xhr.onload = function () {
             let response = JSON.parse(remote.xhr.response);
             for (let i = 0; i < response.picks.length; i++) {
-                response.picks[0]; // pick_number
-                response.picks[1]; // player
-                response.picks[3]; // pokemon
+                let pick = response.picks[i];
+                pick[0]; // pick_number
+                pick[1]; // player
+                pick[3]; // pokemon
+                console.debug(pick);
                 // Need to sort and add to players
-                console.debug(response);
             }
         }
         remote.send_request(request);

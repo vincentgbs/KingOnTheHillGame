@@ -176,17 +176,30 @@ class Pokedraft:
             print(options)
         return options
 
+    def snake_order(self, pick_number, nop):
+        round = floor(pick_number)/nop
+        if (round%2 == 1): # odd round
+            return (nop - ((pick_number%nop)+1))
+        else: # even round
+            return (pick_number % nop)
+
     def send_pick(self, post):
         if (self.debug):
             print('send_pick called')
             print(post)
         check = self.check_user_and_draft(post)
         if (check['valid'] and check['started']):
-            # check for snake draft order
-            self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pick_number`, `pokemon`) VALUES (?, ?, ?, ?);''', (post.draft_id, post.player, post.pick_number, post.pick))
+            last_pick = self.cur.execute('''SELECT `pick_number`
+            FROM `picks` WHERE `draft_id`=? ORDER BY `pick_number` DESC;''', (post.draft_id,)).fetchone()
+            if (not last_pick is None):
+                nop = self.cur.execute('''SELECT `nop` FROM `draft`
+                WHERE `draft_id`=?;''', (post.draft_id,)).fetchone()[0]
+                # check for snake draft order (player)
+                if((last_turn[0]+1 != post.pick_number) or (self.snake_order() != post.player)):
+                    return pkdResponse({"accepted":"false"})
+                self.cur.execute('''INSERT INTO `picks` (`draft_id`, `player`, `pick_number`, `pokemon`) VALUES (?, ?, ?, ?);''', (post.draft_id, post.player, post.pick_number, post.pick))
             response = pkdResponse({"accepted":"true"})
         else:
-            print(check)
             response = post
         self.conn.commit()
         return self.return_post(response)
@@ -198,7 +211,7 @@ class Pokedraft:
         check = self.check_user_and_draft(post)
         if (check['valid'] and check['started']):
             picks = self.cur.execute('''SELECT `pick_number`, `player`, `pokemon`
-            FROM `picks` WHERE `draft_id`=?;''', (post.draft_id,)).fetchall()
+            FROM `picks` WHERE `draft_id`=? ORDER BY `pick_number` ASC;''', (post.draft_id,)).fetchall()
             response = pkdResponse({"picks":picks})
         else:
             response = post
