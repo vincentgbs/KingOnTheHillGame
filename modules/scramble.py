@@ -13,7 +13,6 @@ class scramRequest(BaseModel):
     last_check: Optional[int] = None
     location: Optional[str] = None
     eggs: Optional[str] = None
-    splashes: Optional[str] = None
 
 class scramResponse(BaseModel):
     def __init__(self, dictionary):
@@ -22,17 +21,16 @@ class scramResponse(BaseModel):
             self.user_id = dictionary["user_id"]
         if("accepted" in dictionary.keys()):
             self.accepted = dictionary["accepted"]
-        if("location" in dictionary.keys()):
-            self.location = dictionary["location"]
+        if("locations" in dictionary.keys()):
+            self.locations = dictionary["locations"]
         if("eggs" in dictionary.keys()):
             self.eggs = dictionary["eggs"]
         if("splashes" in dictionary.keys()):
             self.splashes = dictionary["splashes"]
     user_id: Optional[str] = None
     accepted: Optional[bool] = None
-    location: Optional[str] = None
+    locations: Optional[str] = None
     eggs: Optional[str] = None
-    splashes: Optional[str] = None
 
 class Scramble:
     def __init__(self, debug=False, db='db.sqlite3'):
@@ -45,6 +43,7 @@ class Scramble:
             print('DROPPING and CREATING `scramblegame` and `scramblemoves`;')
         self.cur.execute('DROP TABLE IF EXISTS `scramblegame`');
         self.cur.execute('DROP TABLE IF EXISTS `scramblemoves`');
+        self.cur.execute('DROP TABLE IF EXISTS `scrambleeggs`');
         self.cur.execute('''CREATE TABLE `scramblegame` (
             `game_id` varchar(255),
             `user_id` varchar(255),
@@ -53,9 +52,14 @@ class Scramble:
             `started` int(2) DEFAULT NULL);''')
         self.cur.execute('''CREATE TABLE `scramblemoves` (
             `game_id` varchar(255),
-            `last_check` int(4),
             `player` int(2) DEFAULT NULL,
             `location` varchar(255),
+            `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
+        self.cur.execute('''CREATE TABLE `scrambleeggs` (
+            `game_id` varchar(255),
+            `last_check` int(4),
+            `player` int(2) DEFAULT NULL,
+            `egg` varchar(255),
             `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
         self.conn.commit()
         self.conn.close()
@@ -160,6 +164,7 @@ class Scramble:
             print(post)
         check = self.check_user_and_game(post)
         if(check['valid'] and check['started']):
+            self.cur.execute('''INSERT INTO `scramblemoves` (`game_id`, `player` ,`location`) VALUES (?, ?, ?)''', (post.game_id, post.player, post.location))
             self.conn.commit()
             post = scramResponse({"accepted":"true"})
         return self.return_post(post)
@@ -168,8 +173,20 @@ class Scramble:
         if (self.debug):
             print('send_eggs called')
             print(post)
+        return self.return_post(post)
 
     def get_moves(self, post):
         if (self.debug):
             print('get_moves called')
             print(post)
+        check = self.check_user_and_game(post)
+        if(check['valid'] and check['started']):
+            nop = self.cur.execute('''SELECT `nop`
+            FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+            locations = []
+            for i in range(0, nop[0]):
+                locations.append(self.cur.execute('''SELECT `player`, `location`
+                FROM `scramblemoves` WHERE `game_id`=? AND `player`=? ORDER BY `timestamp` DESC
+                LIMIT 1;''', (post.game_id, i)).fetchone())
+            post = scramResponse({"locations":locations})
+        return self.return_post(post)

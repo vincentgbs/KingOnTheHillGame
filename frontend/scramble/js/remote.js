@@ -4,6 +4,7 @@ var remote = {
         user_id: '',
         player: 0,
         ping_rate: 100,
+        max_send_moves: 100,
     },
     create_request: function(action) {
         return {
@@ -76,16 +77,41 @@ var remote = {
             remote.send_request(request);
         }); // Promise
     },
-    send_moves: function() {
+    send_moves: function(attempts) {
+        if (attempts > remote.settings.max_send_moves) {return false;}
         let request = remote.create_request('send_moves');
-        request.location = game.players[remote.settings.player].location;
+        request.location = JSON.stringify(game.players[remote.settings.player].location);
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                if (!response.accepted) {
+                    remote.send_moves(attempts+1);
+                }
+            } catch (err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.send_request(request);
     },
     send_egg: function() {
-        // let request = remote.create_request('send_moves');
+        // let request = remote.create_request('send_egg');
     },
     get_moves: function() {
         let request = remote.create_request('get_moves');
-        // get player locations (now)
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                console.debug(response);
+                console.debug(response.locations);
+            } catch (err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.send_request(request);
         // get egg locations (up to last 7)
         // get splash locations (up to last 7)
     },

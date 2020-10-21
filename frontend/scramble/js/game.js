@@ -20,7 +20,7 @@ var game = {
     eggs: [],
     splashes: [],
     create_location: function(row, col) {
-        return {row:row, col:col, egg: false};
+        return {row:row, col:col};
     },
     create_player: function(pid) {
         return {
@@ -28,7 +28,7 @@ var game = {
             surviving: true,
             eggs: [],
             splashes: [],
-            location: {row:-1, col:-1, egg: false},
+            location: {row:-1, col:-1},
             move: function(direction) {
                 let player = this;
                 let move = game.create_location(player.location.row, player.location.col);
