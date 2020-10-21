@@ -1,13 +1,19 @@
 var game = {
     settings: {
         game_id: false,
-        no_of_players: 2,
+        no_of_players: 4,
         vertical: 9, // static
         horizontal: 9, // static
         piece_colors: ['royalblue', 'darkorange', 'forestgreen', 'darkred'], // static
         egg_timer: 2500,
-        splash_zone: 3,
+        splash_zone: 2,
         splash_timer: 500,
+        starting_positions: [
+            {v:1,h:((9-1)/2)},
+            {v:(9-2),h:((9-1)/2)},
+            {v:((9-1)/2),h:1},
+            {v:((9-1)/2),h:(9-2)},
+        ],
     },
     players: [],
     eggs: [],
@@ -19,7 +25,7 @@ var game = {
         return {
             pid: pid,
             surviving: true,
-            location: {row:1, col:1, egg: false},
+            location: {row:-1, col:-1, egg: false},
             move: function(direction) {
                 let player = this;
                 if (direction == 'u') {
@@ -94,10 +100,16 @@ var game = {
             }
         }
     },
+    start_game: function() {
+        for (let i = 0; i < game.settings.no_of_players; i++) {
+            let player = game.create_player(i);
+            let xy = game.settings.starting_positions[i];
+            player.location = game.create_location(xy.h, xy.v);
+            game.players.push(player);
+        }
+    },
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
     console.log('game.js (0) loaded');
-    let player0 = game.create_player(0); // DEBUGGING
-    game.players.push(player0); // DEBUGGING
 });

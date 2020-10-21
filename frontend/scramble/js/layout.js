@@ -104,12 +104,12 @@ var layout = {
     draw_eggsplosion: function(splash) {
         if (splash.show) {
             let location = splash.location;
-            let x1 = ((location.row-2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let x1 = ((location.row-(game.settings.splash_zone-1)) * layout.settings.square_size) + (layout.settings.square_size/2);
             let x2 = ((location.row) * layout.settings.square_size) + (layout.settings.square_size/2);
-            let x3 = ((location.row+2) * layout.settings.square_size) + (layout.settings.square_size/2);
-            let y1 = ((location.col-2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let x3 = ((location.row+(game.settings.splash_zone-1)) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y1 = ((location.col-(game.settings.splash_zone-1)) * layout.settings.square_size) + (layout.settings.square_size/2);
             let y2 = ((location.col) * layout.settings.square_size) + (layout.settings.square_size/2);
-            let y3 = ((location.col+2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y3 = ((location.col+(game.settings.splash_zone-1)) * layout.settings.square_size) + (layout.settings.square_size/2);
             layout.context.beginPath(); // vertical line
             layout.context.moveTo(x2, y1);
             layout.context.lineTo(x2, y3);
