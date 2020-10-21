@@ -17,8 +17,6 @@ var game = {
         speed: 1, // static
     },
     players: [],
-    eggs: [],
-    splashes: [],
     create_location: function(row, col) {
         return {row:row, col:col};
     },
@@ -54,23 +52,29 @@ var game = {
                             }
                         }
                     }
-                    for(let i = 0; i < game.eggs.length; i++) {
-                        if (game.overlap(move, game.eggs[i].location)) {
-                            if (game.eggs[i].show) {
-                                return false;
+                    for(let i = 0; i < game.players.length; i++) {
+                        for(let j = 0; j < game.players[i].eggs.length; j++) {
+                            if (game.overlap(move, game.players[i].eggs[j].location)) {
+                                if (game.players[i].eggs[j].show) {
+                                    return false;
+                                }
                             }
                         }
                     } // else
                     player.location = move;
                 }
             }, // move
-            drop_egg: function() {
+            drop_egg: function(location, index) {
                 let player = this;
+                if (index) {
+                    if (player.eggs[index]) {
+                        return true;
+                    }
+                } // else
                 let egg = this.create_egg(
-                    game.eggs.length,
-                    game.create_location(player.location.row, player.location.col)
+                    player.eggs.length,
+                    game.create_location(location.row, location.col)
                 );
-                game.eggs.push(egg);
                 player.eggs.push(egg);
             },
             create_egg: function(index, location) {
@@ -86,16 +90,15 @@ var game = {
             },
             eggsplosion: function(index, location) {
                 let player = this;
-                game.eggs[index].show = false;
+                player.eggs[index].show = false;
                 game.check_players_in_splash_zone(location);
-                let splash = player.create_splash(game.splashes.length, location);
-                game.splashes.push(splash);
+                let splash = player.create_splash(player.splashes.length, location);
                 player.splashes.push(splash);
             },
             create_splash: function(index, location) {
                 let player = this;
                 setTimeout(function() {
-                    game.splashes[index].show = false;
+                    player.splashes[index].show = false;
                 }, game.settings.splash_timer);
                 return {
                     show: true,

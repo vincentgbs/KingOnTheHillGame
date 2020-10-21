@@ -97,8 +97,11 @@ var layout = {
         }
     },
     draw_eggs: function() {
-        for(let i = 0; i < game.eggs.length; i++) {
-            layout.draw_egg(game.eggs[i]);
+        for(let i = 0; i < game.players.length; i++) {
+            let player = game.players[i];
+            for(let j = 0; j < player.eggs.length; j++) {
+                layout.draw_egg(player.eggs[j]);
+            }
         }
     },
     draw_eggsplosion: function(splash) {
@@ -123,8 +126,11 @@ var layout = {
         }
     },
     draw_eggsplosions: function() {
-        for(let i = 0; i < game.splashes.length; i++) {
-            layout.draw_eggsplosion(game.splashes[i]);
+        for(let i = 0; i < game.players.length; i++) {
+            let player = game.players[i];
+            for(let j = 0; j < player.splashes.length; j++) {
+                layout.draw_eggsplosion(player.splashes[j]);
+            }
         }
     },
     render: function() {

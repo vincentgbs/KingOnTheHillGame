@@ -4,14 +4,16 @@ var controls = {
     },
     holdArrow: function(direction, e)
     {
-        if (controls.settings.start && game.players[remote.settings.player].surviving) {
-            game.players[remote.settings.player].move(direction);
+        let player = game.players[remote.settings.player];
+        if (controls.settings.start && player.surviving) {
+            player.move(direction);
             return e.preventDefault();
         }
     },
     spacebar: function(e) {
-        if (controls.settings.start && game.players[remote.settings.player].surviving) {
-            game.players[remote.settings.player].drop_egg();
+        let player = game.players[remote.settings.player];
+        if (controls.settings.start && player.surviving) {
+            player.drop_egg(player.location, false);
             return e.preventDefault();
         }
     },

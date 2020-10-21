@@ -157,7 +157,7 @@ var remote = {
             if (remote_eggs[i] != null) {
                 let index = remote_eggs[i][0];
                 let egg = JSON.parse(remote_eggs[i][1]);
-                game.players[index].eggs[egg.pid] = egg;
+                // game.players[index].drop_egg();
             }
         }
     },
