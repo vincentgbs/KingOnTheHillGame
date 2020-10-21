@@ -136,5 +136,7 @@ class Scramble:
         if(self.check_user_and_game(post)):
             self.cur.execute('''UPDATE `scramblegame` SET `started`=1 WHERE `game_id`=?''', (post.game_id,))
             post = scramResponse({"accepted":"true"})
+        else:
+            post = scramResponse({"accepted":"false"})
         self.conn.commit()
         return self.return_post(post)

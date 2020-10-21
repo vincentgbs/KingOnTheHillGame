@@ -31,8 +31,13 @@ var controls = {
     get_nop: function() {
         game.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
-    start_game: function() {
-        controls.settings.start = true;
+    start_game: async function() {
+        let response = await remote.start_game();
+        if (response.accepted == 'true') {
+            controls.settings.start = true;
+        } else {
+            layout.flashMessage('Unable to start game', 999);
+        }
     },
     new_game: function() {
         remote.new_game();

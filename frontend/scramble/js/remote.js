@@ -44,13 +44,26 @@ var remote = {
         }
     },
     join_game: function() {
+        let request = remote.create_request('join_game');
+        request.game_id = remote.get_gid();
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                remote.create_game(remote.xhr.response);
+                resolve(JSON.parse(remote.xhr.response));
+            } catch (err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.send_request(request);
+    },
+    start_game: function() {
         return new Promise(resolve => {
-            let request = remote.create_request('join_game');
-            request.game_id = remote.get_gid();
+            let request = remote.create_request('start_game');
             remote.xhr.open('POST', remote.settings.url);
             remote.xhr.onload = function () {
                 try {
-                    remote.create_game(remote.xhr.response);
                     resolve(JSON.parse(remote.xhr.response));
                 } catch (err) {
                     console.debug(err);
@@ -59,23 +72,6 @@ var remote = {
             };
             remote.send_request(request);
         }); // Promise
-    },
-    start_game: function() {
-        // return new Promise(resolve => {
-        //     let request = remote.create_request('join_game');
-        //     request.game_id = remote.get_gid();
-        //     remote.xhr.open('POST', remote.settings.url);
-        //     remote.xhr.onload = function () {
-        //         try {
-        //             remote.create_game(remote.xhr.response);
-        //             resolve(JSON.parse(remote.xhr.response));
-        //         } catch (err) {
-        //             console.debug(err);
-        //             console.debug(remote.xhr.response);
-        //         }
-        //     };
-        //     remote.send_request(request);
-        // }); // Promise
     },
     send_moves: function() {
         // send player location
