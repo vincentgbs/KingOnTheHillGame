@@ -82,7 +82,7 @@ var remote = {
         // send splash locations
     },
     get_moves: function() {
-        // get player location
+        // get player locations
         // get egg locations
         // get splash locations
     },

@@ -47,7 +47,9 @@ class Scramble:
             `game_id` varchar(255),
             `last_check` int(4),
             `player` int(2) DEFAULT NULL,
-            `json` varchar(1023),
+            `location` varchar(255),
+            `eggs` varchar(1023),
+            `splashes` varchar(1023),
             `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
         self.conn.commit()
         self.conn.close()
@@ -100,7 +102,7 @@ class Scramble:
         check = self.cur.execute('''SELECT `nop`, `player`
         FROM `scramblegame` WHERE `game_id`=? AND `user_id`=?;''',
         (post.game_id,post.user_id)).fetchone()
-        post.last_check = -1; # game has not started
+        post.last_check = -1; # started placeholder
         if (check is None): # no match for game_id + user_id
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
@@ -125,7 +127,7 @@ class Scramble:
             print(post)
         started = game = self.cur.execute('''SELECT `started`
         FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
-        if (started[0] == 1): # game already started
+        if (started[0] == 1):
             post.last_check = 1; # enable controls
         return post
 
@@ -142,3 +144,13 @@ class Scramble:
                 return scramResponse({"accepted":"true"})
         # else
         return scramResponse({"accepted":"false"})
+
+    def send_moves(self, post):
+        if (self.debug):
+            print('send_moves called')
+            print(post)
+
+    def get_moves(self, post):
+        if (self.debug):
+            print('get_moves called')
+            print(post)

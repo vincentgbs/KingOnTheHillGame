@@ -66,12 +66,12 @@ var game = {
             }, // move
             drop_egg: function() {
                 let player = this;
-                game.eggs.push(
-                    this.create_egg(
-                        game.eggs.length,
-                        game.create_location(player.location.row, player.location.col)
-                    )
+                let egg = this.create_egg(
+                    game.eggs.length,
+                    game.create_location(player.location.row, player.location.col)
                 );
+                game.eggs.push(egg);
+                player.eggs.push(egg);
             },
             create_egg: function(index, location) {
                 let player = this;
@@ -87,9 +87,9 @@ var game = {
                 let player = this;
                 game.eggs[index].show = false;
                 game.check_players_in_splash_zone(location);
-                game.splashes.push(
-                    player.create_splash(game.splashes.length, location)
-                );
+                let splash = player.create_splash(game.splashes.length, location);
+                game.splashes.push(splash);
+                player.splashes.push(splash);
             },
             create_splash: function(index, location) {
                 setTimeout(function() {
