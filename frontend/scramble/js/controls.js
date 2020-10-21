@@ -39,11 +39,11 @@ var controls = {
     },
     new_game: function() {
         console.log('new game');
-        // controls.start_game();
+        // controls.create_game();
     },
     join_game: function() {
         console.log('join game');
-        // controls.start_game();
+        // controls.create_game();
     },
 }
 

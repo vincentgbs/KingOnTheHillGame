@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 # from fastapi.middleware.cors import CORSMiddleware
 from modules.koth import Kingonthehill, kothRequest
-# from modules.scramble import Scramble, scramRequest
+from modules.scramble import Scramble, scramRequest
 
 debug = True
 
