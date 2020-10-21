@@ -18,6 +18,7 @@ var game = {
     create_player: function(pid) {
         return {
             pid: pid,
+            surviving: true,
             location: {row:1, col:1, egg: false},
             move: function(direction) {
                 let player = this;
@@ -80,12 +81,14 @@ var game = {
             if (check.row == location.row) {
                 if (check.col > (location.col-game.settings.splash_zone) &&
                 check.col < (location.col+game.settings.splash_zone) ) {
+                    game.players[i].surviving = false;
                     console.log(game.players[i].pid + ' eggsploded.');
                 }
             }
             if (check.col == location.col) {
                 if (check.row > (location.row-game.settings.splash_zone) &&
                 check.row < (location.row+game.settings.splash_zone) ) {
+                    game.players[i].surviving = false;
                     console.log(game.players[i].pid + ' eggsploded.');
                 }
             }

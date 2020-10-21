@@ -22,12 +22,16 @@ var controls = {
     },
     holdArrow: function(direction, e)
     {
-        game.players[controls.settings.player].move(direction);
-        return e.preventDefault();
+        if (game.players[controls.settings.player].surviving) {
+            game.players[controls.settings.player].move(direction);
+            return e.preventDefault();
+        }
     },
     spacebar: function(e) {
-        game.players[controls.settings.player].drop_egg();
-        return e.preventDefault();
+        if (game.players[controls.settings.player].surviving) {
+            game.players[controls.settings.player].drop_egg();
+            return e.preventDefault();
+        }
     },
     addEventListeners: function() {
         document.onkeydown = function(e) {

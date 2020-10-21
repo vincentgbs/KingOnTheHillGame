@@ -61,7 +61,12 @@ var layout = {
     },
     draw_player: function(player) {
         let location = player.location;
-        let color = game.settings.piece_colors[player.pid];
+        let color;
+        if (player.surviving) {
+            color = game.settings.piece_colors[player.pid];
+        } else {
+            color = 'LightGrey';
+        }
         let x = (location.row * layout.settings.square_size) + (layout.settings.square_size/2);
         let y = (location.col * layout.settings.square_size) + (layout.settings.square_size/2);
         layout.context.beginPath();
