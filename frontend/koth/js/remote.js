@@ -1,6 +1,6 @@
 var remote = {
     settings: {
-        url: 'http://localhost:8080/koth-actions',
+        url: 'koth-actions',
         user_id: '',
         player: 0,
         local: false,
@@ -153,6 +153,10 @@ var remote = {
             }
         }
     },
+    get_domain: function() {
+        let url = window.location.href; // get base domain
+        remote.settings.url = (url.substring(0, url.length-15) + 'koth-actions');
+    },
     get_url: function() {
         let url = document.querySelector("#remote_url").value;
         if (url != "") { remote.settings.url = url; }
@@ -186,4 +190,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     } else { // persistence
         remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
+    remote.get_domain();
 });
