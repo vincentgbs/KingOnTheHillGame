@@ -70,7 +70,7 @@ var remote = {
                 }
             };
             remote.send_request(request);
-        });
+        }); // Promise
     },
     send_turn: function(turn) {
         let request = remote.create_request('send_turn');
