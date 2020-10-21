@@ -11,7 +11,9 @@ class scramRequest(BaseModel):
     player: int
     nop: Optional[int] = None
     last_check: Optional[int] = None
-    moves: Optional[str] = None
+    location: Optional[str] = None
+    eggs: Optional[str] = None
+    splashes: Optional[str] = None
 
 class scramResponse(BaseModel):
     def __init__(self, dictionary):
@@ -20,11 +22,17 @@ class scramResponse(BaseModel):
             self.user_id = dictionary["user_id"]
         if("accepted" in dictionary.keys()):
             self.accepted = dictionary["accepted"]
-        if("moves" in dictionary.keys()):
-            self.moves = dictionary["moves"]
+        if("location" in dictionary.keys()):
+            self.location = dictionary["location"]
+        if("eggs" in dictionary.keys()):
+            self.eggs = dictionary["eggs"]
+        if("splashes" in dictionary.keys()):
+            self.splashes = dictionary["splashes"]
     user_id: Optional[str] = None
     accepted: Optional[bool] = None
-    moves: Optional[str] = None
+    location: Optional[str] = None
+    eggs: Optional[str] = None
+    splashes: Optional[str] = None
 
 class Scramble:
     def __init__(self, debug=False, db='db.sqlite3'):
@@ -48,8 +56,6 @@ class Scramble:
             `last_check` int(4),
             `player` int(2) DEFAULT NULL,
             `location` varchar(255),
-            `eggs` varchar(1023),
-            `splashes` varchar(1023),
             `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
         self.conn.commit()
         self.conn.close()
@@ -77,13 +83,16 @@ class Scramble:
         return post
 
     def check_user_and_game(self, post):
-        game = self.cur.execute('''SELECT `user_id`
+        game = self.cur.execute('''SELECT `user_id`, `started`
         FROM `scramblegame` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
         (post.game_id, post.user_id, post.player)).fetchone();
+        response = {'valid':False, 'started':False}
         if (not game is None): # game != null
             if (game[0] == post.user_id):
-                return True
-        return False # else
+                response['valid'] = True
+                if (game[1] == 1):
+                    response['started'] = True
+        return response
 
     def new_game(self, post):
         if (self.debug):
@@ -135,7 +144,7 @@ class Scramble:
         if (self.debug):
             print('start_game called')
             print(post)
-        if(self.check_user_and_game(post)):
+        if(self.check_user_and_game(post)['valid']):
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             if(game[0] == game[1]):
@@ -148,6 +157,16 @@ class Scramble:
     def send_moves(self, post):
         if (self.debug):
             print('send_moves called')
+            print(post)
+        check = self.check_user_and_game(post)
+        if(check['valid'] and check['started']):
+            self.conn.commit()
+            post = scramResponse({"accepted":"true"})
+        return self.return_post(post)
+
+    def send_eggs(self, post):
+        if (self.debug):
+            print('send_eggs called')
             print(post)
 
     def get_moves(self, post):

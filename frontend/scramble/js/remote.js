@@ -78,15 +78,19 @@ var remote = {
     },
     send_moves: function() {
         let request = remote.create_request('send_moves');
-        // send player location (now)
-        // send egg locations (up to last 10)
-        // send splash locations (up to last 10)
+        request.location = game.players[remote.settings.player].location;
+    },
+    send_egg: function() {
+        // let request = remote.create_request('send_moves');
     },
     get_moves: function() {
         let request = remote.create_request('get_moves');
         // get player locations (now)
         // get egg locations (up to last 7)
         // get splash locations (up to last 7)
+    },
+    send_and_get_moves: function() {
+        //
     },
     xhr: new XMLHttpRequest(),
     send_request: function(request) {
@@ -133,5 +137,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
         remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
     remote.get_domain();
-    // setInterval(remote.get_moves, remote.settings.ping_rate);
+    // setInterval(remote.send_and_get_moves, remote.settings.ping_rate);
 });

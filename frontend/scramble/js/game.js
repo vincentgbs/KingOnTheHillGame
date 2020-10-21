@@ -80,6 +80,7 @@ var game = {
                 }, game.settings.egg_timer);
                 return {
                     show: true,
+                    pid: player.pid,
                     location: location,
                 };
             },
@@ -92,11 +93,13 @@ var game = {
                 player.splashes.push(splash);
             },
             create_splash: function(index, location) {
+                let player = this;
                 setTimeout(function() {
                     game.splashes[index].show = false;
                 }, game.settings.splash_timer);
                 return {
                     show: true,
+                    pid: player.pid,
                     location: location,
                 };
             },
