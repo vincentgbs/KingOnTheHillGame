@@ -13,7 +13,7 @@ var remote = {
             action: action,
         };
     },
-    create_game: function(request) {
+    create_game: function(response) {
         try {
             response = JSON.parse(response);
             if (response.player < 0) {

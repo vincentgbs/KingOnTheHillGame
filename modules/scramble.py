@@ -48,7 +48,7 @@ class Scramble:
             `last_check` int(4),
             `player` int(2) DEFAULT NULL,
             `json` varchar(1023),
-            `timestamp` timestamp DEFAULT CURRENT_TIMESTAMP());''')
+            `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
         self.conn.commit()
         self.conn.close()
         return {"Migration": "Complete"}
@@ -134,9 +134,11 @@ class Scramble:
             print('start_game called')
             print(post)
         if(self.check_user_and_game(post)):
-            self.cur.execute('''UPDATE `scramblegame` SET `started`=1 WHERE `game_id`=?''', (post.game_id,))
-            post = scramResponse({"accepted":"true"})
-        else:
-            post = scramResponse({"accepted":"false"})
-        self.conn.commit()
-        return self.return_post(post)
+            game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
+            FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+            if(game[0] == game[1]):
+                self.cur.execute('''UPDATE `scramblegame` SET `started`=1 WHERE `game_id`=?''', (post.game_id,))
+                self.conn.commit()
+                return scramResponse({"accepted":"true"})
+        # else
+        return scramResponse({"accepted":"false"})
