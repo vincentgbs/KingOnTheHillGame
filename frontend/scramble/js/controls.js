@@ -34,16 +34,20 @@ var controls = {
     start_game: async function() {
         let response = await remote.start_game();
         if (response.accepted == 'true') {
+            layout.flashMessage('Starting Game...', 500);
             controls.settings.start = true;
         } else {
-            layout.flashMessage('Unable to start game', 999);
+            layout.flashMessage('Unable to start game', 2500);
         }
     },
     new_game: function() {
         remote.new_game();
     },
-    join_game: function() {
-        remote.join_game();
+    join_game: async function() {
+        let response = await remote.join_game();
+        if (response.last_check > 0) {
+            controls.start_game();
+        }
     },
 }
 

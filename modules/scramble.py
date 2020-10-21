@@ -100,6 +100,7 @@ class Scramble:
         check = self.cur.execute('''SELECT `nop`, `player`
         FROM `scramblegame` WHERE `game_id`=? AND `user_id`=?;''',
         (post.game_id,post.user_id)).fetchone()
+        post.last_check = -1; # game has not started
         if (check is None): # no match for game_id + user_id
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
@@ -125,7 +126,7 @@ class Scramble:
         started = game = self.cur.execute('''SELECT `started`
         FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
         if (started[0] == 1): # game already started
-            False # self.get_moves(post)
+            post.last_check = 1; # enable controls
         return post
 
     def start_game(self, post):

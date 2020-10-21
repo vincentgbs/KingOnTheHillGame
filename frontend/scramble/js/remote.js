@@ -45,18 +45,21 @@ var remote = {
         }
     },
     join_game: function() {
-        let request = remote.create_request('join_game');
-        request.game_id = remote.get_gid();
-        remote.xhr.open('POST', remote.settings.url);
-        remote.xhr.onload = function () {
-            try {
-                remote.create_game(remote.xhr.response);
-            } catch (err) {
-                console.debug(err);
-                console.debug(remote.xhr.response);
-            }
-        };
-        remote.send_request(request);
+        return new Promise(resolve => {
+            let request = remote.create_request('join_game');
+            request.game_id = remote.get_gid();
+            remote.xhr.open('POST', remote.settings.url);
+            remote.xhr.onload = function () {
+                try {
+                    remote.create_game(remote.xhr.response);
+                    resolve(JSON.parse(remote.xhr.response));
+                } catch (err) {
+                    console.debug(err);
+                    console.debug(remote.xhr.response);
+                }
+            };
+            remote.send_request(request);
+        }); // Promise
     },
     start_game: function() {
         return new Promise(resolve => {
@@ -128,4 +131,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
         remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
     remote.get_domain();
+    // setInterval(remote.get_moves, remote.settings.ping_rate);
 });
