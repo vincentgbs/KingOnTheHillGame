@@ -1,34 +1,17 @@
 var controls = {
     settings: {
-        player: 0,
-    },
-    overlap: function(player, location) {
-        if (player.location.row == location.row && player.location.col == location.col) {
-            return true;
-        }
-    },
-    avoid_blocks: function(player) {
-        for (let i = 0; i < game.settings.vertical; i++ ) {
-            for (let j = 0; j < game.settings.horizontal; j++ ) {
-                if (i%2==0 && j%2==0) {
-                    if (controls.overlap(player, game.create_location(i, j))) {
-                        return false;
-                    }
-                }
-            }
-        } // else
-        return true;
+        start: false,
     },
     holdArrow: function(direction, e)
     {
-        if (game.players[controls.settings.player].surviving) {
-            game.players[controls.settings.player].move(direction);
+        if (controls.settings.start && game.players[remote.settings.player].surviving) {
+            game.players[remote.settings.player].move(direction);
             return e.preventDefault();
         }
     },
     spacebar: function(e) {
-        if (game.players[controls.settings.player].surviving) {
-            game.players[controls.settings.player].drop_egg();
+        if (controls.settings.start && game.players[remote.settings.player].surviving) {
+            game.players[remote.settings.player].drop_egg();
             return e.preventDefault();
         }
     },
@@ -44,6 +27,23 @@ var controls = {
             ek = e.keyCode;
             if (ek==32) {controls.spacebar(e);}
         };
+    },
+    get_nop: function() {
+        game.settings.no_of_players = document.querySelector("#no_of_players").value;
+    },
+    create_game: function() {
+        remote.create_game();
+    },
+    start_game: function() {
+        controls.settings.start = true;
+    },
+    new_game: function() {
+        console.log('new game');
+        // controls.start_game();
+    },
+    join_game: function() {
+        console.log('join game');
+        // controls.start_game();
     },
 }
 

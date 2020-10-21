@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 # from fastapi.middleware.cors import CORSMiddleware
 from modules.koth import Kingonthehill, kothRequest
-from modules.pkd import Pokedraft, pkdRequest
+# from modules.scramble import Scramble, scramRequest
 
 debug = True
 
@@ -12,7 +12,7 @@ frontendroot = "/vagrant/KingOnTheHillGame/frontend"
 app.mount("/koth", StaticFiles(directory=frontendroot+"/koth"), name="koth")
 if (debug):
     app.mount("/koth-test", StaticFiles(directory=frontendroot+"/koth-test"), name="koth-test")
-app.mount("/pkd", StaticFiles(directory=frontendroot+"/pkd"), name="pkd")
+app.mount("/scramble", StaticFiles(directory=frontendroot+"/scramble"), name="scramble")
 
 # app.add_middleware(
 #     CORSMiddleware,
@@ -29,7 +29,7 @@ def read_root():
 @app.get("/koth-migrate")
 def read_root():
     if (debug):
-        k = Kingonthehill()
+        k = Kingonthehill(debug)
         return k.migrate()
 
 @app.post("/koth-actions")
@@ -46,26 +46,24 @@ def create_game(post: kothRequest):
     else:
         return {"accepted":"false"}
 
-@app.get("/pkd-migrate")
+@app.get("/scramble-migrate")
 def read_root():
     if (debug):
-        p = Pokedraft()
-        return p.migrate()
+        s = Scramble(debug)
+        return s.migrate()
 
-@app.post("/pkd-actions")
-def create_game(post: pkdRequest):
-    p = Pokedraft(debug)
-    if (post.action == 'new_draft'):
-        return p.new_draft(post)
-    elif (post.action == 'join_draft'):
-        return p.join_draft(post)
-    elif (post.action == 'get_options'):
-        return p.get_options(post);
-    elif (post.action == 'start_draft'):
-        return p.start_draft(post)
-    elif (post.action == 'send_pick'):
-        return p.send_pick(post)
-    elif (post.action == 'get_picks'):
-        return p.get_picks(post)
+@app.post("/scramble-actions")
+def create_game(post: scramRequest):
+    s = Scramble(debug)
+    if (post.action == 'new_game'):
+        return s.new_game(post)
+    elif (post.action == 'join_game'):
+        return s.join_game(post)
+    elif (post.action == 'start_game'):
+        return s.start_game(post)
+    elif (post.action == 'send_moves'):
+        return s.send_moves(post)
+    elif (post.action == 'get_moves'):
+        return s.get_moves(post)
     else:
         return {"accepted":"false"}

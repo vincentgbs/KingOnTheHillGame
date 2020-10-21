@@ -2,7 +2,7 @@ var layout = {
     settings: {
         screen_ratio: (2/3),
         square_size: null,
-        framerate: 1000,
+        framerate: 100,
         egg_color: 'Khaki',
         flash_egg_color: 'Beige',
     },
@@ -128,11 +128,52 @@ var layout = {
         }
     },
     render: function() {
-        layout.draw_lines();
-        layout.draw_blocks();
+        layout.draw_lines(); // static
+        layout.draw_blocks(); // static
         layout.draw_players();
         layout.draw_eggs();
         layout.draw_eggsplosions();
+    },
+    create_game: function() {
+        let html = '<button id="start_game">Start Game</button>';
+        if (game.settings.game_id) {
+            html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
+        }
+        html += ' <button id="reset_options">Reset Options</button>';
+        document.querySelector("#turn").innerHTML = html;
+        if (document.querySelector("#reset_options")) {
+            document.querySelector("#reset_options").onclick = layout.reset_options;
+        }
+    },
+    reset_options: function() {
+        document.querySelector("#turn").innerHTML = `
+        <text id="nop_div">
+            <label>Number of players: </label>
+            <select id="no_of_players">
+                <option selected>2</option>
+                <option>3</option>
+                <option>4</option>
+            </select>
+        </text>
+        <button id="new_game">New Game</button>
+        <b>OR</b>
+        <div id="gid_div">
+            <label>Game id: </label>
+            <input type="text" id="join_game_id"/>
+            <button id="join_game">Join Game</button>
+        </div>`;
+        if (document.querySelector("#join_game_id")) {
+            document.querySelector("#join_game_id").onkeyup = remote.get_gid;
+        }
+        if (document.querySelector("#no_of_players")) {
+            document.querySelector("#no_of_players").onchange = controls.get_nop;
+        }
+        if (document.querySelector("#new_game")) {
+            document.querySelector("#new_game").onclick = controls.new_game;
+        }
+        if (document.querySelector("#join_game")) {
+            document.querySelector("#join_game").onclick = controls.join_game;
+        }
     },
 };
 
@@ -141,4 +182,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
     setInterval(layout.render, layout.framerate);
+    layout.reset_options();
 });
