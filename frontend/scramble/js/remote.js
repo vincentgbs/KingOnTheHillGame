@@ -77,14 +77,16 @@ var remote = {
         }); // Promise
     },
     send_moves: function() {
-        // send player location
-        // send egg locations
-        // send splash locations
+        let request = remote.create_request('send_moves');
+        // send player location (now)
+        // send egg locations (up to last 10)
+        // send splash locations (up to last 10)
     },
     get_moves: function() {
-        // get player locations
-        // get egg locations
-        // get splash locations
+        let request = remote.create_request('get_moves');
+        // get player locations (now)
+        // get egg locations (up to last 7)
+        // get splash locations (up to last 7)
     },
     xhr: new XMLHttpRequest(),
     send_request: function(request) {
