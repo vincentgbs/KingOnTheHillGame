@@ -65,5 +65,9 @@ def create_game(post: scramRequest):
         return s.send_moves(post)
     elif (post.action == 'get_moves'):
         return s.get_moves(post)
+    elif (post.action == 'send_egg'):
+        return s.send_eggs(post)
+    elif (post.action == 'get_eggs'):
+        return s.get_eggs(post)
     else:
         return {"accepted":"false"}

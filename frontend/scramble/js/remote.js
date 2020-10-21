@@ -5,6 +5,7 @@ var remote = {
         player: 0,
         ping_rate: 100,
         max_send_moves: 100,
+        max_send_eggs: 10,
     },
     create_request: function(action) {
         return {
@@ -95,8 +96,25 @@ var remote = {
         };
         remote.send_request(request);
     },
-    send_egg: function() {
-        // let request = remote.create_request('send_egg');
+    send_egg: function(attempts) {
+        if (attempts > remote.settings.max_send_eggs) {return false;}
+        let request = remote.create_request('send_egg');
+        let eggs = game.players[remote.settings.player].eggs;
+        let last_egg = eggs[eggs.length - 1];
+        request.eggs = JSON.stringify(last_egg);
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                if (!response.accepted) {
+                    remote.send_egg(attempts+1);
+                }
+            } catch (err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.send_request(request);
     },
     get_moves: function() {
         let request = remote.create_request('get_moves');
@@ -104,16 +122,44 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                console.debug(response);
-                console.debug(response.locations);
+                remote.move_players(response.locations);
             } catch (err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);
             }
         };
         remote.send_request(request);
-        // get egg locations (up to last 7)
-        // get splash locations (up to last 7)
+    },
+    get_eggs: function() {
+        let request = remote.create_request('get_eggs');
+        remote.xhr.open('POST', remote.settings.url);
+        remote.xhr.onload = function () {
+            try {
+                let response = JSON.parse(remote.xhr.response);
+                remote.place_eggs(response.eggs);
+            } catch (err) {
+                console.debug(err);
+                console.debug(remote.xhr.response);
+            }
+        };
+        remote.send_request(request);
+    },
+    move_players: function(remote_locations) {
+        for(let i = 0; i < remote_locations.length; i++) {
+            if (remote_locations[i] != null) {
+                let index = response.locations[i][0];
+                game.players[index].location = JSON.parse(remote_locations[i][1]);
+            }
+        }
+    },
+    place_eggs: function(remote_eggs) {
+        for(let i = 0; i < remote_eggs.length; i++) {
+            if (remote_eggs[i] != null) {
+                let index = remote_eggs[i][0];
+                let egg = JSON.parse(remote_eggs[i][1]);
+                game.players[index].eggs[egg.pid] = egg;
+            }
+        }
     },
     send_and_get_moves: function() {
         //

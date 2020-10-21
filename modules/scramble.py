@@ -57,7 +57,6 @@ class Scramble:
             `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
         self.cur.execute('''CREATE TABLE `scrambleeggs` (
             `game_id` varchar(255),
-            `last_check` int(4),
             `player` int(2) DEFAULT NULL,
             `egg` varchar(255),
             `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);''')
@@ -152,11 +151,11 @@ class Scramble:
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             if(game[0] == game[1]):
-                self.cur.execute('''UPDATE `scramblegame` SET `started`=1 WHERE `game_id`=?''', (post.game_id,))
+                self.cur.execute('''UPDATE `scramblegame` SET `started`=1
+                WHERE `game_id`=?''', (post.game_id,))
                 self.conn.commit()
                 return scramResponse({"accepted":"true"})
-        # else
-        return scramResponse({"accepted":"false"})
+        return scramResponse({"accepted":"false"}) # else
 
     def send_moves(self, post):
         if (self.debug):
@@ -165,14 +164,19 @@ class Scramble:
         check = self.check_user_and_game(post)
         if(check['valid'] and check['started']):
             self.cur.execute('''INSERT INTO `scramblemoves` (`game_id`, `player` ,`location`) VALUES (?, ?, ?)''', (post.game_id, post.player, post.location))
-            self.conn.commit()
             post = scramResponse({"accepted":"true"})
+        self.conn.commit()
         return self.return_post(post)
 
     def send_eggs(self, post):
         if (self.debug):
             print('send_eggs called')
             print(post)
+        check = self.check_user_and_game(post)
+        if(check['valid'] and check['started']):
+            self.cur.execute('''INSERT INTO `scrambleeggs` (`game_id`, `player`, `egg`) VALUES (?, ?, ?)''', (post.game_id, post.player, post.eggs))
+            post = scramResponse({"accepted":"true"})
+        self.conn.commit()
         return self.return_post(post)
 
     def get_moves(self, post):
@@ -189,4 +193,20 @@ class Scramble:
                 FROM `scramblemoves` WHERE `game_id`=? AND `player`=? ORDER BY `timestamp` DESC
                 LIMIT 1;''', (post.game_id, i)).fetchone())
             post = scramResponse({"locations":locations})
+        return self.return_post(post)
+
+    def get_eggs(self, post):
+        if (self.debug):
+            print('get_eggs called')
+            print(post)
+        check = self.check_user_and_game(post)
+        if(check['valid'] and check['started']):
+            nop = self.cur.execute('''SELECT `nop`
+            FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+            eggs = []
+            for i in range(0, nop[0]):
+                eggs.append(self.cur.execute('''SELECT `player`, `egg`
+                FROM `scrambleeggs` WHERE `game_id`=? AND `player`=? ORDER BY `timestamp` DESC
+                LIMIT 9;''', (post.game_id, i)).fetchone())
+            post = scramResponse({"eggs":eggs})
         return self.return_post(post)
