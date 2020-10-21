@@ -7,9 +7,11 @@ var game = {
         piece_colors: ['royalblue', 'darkorange', 'forestgreen', 'darkred'], // static
         egg_timer: 2500,
         splash_zone: 3,
+        splash_timer: 500,
     },
     players: [],
     eggs: [],
+    splashes: [],
     create_location: function(row, col) {
         return {row:row, col:col, egg: false};
     },
@@ -60,7 +62,19 @@ var game = {
     },
     eggsplosion: function(index, location) {
         game.eggs[index].show = false;
-        layout.eggsplosion(location);
+        game.check_players_in_splash_zone(location);
+        game.splashes.push(game.create_splash(game.splashes.length, location));
+    },
+    create_splash: function(index, location) {
+        setTimeout(function() {
+            game.splashes[index].show = false;
+        }, game.settings.splash_timer);
+        return {
+            show: true,
+            location: location,
+        };
+    },
+    check_players_in_splash_zone: function(location) {
         for(let i = 0; i < game.players.length; i++) {
             let check = game.players[i].location;
             if (check.row == location.row) {

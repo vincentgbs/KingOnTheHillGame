@@ -96,11 +96,38 @@ var layout = {
             layout.draw_egg(game.eggs[i]);
         }
     },
+    draw_eggsplosion: function(splash) {
+        if (splash.show) {
+            let location = splash.location;
+            let x1 = ((location.row-2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let x2 = ((location.row) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let x3 = ((location.row+2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y1 = ((location.col-2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y2 = ((location.col) * layout.settings.square_size) + (layout.settings.square_size/2);
+            let y3 = ((location.col+2) * layout.settings.square_size) + (layout.settings.square_size/2);
+            layout.context.beginPath(); // vertical line
+            layout.context.moveTo(x2, y1);
+            layout.context.lineTo(x2, y3);
+            layout.context.lineWidth = 5;
+            layout.context.stroke();
+            layout.context.beginPath(); // horizontal line
+            layout.context.moveTo(x1, y2);
+            layout.context.lineTo(x3, y2);
+            layout.context.lineWidth = 5;
+            layout.context.stroke();
+        }
+    },
+    draw_eggsplosions: function() {
+        for(let i = 0; i < game.splashes.length; i++) {
+            layout.draw_eggsplosion(game.splashes[i]);
+        }
+    },
     render: function() {
         layout.draw_lines();
         layout.draw_blocks();
         layout.draw_players();
         layout.draw_eggs();
+        layout.draw_eggsplosions();
     },
 };
 
