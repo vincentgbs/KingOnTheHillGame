@@ -1,7 +1,6 @@
 var controls = {
     settings: {
         player: 0,
-        speed: 1,
     },
     overlap: function(player, location) {
         if (player.location.row == location.row && player.location.col == location.col) {

@@ -14,6 +14,7 @@ var game = {
             {v:((9-1)/2),h:1},
             {v:((9-1)/2),h:(9-2)},
         ],
+        speed: 1, // static
     },
     players: [],
     eggs: [],
@@ -31,26 +32,26 @@ var game = {
             move: function(direction) {
                 let player = this;
                 if (direction == 'u') {
-                    player.location.col -= controls.settings.speed;
+                    player.location.col -= game.settings.speed;
                 } else if (direction == 'd') {
-                    player.location.col += controls.settings.speed;
+                    player.location.col += game.settings.speed;
                 } else if (direction == 'l') {
-                    player.location.row -= controls.settings.speed;
+                    player.location.row -= game.settings.speed;
                 } else if (direction == 'r') {
-                    player.location.row += controls.settings.speed;
+                    player.location.row += game.settings.speed;
                 }
                 // undo move if blocked
                 if (!controls.avoid_blocks(player) ||
                 player.location.col < 0 || player.location.row < 0 ||
                 player.location.col >= game.settings.vertical || player.location.row >= game.settings.horizontal) {
                     if (direction == 'u') {
-                        player.location.col += controls.settings.speed;
+                        player.location.col += game.settings.speed;
                     } else if (direction == 'd') {
-                        player.location.col -= controls.settings.speed;
+                        player.location.col -= game.settings.speed;
                     } else if (direction == 'l') {
-                        player.location.row += controls.settings.speed;
+                        player.location.row += game.settings.speed;
                     } else if (direction == 'r') {
-                        player.location.row -= controls.settings.speed;
+                        player.location.row -= game.settings.speed;
                     }
                 }
             }, // move
