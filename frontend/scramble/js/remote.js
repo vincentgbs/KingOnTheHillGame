@@ -23,6 +23,7 @@ var remote = {
                 game.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
                 game.create_game();
+                layout.game_options();
             }
         } catch(err) {
             console.debug(err);
@@ -50,7 +51,6 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 remote.create_game(remote.xhr.response);
-                resolve(JSON.parse(remote.xhr.response));
             } catch (err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);

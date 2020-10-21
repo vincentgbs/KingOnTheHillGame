@@ -100,7 +100,6 @@ class Scramble:
         check = self.cur.execute('''SELECT `nop`, `player`
         FROM `scramblegame` WHERE `game_id`=? AND `user_id`=?;''',
         (post.game_id,post.user_id)).fetchone()
-        post.current = -1
         if (check is None): # no match for game_id + user_id
             game = self.cur.execute('''SELECT `nop`, COUNT(`player`)
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
@@ -123,10 +122,10 @@ class Scramble:
         if (self.debug):
             print('rejoin_game called')
             print(post)
-        last_turn = self.cur.execute('''SELECT `last_check`, `json` FROM `scramblemoves`
-        WHERE `game_id`=? AND `current`>=? ORDER BY `current` DESC;''', (post.game_id, 0)).fetchone();
-        if (not last_turn is None): # game already started
-            post.current = last_turn[0]
+        started = game = self.cur.execute('''SELECT `started`
+        FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
+        if (started[0] == 1): # game already started
+            False # self.get_moves(post)
         return post
 
     def start_game(self, post):

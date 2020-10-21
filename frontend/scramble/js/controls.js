@@ -41,11 +41,9 @@ var controls = {
     },
     new_game: function() {
         remote.new_game();
-        layout.game_options();
     },
     join_game: function() {
         remote.join_game();
-        layout.game_options();
     },
 }
 
