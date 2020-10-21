@@ -1,6 +1,6 @@
 var remote = {
     settings: {
-        url: 'http://localhost:8080/scramble-actions',
+        url: 'scramble-actions',
         user_id: '',
         player: 0,
         ping_rate: 100,
@@ -61,7 +61,21 @@ var remote = {
         }); // Promise
     },
     start_game: function() {
-        //
+        // return new Promise(resolve => {
+        //     let request = remote.create_request('join_game');
+        //     request.game_id = remote.get_gid();
+        //     remote.xhr.open('POST', remote.settings.url);
+        //     remote.xhr.onload = function () {
+        //         try {
+        //             remote.create_game(remote.xhr.response);
+        //             resolve(JSON.parse(remote.xhr.response));
+        //         } catch (err) {
+        //             console.debug(err);
+        //             console.debug(remote.xhr.response);
+        //         }
+        //     };
+        //     remote.send_request(request);
+        // }); // Promise
     },
     send_moves: function() {
         // send player location
@@ -84,6 +98,10 @@ var remote = {
             console.debug(err);
             console.debug(request);
         }
+    },
+    get_domain: function() {
+        let url = window.location.href; // get base domain
+        remote.settings.url = (url.substring(0, url.length-19) + 'scramble-actions');
     },
     get_gid: function() {
         let gid;
@@ -113,4 +131,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     } else { // persistence
         remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
+    remote.get_domain();
 });

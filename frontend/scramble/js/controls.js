@@ -31,19 +31,16 @@ var controls = {
     get_nop: function() {
         game.settings.no_of_players = document.querySelector("#no_of_players").value;
     },
-    create_game: function() {
-        remote.create_game();
-    },
     start_game: function() {
         controls.settings.start = true;
     },
     new_game: function() {
-        console.log('new game');
-        // controls.create_game();
+        remote.new_game();
+        layout.game_options();
     },
     join_game: function() {
-        console.log('join game');
-        // controls.create_game();
+        remote.join_game();
+        layout.game_options();
     },
 }
 

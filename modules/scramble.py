@@ -48,7 +48,7 @@ class Scramble:
             `last_check` int(4),
             `player` int(2) DEFAULT NULL,
             `json` varchar(1023),
-            `timestamp`);''')
+            `timestamp` timestamp DEFAULT CURRENT_TIMESTAMP());''')
         self.conn.commit()
         self.conn.close()
         return {"Migration": "Complete"}

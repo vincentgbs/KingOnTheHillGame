@@ -134,7 +134,7 @@ var layout = {
         layout.draw_eggs();
         layout.draw_eggsplosions();
     },
-    create_game: function() {
+    game_options: function() {
         let html = '<button id="start_game">Start Game</button>';
         if (game.settings.game_id) {
             html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
@@ -143,6 +143,9 @@ var layout = {
         document.querySelector("#turn").innerHTML = html;
         if (document.querySelector("#reset_options")) {
             document.querySelector("#reset_options").onclick = layout.reset_options;
+        }
+        if (document.querySelector("#start_game")) {
+            document.querySelector("#start_game").onclick = controls.start_game;
         }
     },
     reset_options: function() {
