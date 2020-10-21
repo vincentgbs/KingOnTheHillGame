@@ -75,6 +75,15 @@ class Kingonthehill:
         post.user_id = None # never return user_id
         return post
 
+    def check_user_and_game(self, post):
+        game = self.cur.execute('''SELECT `user_id`
+        FROM `kothgame` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
+        (post.game_id, post.user_id, post.player)).fetchone();
+        if (not game is None): # game != null
+            if (game[0] == post.user_id):
+                return True
+        return False # else
+
     def new_game(self, post):
         if (self.debug):
             print('new_game called')
@@ -120,15 +129,6 @@ class Kingonthehill:
         if (not last_turn is None): # game already started
             post.current = last_turn[0]
         return post
-
-    def check_user_and_game(self, post):
-        game = self.cur.execute('''SELECT `user_id`
-        FROM `kothgame` WHERE `game_id`=? AND `user_id`=? AND `player`=?;''',
-        (post.game_id, post.user_id, post.player)).fetchone();
-        if (not game is None): # game != null
-            if (game[0] == post.user_id):
-                return True
-        return False # else
 
     def send_turn(self, post):
         if (self.debug):
