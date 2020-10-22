@@ -87,6 +87,7 @@ var game = {
                 return {
                     show: true,
                     pid: player.pid,
+                    index: index,
                     location: location,
                 };
             },
@@ -105,6 +106,7 @@ var game = {
                 return {
                     show: true,
                     pid: player.pid,
+                    index: index,
                     location: location,
                 };
             },

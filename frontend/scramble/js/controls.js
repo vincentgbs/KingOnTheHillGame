@@ -14,6 +14,7 @@ var controls = {
         let player = game.players[remote.settings.player];
         if (controls.settings.start && player.surviving) {
             player.drop_egg(player.location, false);
+            remote.send_egg(0);
             return e.preventDefault();
         }
     },

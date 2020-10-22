@@ -3,7 +3,7 @@ var remote = {
         url: 'scramble-actions',
         user_id: '',
         player: 0,
-        ping_rate: 100,
+        ping_rate: 500,
         max_send_moves: 100,
         max_send_eggs: 10,
     },
@@ -155,14 +155,16 @@ var remote = {
     place_eggs: function(remote_eggs) {
         for(let i = 0; i < remote_eggs.length; i++) {
             if (remote_eggs[i] != null) {
-                let index = remote_eggs[i][0];
+                let pid = remote_eggs[i][0];
                 let egg = JSON.parse(remote_eggs[i][1]);
-                // game.players[index].drop_egg();
+                game.players[pid].drop_egg(egg.location, egg.index);
             }
         }
     },
     send_and_get_moves: function() {
-        //
+        remote.send_moves(0);
+        remote.get_moves();
+        remote.get_eggs();
     },
     xhr: new XMLHttpRequest(),
     send_request: function(request) {
