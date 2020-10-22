@@ -2,7 +2,7 @@ var layout = {
     settings: {
         screen_ratio: (2/3),
         square_size: null,
-        framerate: 100,
+        framerate: 50,
         egg_color: 'Khaki',
         flash_egg_color: 'Beige',
     },

@@ -3,7 +3,7 @@ var remote = {
         url: 'scramble-actions',
         user_id: '',
         player: 0,
-        ping_rate: 250,
+        ping_rate: 200,
         max_send_moves: 10,
         max_send_eggs: 5,
         refresh: null, // setInterval

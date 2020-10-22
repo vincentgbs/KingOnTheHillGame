@@ -4,11 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from modules.koth import Kingonthehill, kothRequest
 from modules.scramble import Scramble, scramRequest
 
-debug = True
+debug = False
 
 app = FastAPI()
 
 frontendroot = "/vagrant/KingOnTheHillGame/frontend"
+# frontendroot = "/home/vincent_gbs11/KingOnTheHillGame/frontend"
 app.mount("/koth", StaticFiles(directory=frontendroot+"/koth"), name="koth")
 if (debug):
     app.mount("/koth-test", StaticFiles(directory=frontendroot+"/koth-test"), name="koth-test")

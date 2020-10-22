@@ -14,7 +14,8 @@ apt install python3-pip -y
 pip3 install fastapi # framework
 pip3 install uvicorn # server
 pip3 install aiofiles # static files library
-uvicorn main:app --reload --host 0.0.0.0 & disown
+uvicorn main:app --reload --host 0.0.0.0
+# uvicorn main:app --reload --host 0.0.0.0 & disown
 # apache proxy for port forwarding
 apt install apache2 -y
 cp /etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf.bak
