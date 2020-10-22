@@ -136,12 +136,36 @@ var game = {
                 if (check.col > (location.col-game.settings.splash_zone) &&
                 check.col < (location.col+game.settings.splash_zone) ) {
                     game.players[i].surviving = false;
+                    if (i == remote.settings.player) {
+                        clearInterval(remote.settings.refresh);
+                        setTimeout(function() {
+                            clearInterval(remote.settings.refresh);
+                            setTimeout(function() {
+                                clearInterval(remote.settings.refresh);
+                                setTimeout(function() {
+                                    clearInterval(remote.settings.refresh);
+                                },1);
+                            },1);
+                        },1);
+                    }
                 }
             }
             if (check.col == location.col) {
                 if (check.row > (location.row-game.settings.splash_zone) &&
                 check.row < (location.row+game.settings.splash_zone) ) {
                     game.players[i].surviving = false;
+                    if (i == remote.settings.player) {
+                        clearInterval(remote.settings.refresh);
+                        setTimeout(function() {
+                            clearInterval(remote.settings.refresh);
+                            setTimeout(function() {
+                                clearInterval(remote.settings.refresh);
+                                setTimeout(function() {
+                                    clearInterval(remote.settings.refresh);
+                                },1);
+                            },1);
+                        },1);
+                    }
                 }
             }
         }

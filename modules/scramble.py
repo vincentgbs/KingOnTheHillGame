@@ -188,25 +188,13 @@ class Scramble:
             nop = self.cur.execute('''SELECT `nop`
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             locations = []
+            eggs = []
             for i in range(0, nop[0]):
                 locations.append(self.cur.execute('''SELECT `player`, `location`
                 FROM `scramblemoves` WHERE `game_id`=? AND `player`=? ORDER BY `timestamp` DESC
                 LIMIT 1;''', (post.game_id, i)).fetchone())
-            post = scramResponse({"locations":locations})
-        return self.return_post(post)
-
-    def get_eggs(self, post):
-        if (self.debug):
-            print('get_eggs called')
-            print(post)
-        check = self.check_user_and_game(post)
-        if(check['valid'] and check['started']):
-            nop = self.cur.execute('''SELECT `nop`
-            FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
-            eggs = []
-            for i in range(0, nop[0]):
                 eggs.append(self.cur.execute('''SELECT `player`, `egg`
                 FROM `scrambleeggs` WHERE `game_id`=? AND `player`=? ORDER BY `timestamp` DESC
                 LIMIT 9;''', (post.game_id, i)).fetchone())
-            post = scramResponse({"eggs":eggs})
+            post = scramResponse({"locations":locations, "eggs":eggs})
         return self.return_post(post)
