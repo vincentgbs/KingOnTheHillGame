@@ -70,12 +70,14 @@ var game = {
                     if (player.eggs[index]) {
                         return true;
                     }
-                } // else
+                } else {
+                    index = player.eggs.length;
+                }
                 let egg = this.create_egg(
                     player.eggs.length,
                     game.create_location(location.row, location.col)
                 );
-                player.eggs.push(egg);
+                player.eggs[index] = egg;
             },
             create_egg: function(index, location) {
                 let player = this;
