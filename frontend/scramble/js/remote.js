@@ -3,7 +3,7 @@ var remote = {
         url: 'scramble-actions',
         user_id: '',
         player: 0,
-        ping_rate: 500,
+        ping_rate: 1000,
         max_send_moves: 100,
         max_send_eggs: 10,
     },
@@ -122,7 +122,10 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                remote.move_players(response.locations);
+                console.debug(respone);
+                if (response.locations) {
+                    remote.move_players(response.locations);
+                }
             } catch (err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);
@@ -136,7 +139,10 @@ var remote = {
         remote.xhr.onload = function () {
             try {
                 let response = JSON.parse(remote.xhr.response);
-                remote.place_eggs(response.eggs);
+                console.debug(respone);
+                if (response.eggs) {
+                    remote.place_eggs(response.eggs);
+                }
             } catch (err) {
                 console.debug(err);
                 console.debug(remote.xhr.response);
@@ -148,7 +154,9 @@ var remote = {
         for(let i = 0; i < remote_locations.length; i++) {
             if (remote_locations[i] != null) {
                 let index = response.locations[i][0];
-                game.players[index].location = JSON.parse(remote_locations[i][1]);
+                if (remote.settings.player != index) {
+                    game.players[index].location = JSON.parse(remote_locations[i][1]);
+                }
             }
         }
     },
@@ -157,11 +165,14 @@ var remote = {
             if (remote_eggs[i] != null) {
                 let pid = remote_eggs[i][0];
                 let egg = JSON.parse(remote_eggs[i][1]);
-                game.players[pid].drop_egg(egg.location, egg.index);
+                if (remote.settings.player != index) {
+                    game.players[pid].drop_egg(egg.location, egg.index);
+                }
             }
         }
     },
     send_and_get_moves: function() {
+        console.log('send_and_get_moves');
         remote.send_moves(0);
         remote.get_moves();
         remote.get_eggs();
@@ -211,5 +222,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
         remote.settings.user_id = window.localStorage.getItem('remote_user_id');
     }
     remote.get_domain();
-    // setInterval(remote.send_and_get_moves, remote.settings.ping_rate);
+    setInterval(remote.send_and_get_moves, remote.settings.ping_rate);
 });
