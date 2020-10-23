@@ -101,6 +101,9 @@ var remote = {
         xhr.onload = function () {
             try {
                 let response = JSON.parse(xhr.response);
+                if (response.last_check > 0) {
+                    controls.start_game();
+                }
                 if (response.locations) {
                     remote.move_players(response.locations);
                 }
@@ -144,7 +147,6 @@ var remote = {
         }
     },
     send_and_get_moves: function() {
-        console.log('send_and_get_moves');
         remote.send_moves();
         remote.get_moves();
     },

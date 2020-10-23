@@ -27,6 +27,8 @@ class scramResponse(BaseModel):
             self.eggs = dictionary["eggs"]
         if("splashes" in dictionary.keys()):
             self.splashes = dictionary["splashes"]
+        if("last_check" in dictionary.keys()):
+            self.last_check = dictionary["last_check"]
     user_id: Optional[str] = None
     accepted: Optional[bool] = None
     locations: Optional[str] = None
@@ -183,8 +185,10 @@ class Scramble:
         if (self.debug):
             print('get_moves called')
             print(post)
+        post.last_check = -1; # default off
         check = self.check_user_and_game(post)
         if(check['valid'] and check['started']):
+            post.last_check = 1; # enable controls
             nop = self.cur.execute('''SELECT `nop`
             FROM `scramblegame` WHERE `game_id`=?;''', (post.game_id,)).fetchone()
             locations = []

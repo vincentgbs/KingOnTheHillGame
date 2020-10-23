@@ -5,6 +5,7 @@ var layout = {
         framerate: 100,
         egg_color: 'Khaki',
         flash_egg_color: 'Beige',
+        refresh: null, // setInterval
     },
     canvas: null,
     context: null,
@@ -199,6 +200,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     console.log('layout.js (1) loaded');
     const canvas = document.querySelector("#board");
     layout.set(canvas, window.screen.height, window.screen.width);
-    setInterval(layout.render, layout.framerate);
+    layout.settings.refresh = setInterval(layout.render, layout.framerate);
     layout.reset_options();
 });
