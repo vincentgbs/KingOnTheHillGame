@@ -27,8 +27,8 @@ var layout = {
     },
     start_game: function() {
         let html = '<label>Turn: </label><text id="player_turn"></text>';
-        if (game.settings.game_id) {
-            html += ' <label>Game Id: </label><text id="game_id">'+game.settings.game_id+'</text>';
+        if (remote.settings.game_id) {
+            html += ' <label>Game Id: </label><text id="game_id">'+remote.settings.game_id+'</text>';
         }
         html += ' <button id="reset_options">Reset Options</button>';
         document.querySelector("#turn").innerHTML = html;

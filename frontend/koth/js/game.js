@@ -1,6 +1,5 @@
 var game = {
     settings: {
-        game_id: false,
         no_of_players: 2,
         vertical: 7, // static
         horizontal: 7, // static

@@ -1,6 +1,7 @@
 var remote = {
     settings: {
         url: 'koth-actions',
+        game_id: false,
         user_id: '',
         player: 0,
         local: false,
@@ -9,7 +10,7 @@ var remote = {
     },
     create_request: function(action) {
         return {
-            game_id: game.settings.game_id,
+            game_id: remote.settings.game_id,
             user_id: remote.settings.user_id,
             player: remote.settings.player,
             action: action,
@@ -24,7 +25,7 @@ var remote = {
                 if (!remote.settings.local) {
                     layout.flashMessage('You are: ' + game.settings.piece_colors[response.player], 3000);
                 }
-                game.settings.game_id = response.game_id;
+                remote.settings.game_id = response.game_id;
                 game.settings.no_of_players = response.nop;
                 remote.settings.player = response.player;
                 game.start_game();
@@ -169,7 +170,7 @@ var remote = {
         } else {
             gid = document.querySelector("#game_id").innerText;
         }
-        if (gid != "") { game.settings.game_id = gid; }
+        if (gid != "") { remote.settings.game_id = gid; }
         return gid;
     },
     set_user_id: function() {
