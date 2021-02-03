@@ -13,7 +13,7 @@ frontendroot = "/vagrant/KingOnTheHillGame/frontend"
 app.mount("/koth", StaticFiles(directory=frontendroot+"/koth"), name="koth")
 if (debug):
     app.mount("/koth-test", StaticFiles(directory=frontendroot+"/koth-test"), name="koth-test")
-app.mount("/scramble", StaticFiles(directory=frontendroot+"/scramble"), name="scramble")
+# app.mount("/scramble", StaticFiles(directory=frontendroot+"/scramble"), name="scramble")
 
 # app.add_middleware(
 #     CORSMiddleware,
@@ -47,26 +47,26 @@ def create_game(post: kothRequest):
     else:
         return {"accepted":"false"}
 
-@app.get("/scramble-migrate")
-def read_root():
-    if (debug):
-        s = Scramble(debug)
-        return s.migrate()
-
-@app.post("/scramble-actions")
-def create_game(post: scramRequest):
-    s = Scramble(debug)
-    if (post.action == 'new_game'):
-        return s.new_game(post)
-    elif (post.action == 'join_game'):
-        return s.join_game(post)
-    elif (post.action == 'start_game'):
-        return s.start_game(post)
-    elif (post.action == 'send_moves'):
-        return s.send_moves(post)
-    elif (post.action == 'get_moves'):
-        return s.get_moves(post)
-    elif (post.action == 'send_egg'):
-        return s.send_eggs(post)
-    else:
-        return {"accepted":"false"}
+# @app.get("/scramble-migrate")
+# def read_root():
+#     if (debug):
+#         s = Scramble(debug)
+#         return s.migrate()
+#
+# @app.post("/scramble-actions")
+# def create_game(post: scramRequest):
+#     s = Scramble(debug)
+#     if (post.action == 'new_game'):
+#         return s.new_game(post)
+#     elif (post.action == 'join_game'):
+#         return s.join_game(post)
+#     elif (post.action == 'start_game'):
+#         return s.start_game(post)
+#     elif (post.action == 'send_moves'):
+#         return s.send_moves(post)
+#     elif (post.action == 'get_moves'):
+#         return s.get_moves(post)
+#     elif (post.action == 'send_egg'):
+#         return s.send_eggs(post)
+#     else:
+#         return {"accepted":"false"}
