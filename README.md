@@ -8,3 +8,5 @@ You may move your piece to any adjacent square (including diagonals). You may bu
 When moving, you cannot move to a space where another piece resides. You cannot move onto a cap. You cannot move up more than one level at a time. You may move down multiple levels.
 When you build, you cannot build on a square where another piece resides. You cannot build on top of a cap. There is no limitation on the level you can build at: you can be on the ground and build a cap.
 The king has a special ability: when moving, it can swap places with an adjacent pawn that it controls (same team).
+
+Frontend Only sample: https://vincentgbs.github.io/KingOnTheHillGame/frontend/koth/index.html
